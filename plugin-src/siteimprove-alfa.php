@@ -21,7 +21,6 @@
 namespace Siteimprove\Alfa;
 
 use Siteimprove\Alfa\Core\Hook_Registry;
-use Siteimprove\Alfa\Core\I18n;
 
 if ( ! defined( 'WPINC' ) ) {
 	die; // If this file is called directly, abort.
@@ -55,7 +54,13 @@ class Siteimprove_Alfa {
 	 */
 	public function plugins_loaded(): void {
 		$hook_registry = new Hook_Registry();
-		$hook_registry->add( new I18n() );
+
+		if ( is_admin() ) {
+			$hook_registry
+				->add( new Admin\Navigation() )
+				->add( new Admin\Dashboard_Page() );
+		}
+
 		$hook_registry->register_hooks();
 	}
 }
