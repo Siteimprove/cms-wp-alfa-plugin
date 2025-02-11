@@ -14,6 +14,7 @@ hooks:
         - exec: bash .ddev/setup.sh
 use_dns_when_possible: true
 composer_version: "2"
+composer_root: plugin-src
 web_environment: []
 corepack_enable: false
 

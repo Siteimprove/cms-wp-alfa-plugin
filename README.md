@@ -7,7 +7,7 @@ automatically and can be reinstalled at any time.
 ### Directory Structure
 
 - `.ddev/`: Contains the DDEV configuration files.
-- `plugin-src`: Contains the Siteimprove Alfa WordPress Plugin.
+- `plugin-src/`: Contains the Siteimprove Alfa WordPress Plugin.
 - `wordpress/`: Contains the WordPress installation. This directory is created automatically by DDEV.
 
 ### Prerequisites
