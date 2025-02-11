@@ -1,0 +1,10 @@
+.DS_Store
+.idea
+.vscode
+.npmrc
+composer.phar
+node_modules
+/plugin/*/node_modules/
+/plugin/*/vendor/
+/wordpress/*
+**/dist/**/*.map
