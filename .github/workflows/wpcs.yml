@@ -28,4 +28,4 @@ jobs:
 
       - name: Check PHP Code Sniff
         working-directory: ./plugin-src
-        run: ./vendor/bin/phpcs --standard=../phpcs.xml.dist . --report-summary
+        run: ./vendor/bin/phpcs . --standard=../phpcs.xml.dist --report-summary
