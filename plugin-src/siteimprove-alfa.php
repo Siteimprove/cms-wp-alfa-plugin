@@ -4,7 +4,7 @@
  *
  * @wordpress-plugin
  * Plugin Name:       Siteimprove Alfa
- * Description:       Integration with Siteimprove Alfa.
+ * Description:       The Siteimprove plugin bridges the gap between Drupal and the Siteimprove Intelligence Platform via open source Alfa Engine.
  * Version:           1.0.0
  * Requires at least: 5.9 // TODO: clarify min WP version
  * Requires PHP:      8.0 // TODO: clarify min php version

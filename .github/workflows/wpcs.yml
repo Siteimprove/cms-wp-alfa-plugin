@@ -1,0 +1,24 @@
+name: WPCS check
+
+on: push
+
+jobs:
+  phpcs:
+    name: WPCS
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.0'
+          tools: composer
+      - name: Install PHP_CodeSniffer
+        working-directory: ./plugin-src
+        run: composer install --prefer-dist --no-progress --no-suggest
+      - name: Configure PHPCS
+        working-directory: ./plugin-src
+        run: ./vendor/bin/phpcs --config-set installed_paths ./vendor/phpcsstandards/phpcsextra,./vendor/phpcsstandards/phpcsutils,./vendor/wp-coding-standards/wpcs
+      - name: Check PHP Code Sniff
+        working-directory: ./plugin-src
+        run: ./vendor/bin/phpcs --standard=../phpcs.xml.dist . --report-summary
