@@ -6,8 +6,8 @@
  * Plugin Name:       Siteimprove Alfa
  * Description:       The Siteimprove plugin bridges the gap between Drupal and the Siteimprove Intelligence Platform via open source Alfa Engine.
  * Version:           1.0.0
- * Requires at least: 5.9 // TODO: clarify min WP version
- * Requires PHP:      8.0 // TODO: clarify min php version
+ * Requires at least: 6.7
+ * Requires PHP:      8.0
  * Author:            Siteimprove
  * Author URI:        https://siteimprove.com
  * License:           GPL-2.0+
@@ -19,6 +19,9 @@
  */
 
 namespace Siteimprove\Alfa;
+
+use Siteimprove\Alfa\Core\Hook_Registry;
+use Siteimprove\Alfa\Core\I18n;
 
 if ( ! defined( 'WPINC' ) ) {
 	die; // If this file is called directly, abort.
@@ -44,34 +47,16 @@ class Siteimprove_Alfa {
 	 * @return void
 	 */
 	public function init(): void {
-		register_activation_hook( __FILE__, array( $this, 'activate' ) );
-		register_deactivation_hook( __FILE__, array( $this, 'deactivate' ) );
-
 		add_action( 'plugins_loaded', array( $this, 'plugins_loaded' ) );
 	}
 
 	/**
-	 * Set up plugin.
-	 *
 	 * @return void
 	 */
 	public function plugins_loaded(): void {
-	}
-
-	/**
-	 * Execute plugin activation process.
-	 *
-	 * @return void
-	 */
-	public function activate(): void {
-	}
-
-	/**
-	 * Execute plugin deactivation process.
-	 *
-	 * @return void
-	 */
-	public function deactivate(): void {
+		$hook_registry = new Hook_Registry();
+		$hook_registry->add( new I18n() );
+		$hook_registry->register_hooks();
 	}
 }
 

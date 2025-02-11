@@ -13,5 +13,9 @@
         "allow-plugins": {
             "dealerdirect/phpcodesniffer-composer-installer": true
         }
+    },
+    "scripts": {
+        "lint": "./vendor/bin/phpcs . --standard=../phpcs.xml.dist",
+        "lint-fix": "./vendor/bin/phpcbf . --standard=../phpcs.xml.dist"
     }
 }
