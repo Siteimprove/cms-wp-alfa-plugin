@@ -43,7 +43,7 @@ class Siteimprove_Alfa {
 	 *
 	 * @return void
 	 */
-	public function init(): void {
+	public function init():void{
 		register_activation_hook( __FILE__, array( $this, 'activate' ) );
 		register_deactivation_hook( __FILE__, array( $this, 'deactivate' ) );
 
