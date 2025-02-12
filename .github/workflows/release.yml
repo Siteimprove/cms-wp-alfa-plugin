@@ -22,7 +22,7 @@ jobs:
 
       - name: Install Composer dependencies
         working-directory: ./plugin-src
-        run: composer install --no-dev
+        run: composer install --no-dev --prefer-dist --no-progress --no-suggest
 
 #      - name: Set up Node.js
 #        uses: actions/setup-node@v2
@@ -43,7 +43,8 @@ jobs:
           type: 'zip'
           path: './plugin-src/'
           filename: 'siteimprove-alfa.zip'
-      - name: Upload Release
+
+      - name: Create Release
         uses: Siteimprove/release-action@v1
         with:
           artifacts: "siteimprove-alfa.zip"
