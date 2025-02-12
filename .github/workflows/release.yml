@@ -1,0 +1,51 @@
+name: Release Workflow
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    container:
+      image: php:8.0
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Setup Tools
+        run: |
+          apt-get update && apt-get install -y zip unzip
+          curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+
+      - name: Install Composer dependencies
+        working-directory: ./plugin-src
+        run: composer install --no-dev --prefer-dist --no-progress --no-suggest
+
+#      - name: Set up Node.js
+#        uses: actions/setup-node@v2
+#        with:
+#          node-version: '23'
+#
+#      - name: Install Node.js dependencies
+#        working-directory: ./plugin-src
+#        run: npm install
+#
+#      - name: Build assets
+#        working-directory: ./plugin-src
+#        run: npm run build
+
+      - name: Archive Release
+        uses: Siteimprove/zip-release@main
+        with:
+          type: 'zip'
+          path: './plugin-src/'
+          filename: 'siteimprove-alfa.zip'
+
+      - name: Create Release
+        uses: Siteimprove/release-action@v1
+        with:
+          artifacts: "siteimprove-alfa.zip"
+          token: ${{ secrets.GITHUB_TOKEN }}
