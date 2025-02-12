@@ -19,9 +19,9 @@ jobs:
           curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
       - name: Install PHP_CodeSniffer
-        working-directory: ./plugin-src
+        working-directory: ./siteimprove-alfa
         run: composer install --prefer-dist --no-progress --no-suggest
 
       - name: Check PHP Code Sniff
-        working-directory: ./plugin-src
+        working-directory: ./siteimprove-alfa
         run: ./vendor/bin/phpcs . --standard=../phpcs.xml.dist --report-summary

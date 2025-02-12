@@ -4,14 +4,11 @@
 	<arg name="colors" />
 	<arg value="s" /><!-- Show sniff codes in all reports -->
 
-	<rule ref="WordPress-Core">
+	<rule ref="WordPress">
 		<exclude name="WordPress.Files.FileName" />
+		<exclude name="Generic.Commenting.DocComment.MissingShort" />
+		<exclude name="Squiz.Commenting" />
 	</rule>
-
-	<rule ref="WordPress-Docs"></rule>
-
-	<config name="testVersion" value="6.0-" />
-	<file>.</file>
 
 	<exclude-pattern>/node_modules/</exclude-pattern>
 	<exclude-pattern>/wordpress/</exclude-pattern>

@@ -12,7 +12,7 @@ if ! wp core is-installed --allow-root; then
     wp core install --url='$DDEV_PRIMARY_URL' --title="DDEV WordPress" --admin_user="admin" --admin_password="password" --admin_email="admin@example.com"
 fi
 
-SOURCE_PLUGIN_DIR="/var/www/html/plugin-src"
+SOURCE_PLUGIN_DIR="/var/www/html/siteimprove-alfa"
 TARGET_PLUGIN_DIR="/var/www/html/wordpress/wp-content/plugins/siteimprove-alfa"
 
 # Ensure the plugin directory does not already exist (prevent overwriting an actual plugin directory)

@@ -3,6 +3,6 @@
 .vscode
 .npmrc
 node_modules
-/plugin-src/vendor/
+/siteimprove-alfa/vendor/
 wordpress/*
 **/dist/**/*.map

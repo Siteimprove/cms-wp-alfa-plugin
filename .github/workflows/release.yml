@@ -21,7 +21,7 @@ jobs:
           curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
       - name: Install Composer dependencies
-        working-directory: ./plugin-src
+        working-directory: ./siteimprove-alfa
         run: composer install --no-dev --prefer-dist --no-progress --no-suggest
 
 #      - name: Set up Node.js
@@ -30,18 +30,18 @@ jobs:
 #          node-version: '23'
 #
 #      - name: Install Node.js dependencies
-#        working-directory: ./plugin-src
+#        working-directory: ./siteimprove-alfa
 #        run: npm install
 #
 #      - name: Build assets
-#        working-directory: ./plugin-src
+#        working-directory: ./siteimprove-alfa
 #        run: npm run build
 
       - name: Archive Release
         uses: Siteimprove/zip-release@main
         with:
           type: 'zip'
-          path: './plugin-src/'
+          path: './siteimprove-alfa/'
           filename: 'siteimprove-alfa.zip'
 
       - name: Create Release
