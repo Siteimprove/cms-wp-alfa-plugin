@@ -14,7 +14,7 @@ jobs:
 
       - name: Setup Tools
         run: |
-          apt-get update && apt-get install -y zip unzip
+          apt-get update && apt-get install -y zip unzip openssh-client
           curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
       - name: Install Composer dependencies
@@ -41,16 +41,29 @@ jobs:
           path: './siteimprove-alfa/'
           filename: 'siteimprove-alfa.zip'
 
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        id: artifact-upload-step
+        with:
+          name: 'siteimprove-alfa'
+          path: 'siteimprove-alfa.zip'
+          overwrite: 'true'
+
       - name: Install Terminus
         run: |
           curl -O https://raw.githubusercontent.com/pantheon-systems/terminus-installer/master/builds/installer.phar && php installer.phar install
 
-      - name: Auth with Terminus
-        run: terminus auth:login --machine-token=${{ secrets.TERMINUS_TOKEN }}
-
       - name: Deploy to Pantheon
+        # Prepare ssh key that is required to use wp cli on Pantheon
+        # Log into terminus
+        # Uninstall and delete old plugin
+        # Install new plugin
         run: |
-          terminus wp plugin delete siteimprove-alfa
-          terminus wp plugin install siteimprove-alfa.zip --force
-#          terminus import:site ${{ secrets.PANTHEON_SITE_ID }} --file=siteimprove-alfa.zip
-#          terminus env:deploy ${{ secrets.PANTHEON_SITE_ID }}.dev
+          mkdir -p ~/.ssh
+          echo "${{ secrets.TERMINUS_SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          eval "$(ssh-agent -s)"
+          ssh-add ~/.ssh/id_rsa
+          terminus auth:login --machine-token=${{ secrets.TERMINUS_TOKEN }}
+          terminus wp ${{ vars.PANTHEON_SITE_ID }}.dev -- plugin delete siteimprove-alfa
+          terminus wp ${{ vars.PANTHEON_SITE_ID }}.dev -- plugin install ${{ steps.artifact-upload-step.outputs.artifact-url }} --activate
