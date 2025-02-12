@@ -50,7 +50,7 @@ jobs:
 
       - name: Deploy to Pantheon
         run: |
-          terminus wp delete siteimprove-alfa
+          terminus wp plugin delete siteimprove-alfa
           terminus wp plugin install siteimprove-alfa.zip --force
 #          terminus import:site ${{ secrets.PANTHEON_SITE_ID }} --file=siteimprove-alfa.zip
 #          terminus env:deploy ${{ secrets.PANTHEON_SITE_ID }}.dev
