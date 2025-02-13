@@ -16,7 +16,7 @@
         }
     },
     "scripts": {
-        "lint": "./vendor/bin/phpcs . --standard=../phpcs.xml.dist",
-        "lint-fix": "./vendor/bin/phpcbf . --standard=../phpcs.xml.dist"
+        "lint": "./siteimprove-alfa/vendor/bin/phpcs siteimprove-alfa --standard=phpcs.xml.dist",
+        "lint-fix": "./siteimprove-alfa/vendor/bin/phpcbf siteimprove-alfa --standard=phpcs.xml.dist"
     }
 }
