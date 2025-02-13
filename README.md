@@ -1,14 +1,18 @@
-## Local development environment
+# WordPress plugin integration for Siteimprove Alfa
+
+## Introduction
 
 This repository is used to set up a local development environment for Siteimprove Alfa WordPress Plugin, using DDEV.
 The goal of this repository is to focus on plugin development, while the entire WordPress site is set up
 automatically and can be reinstalled at any time.
 
-### Directory Structure
+## Directory Structure
 
 - `.ddev/`: Contains the DDEV configuration files.
 - `siteimprove-alfa/`: Contains the Siteimprove Alfa WordPress Plugin.
 - `wordpress/`: Contains the WordPress installation. This directory is created automatically by DDEV.
+
+## Setting up local development environment
 
 ### Prerequisites
 

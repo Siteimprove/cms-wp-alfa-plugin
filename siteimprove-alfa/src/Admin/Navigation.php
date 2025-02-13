@@ -18,7 +18,7 @@ class Navigation implements Hook_Interface {
 	 * @return void
 	 */
 	public function enqueue_styles(): void {
-		wp_enqueue_style( STIM_ALFA_PLUGIN_NAME, STIM_ALFA_PLUGIN_ROOT_URL . 'admin/css/stim-alfa-admin.css', array(), STIM_ALFA_VERSION, 'all' );
+		wp_enqueue_style( SITEIMPROVE_ALFA_PLUGIN_NAME, SITEIMPROVE_ALFA_PLUGIN_ROOT_URL . 'assets/siteimprove-alfa-admin.css', array(), SITEIMPROVE_ALFA_VERSION, 'all' );
 	}
 
 	/**
@@ -31,7 +31,7 @@ class Navigation implements Hook_Interface {
 			'manage_options',
 			'siteimprove_alfa',
 			array( $this, 'render_dashboard' ),
-			plugins_url( 'siteimprove-alfa/admin/img/si-icon.svg' ),
+			plugins_url( 'siteimprove-alfa/assets/img/si-icon.svg' ),
 		);
 	}
 

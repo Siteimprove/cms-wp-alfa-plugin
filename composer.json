@@ -1,7 +1,7 @@
 {
     "autoload": {
         "psr-4": {
-            "Siteimprove\\Alfa\\": "src/"
+            "Siteimprove\\Alfa\\": "siteimprove-alfa/src/"
         }
     },
     "require-dev": {
