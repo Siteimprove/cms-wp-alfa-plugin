@@ -48,6 +48,7 @@ jobs:
           name: 'siteimprove-alfa'
           path: 'siteimprove-alfa.zip'
           overwrite: 'true'
+          retention-days: 1
 
       - name: Install Terminus
         run: |
@@ -56,7 +57,7 @@ jobs:
       - name: Deploy to Pantheon
         # Prepare ssh key that is required to use wp cli on Pantheon
         # Log into terminus
-        # Uninstall and delete old plugin
+        # Delete old plugin (executes plugin uninstall)
         # Install new plugin
         run: |
           mkdir -p ~/.ssh
@@ -65,5 +66,5 @@ jobs:
           eval "$(ssh-agent -s)"
           ssh-add ~/.ssh/id_rsa
           terminus auth:login --machine-token=${{ secrets.TERMINUS_TOKEN }}
-          terminus wp ${{ vars.PANTHEON_SITE_ID }}.dev -- plugin delete siteimprove-alfa
+          terminus wp ${{ vars.PANTHEON_SITE_ID }}.dev -- plugin delete siteimprove-alfa --quiet
           terminus wp ${{ vars.PANTHEON_SITE_ID }}.dev -- plugin install ${{ steps.artifact-upload-step.outputs.artifact-url }} --activate
