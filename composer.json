@@ -10,6 +10,7 @@
         "phpcsstandards/phpcsutils": "^1.0"
     },
     "config": {
+        "vendor-dir": "./siteimprove-alfa/vendor",
         "allow-plugins": {
             "dealerdirect/phpcodesniffer-composer-installer": true
         }
