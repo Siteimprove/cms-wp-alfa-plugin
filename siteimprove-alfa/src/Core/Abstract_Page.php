@@ -13,7 +13,7 @@ abstract class Abstract_Page {
 	 */
 	protected function render( string $view, array $params = array(), bool $absolute = false ): void {
 		if ( ! $absolute ) {
-			$view = STIM_ALFA_PLUGIN_ROOT_PATH . $view;
+			$view = SITEIMPROVE_ALFA_PLUGIN_ROOT_PATH . $view;
 		}
 
 		if ( ! file_exists( $view ) ) {

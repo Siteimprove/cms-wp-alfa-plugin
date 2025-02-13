@@ -1,7 +1,7 @@
 {
     "autoload": {
         "psr-4": {
-            "Siteimprove\\Alfa\\": "src/"
+            "Siteimprove\\Alfa\\": "siteimprove-alfa/src/"
         }
     },
     "require-dev": {
@@ -10,12 +10,13 @@
         "phpcsstandards/phpcsutils": "^1.0"
     },
     "config": {
+        "vendor-dir": "./siteimprove-alfa/vendor",
         "allow-plugins": {
             "dealerdirect/phpcodesniffer-composer-installer": true
         }
     },
     "scripts": {
-        "lint": "./vendor/bin/phpcs . --standard=../phpcs.xml.dist",
-        "lint-fix": "./vendor/bin/phpcbf . --standard=../phpcs.xml.dist"
+        "lint": "./siteimprove-alfa/vendor/bin/phpcs siteimprove-alfa --standard=phpcs.xml.dist",
+        "lint-fix": "./siteimprove-alfa/vendor/bin/phpcbf siteimprove-alfa --standard=phpcs.xml.dist"
     }
 }

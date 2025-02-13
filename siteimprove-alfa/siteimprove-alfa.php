@@ -30,10 +30,10 @@ if ( file_exists( __DIR__ . '/vendor/autoload.php' ) ) {
 	require_once __DIR__ . '/vendor/autoload.php';
 }
 
-define( 'STIM_ALFA_VERSION', '1.0.0' );
-define( 'STIM_ALFA_PLUGIN_NAME', 'siteimprove-alfa' );
-define( 'STIM_ALFA_PLUGIN_ROOT_PATH', trailingslashit( __DIR__ ) );
-define( 'STIM_ALFA_PLUGIN_ROOT_URL', trailingslashit( plugin_dir_url( __FILE__ ) ) );
+define( 'SITEIMPROVE_ALFA_VERSION', '1.0.0' );
+define( 'SITEIMPROVE_ALFA_PLUGIN_NAME', 'siteimprove-alfa' );
+define( 'SITEIMPROVE_ALFA_PLUGIN_ROOT_PATH', trailingslashit( __DIR__ ) );
+define( 'SITEIMPROVE_ALFA_PLUGIN_ROOT_URL', trailingslashit( plugin_dir_url( __FILE__ ) ) );
 
 /**
  * Main plugin class.

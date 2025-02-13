@@ -13,7 +13,7 @@ class Dashboard_Page extends Abstract_Page implements Hook_Interface {
 
 	public function render_page(): void {
 		$this->render(
-			'admin/views/dashboard.php',
+			'views/dashboard.php',
 		);
 	}
 }
