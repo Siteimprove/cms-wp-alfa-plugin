@@ -4,7 +4,7 @@
  *
  * @wordpress-plugin
  * Plugin Name:       Siteimprove Alfa
- * Description:       The Siteimprove plugin bridges the gap between Drupal and the Siteimprove Intelligence Platform via open source Alfa Engine.
+ * Description:       The Siteimprove plugin bridges the gap between WordPress and the Siteimprove Intelligence Platform via open source Alfa Engine.
  * Version:           1.0.0
  * Requires at least: 6.7
  * Requires PHP:      8.0
@@ -20,6 +20,7 @@
 
 namespace Siteimprove\Alfa;
 
+use Siteimprove\Alfa\Core\Database;
 use Siteimprove\Alfa\Core\Hook_Registry;
 
 if ( ! defined( 'WPINC' ) ) {
@@ -46,6 +47,7 @@ class Siteimprove_Alfa {
 	 * @return void
 	 */
 	public function init(): void {
+		register_activation_hook( __FILE__, array( $this, 'activate' ) );
 		add_action( 'plugins_loaded', array( $this, 'plugins_loaded' ) );
 	}
 
@@ -62,6 +64,14 @@ class Siteimprove_Alfa {
 		}
 
 		$hook_registry->register_hooks();
+	}
+
+	/**
+	 * @return void
+	 */
+	public function activate(): void {
+		$db = new Database();
+		$db->install();
 	}
 }
 
