@@ -12,10 +12,9 @@ class Database {
 		$charset_collate = $wpdb->get_charset_collate();
 
 		$scans_table = $wpdb->prefix . 'siteimprove_alfa_scans';
-		$sql = "CREATE TABLE $scans_table (
+		$sql         = "CREATE TABLE $scans_table (
 			id bigint(20) NOT NULL AUTO_INCREMENT,
-			post_id bigint(20) DEFAULT NULL,
-			url varchar(255) DEFAULT NULL,
+			post_id bigint(20) NOT NULL,
 			scan_result longtext NOT NULL,
 			created_at datetime DEFAULT CURRENT_TIMESTAMP NOT NULL,
 			PRIMARY KEY  (id),
@@ -23,7 +22,7 @@ class Database {
 		) $charset_collate;";
 
 		$daily_stats_table = $wpdb->prefix . 'siteimprove_alfa_daily_stats';
-		$sql .= "CREATE TABLE $daily_stats_table (
+		$sql              .= "CREATE TABLE $daily_stats_table (
 			id bigint(20) NOT NULL AUTO_INCREMENT,
 			conformance varchar(32),
 			count_issues INT NOT NULL,
@@ -33,9 +32,9 @@ class Database {
     		INDEX date_idx (`date`)
 		) $charset_collate;";
 
-		require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+		require_once ABSPATH . 'wp-admin/includes/upgrade.php';
 
-		dbDelta($sql);
+		dbDelta( $sql );
 	}
 
 	/**
@@ -44,12 +43,7 @@ class Database {
 	public function uninstall(): void {
 		global $wpdb;
 
-		$scans_table = $wpdb->prefix . 'siteimprove_alfa_scans';
-		$sql = "DROP TABLE IF EXISTS $scans_table;";
-		$wpdb->query($sql);
-
-		$daily_stats_table = $wpdb->prefix . 'siteimprove_alfa_daily_stats';
-		$sql = "DROP TABLE IF EXISTS $daily_stats_table;";
-		$wpdb->query($sql);
+		$wpdb->query( sprintf( 'DROP TABLE IF EXISTS %s%s;', $wpdb->prefix, 'siteimprove_alfa_scans' ) ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery
+		$wpdb->query( sprintf( 'DROP TABLE IF EXISTS %s%s;', $wpdb->prefix, 'siteimprove_alfa_daily_stats' ) ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery
 	}
 }

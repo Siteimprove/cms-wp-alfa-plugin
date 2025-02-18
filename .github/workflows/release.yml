@@ -23,18 +23,18 @@ jobs:
       - name: Install Composer dependencies
         run: composer install --no-dev --prefer-dist --no-progress --no-suggest
 
-#      - name: Set up Node.js
-#        uses: actions/setup-node@v2
-#        with:
-#          node-version: '23'
-#
-#      - name: Install Node.js dependencies
-#        working-directory: ./siteimprove-alfa
-#        run: npm install
-#
-#      - name: Build assets
-#        working-directory: ./siteimprove-alfa
-#        run: npm run build
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '23'
+
+      - name: Install Node.js dependencies
+        working-directory: ./siteimprove-alfa
+        run: npm install
+
+      - name: Build assets
+        working-directory: ./siteimprove-alfa
+        run: npm run build
 
       - name: Archive Release
         uses: Siteimprove/zip-release@main

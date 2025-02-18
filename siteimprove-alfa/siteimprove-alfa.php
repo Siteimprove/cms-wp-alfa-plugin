@@ -22,6 +22,7 @@ namespace Siteimprove\Alfa;
 
 use Siteimprove\Alfa\Core\Database;
 use Siteimprove\Alfa\Core\Hook_Registry;
+use Siteimprove\Alfa\Repository\Scan_Repository;
 
 if ( ! defined( 'WPINC' ) ) {
 	die; // If this file is called directly, abort.
@@ -62,6 +63,9 @@ class Siteimprove_Alfa {
 				->add( new Admin\Navigation() )
 				->add( new Admin\Dashboard_Page() );
 		}
+
+		$hook_registry
+			->add( new Admin\Admin_Bar( new Scan_Repository() ) );
 
 		$hook_registry->register_hooks();
 	}
