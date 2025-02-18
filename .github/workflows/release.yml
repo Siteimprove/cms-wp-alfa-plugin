@@ -29,11 +29,9 @@ jobs:
           node-version: '23'
 
       - name: Install Node.js dependencies
-        working-directory: ./siteimprove-alfa
         run: npm install
 
       - name: Build assets
-        working-directory: ./siteimprove-alfa
         run: npm run build
 
       - name: Archive Release
