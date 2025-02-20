@@ -5,11 +5,11 @@
     "watch": "webpack --watch --mode development"
   },
   "dependencies": {
+    "@siteimprove/accessibility-cms-components": "https://github.com/siteimprove/cms-alfa-fe-app#development",
     "@siteimprove/alfa-act": "^0.98.0",
     "@siteimprove/alfa-jquery": "^0.77.1",
     "@siteimprove/alfa-json": "^0.98.0",
-    "@siteimprove/alfa-rules": "^0.98.0",
-    "@siteimprove/accessibility-cms-components": "https://github.com/siteimprove/cms-alfa-fe-app#development"
+    "@siteimprove/alfa-rules": "^0.98.0"
   },
   "devDependencies": {
     "@babel/cli": "^7.26.4",

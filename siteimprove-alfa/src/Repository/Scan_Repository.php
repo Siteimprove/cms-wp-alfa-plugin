@@ -26,6 +26,27 @@ class Scan_Repository {
 			$result = $wpdb->insert( $table_name, $data ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery
 		}
 
-		return ( $result ) ? $wpdb->insert_id : null;
+		return $result ? $result : null;
+	}
+
+	/**
+	 * @param int $post_id
+	 *
+	 * @return string|null
+	 */
+	public function get_scan_by_post_id( int $post_id ): ?string {
+		global $wpdb;
+
+		$table_name = $wpdb->prefix . 'siteimprove_alfa_scans';
+
+		$result = $wpdb->get_var( // phpcs:ignore WordPress.DB.DirectDatabaseQuery
+			$wpdb->prepare(
+				'SELECT scan_result FROM %i WHERE post_id = %d',
+				$table_name,
+				$post_id
+			)
+		);
+
+		return $result;
 	}
 }
