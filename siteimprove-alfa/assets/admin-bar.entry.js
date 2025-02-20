@@ -21,7 +21,6 @@ import * as alfaJson from "@siteimprove/alfa-json";
 
             evaluatePageWithAlfa()
                 .then((result) => {
-                    console.log('final result', result);
                     $this.find('.label').html(__('Accessibility results saved', 'siteimprove-alfa'));
                     $this.prop('href', ( siteimproveAlfaSaveScanResultAjax.view_link || '/wp-admin/admin.php?page=stim_alfa' ));
                 })

@@ -26,7 +26,7 @@ class Scan_Repository {
 			$result = $wpdb->insert( $table_name, $data ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery
 		}
 
-		return ( $result ) ? $wpdb->insert_id : null;
+		return $result ? $result : null;
 	}
 
 	/**
