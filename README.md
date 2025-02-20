@@ -1,14 +1,18 @@
-## Local development environment
+# WordPress plugin integration for Siteimprove Alfa
+
+## Introduction
 
 This repository is used to set up a local development environment for Siteimprove Alfa WordPress Plugin, using DDEV.
 The goal of this repository is to focus on plugin development, while the entire WordPress site is set up
 automatically and can be reinstalled at any time.
 
-### Directory Structure
+## Directory Structure
 
 - `.ddev/`: Contains the DDEV configuration files.
-- `plugin-src`: Contains the Siteimprove Alfa WordPress Plugin.
+- `siteimprove-alfa/`: Contains the Siteimprove Alfa WordPress Plugin.
 - `wordpress/`: Contains the WordPress installation. This directory is created automatically by DDEV.
+
+## Setting up local development environment
 
 ### Prerequisites
 
@@ -45,9 +49,9 @@ use is [Rancher Desktop](https://rancherdesktop.io/), which is a free and open-s
 
 To set up the frontend development environment, follow these steps:
 
-1. Navigate to the `plugin-src` directory:
+1. Navigate to the `siteimprove-alfa` directory:
     ```sh
-    cd plugin-src
+    cd siteimprove-alfa
     ```
 
 2. Install the necessary npm packages:

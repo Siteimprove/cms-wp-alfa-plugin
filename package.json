@@ -1,0 +1,28 @@
+{
+  "name": "cms-wp-alfa-plugin",
+  "scripts": {
+    "build": "webpack --mode production",
+    "watch": "webpack --watch --mode development"
+  },
+  "dependencies": {
+    "@siteimprove/accessibility-cms-components": "https://github.com/siteimprove/cms-alfa-fe-app#development",
+    "@siteimprove/alfa-act": "^0.98.0",
+    "@siteimprove/alfa-jquery": "^0.77.1",
+    "@siteimprove/alfa-json": "^0.98.0",
+    "@siteimprove/alfa-rules": "^0.98.0"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.26.4",
+    "@babel/core": "^7.26.0",
+    "@babel/preset-env": "^7.26.0",
+    "@babel/preset-react": "^7.26.3",
+    "@wordpress/env": "^10.15.0",
+    "@wordpress/eslint-plugin": "^22.1.1",
+    "@wordpress/scripts": "^30.8.1",
+    "babel-loader": "^9.2.1",
+    "css-loader": "^7.1.2",
+    "style-loader": "^4.0.0",
+    "webpack": "^5.97.1",
+    "webpack-cli": "^6.0.1"
+  }
+}

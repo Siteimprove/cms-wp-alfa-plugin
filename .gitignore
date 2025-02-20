@@ -2,9 +2,7 @@
 .idea
 .vscode
 .npmrc
-composer.phar
 node_modules
-/plugin/*/node_modules/
-/plugin/*/vendor/
-/wordpress/*
-**/dist/**/*.map
+/siteimprove-alfa/vendor/
+wordpress/*
+siteimprove-alfa/assets/*.bundle.*
