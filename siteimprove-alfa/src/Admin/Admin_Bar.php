@@ -34,7 +34,7 @@ class Admin_Bar implements Hook_Interface {
 			return;
 		}
 
-		wp_enqueue_script( SITEIMPROVE_ALFA_PLUGIN_NAME, SITEIMPROVE_ALFA_PLUGIN_ROOT_URL . 'assets/admin-bar.bundle.js', array( 'jquery' ), SITEIMPROVE_ALFA_VERSION, false );
+		wp_enqueue_script( SITEIMPROVE_ALFA_PLUGIN_NAME, SITEIMPROVE_ALFA_PLUGIN_ROOT_URL . 'assets/admin-bar.bundle.js', array( 'wp-i18n', 'jquery' ), SITEIMPROVE_ALFA_VERSION, false );
 
 		$post_id = get_the_ID();
 

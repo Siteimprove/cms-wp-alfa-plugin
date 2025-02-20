@@ -56,15 +56,21 @@ class Siteimprove_Alfa {
 	 * @return void
 	 */
 	public function plugins_loaded(): void {
+		if ( ! current_user_can( 'manage_options' ) ) {
+			return;
+		}
+
 		$hook_registry = new Hook_Registry();
 
 		if ( is_admin() ) {
 			$hook_registry
 				->add( new Admin\Navigation() )
-				->add( new Admin\Dashboard_Page() );
+				->add( new Admin\Dashboard_Page() )
+				->add( new Admin\Gutenberg_Sidebar() );
 		}
 
 		$hook_registry
+			->add( new Api\Get_Scan_Result_Api( new Scan_Repository() ) )
 			->add( new Admin\Admin_Bar( new Scan_Repository() ) );
 
 		$hook_registry->register_hooks();

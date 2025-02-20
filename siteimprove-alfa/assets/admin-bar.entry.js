@@ -6,6 +6,8 @@ import * as alfaJson from "@siteimprove/alfa-json";
 (function( $ ) {
     'use strict';
 
+    const { __ } = wp.i18n;
+
     $(document).ready(function() {
         bindClickEvent();
     });
