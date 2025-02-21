@@ -4,6 +4,7 @@ namespace Siteimprove\Alfa\Api;
 
 use Siteimprove\Alfa\Repository\Scan_Repository;
 use Siteimprove\Alfa\Core\Hook_Interface;
+use WP_REST_Response;
 
 class Get_Scan_Result_Api implements Hook_Interface {
 
@@ -39,9 +40,14 @@ class Get_Scan_Result_Api implements Hook_Interface {
 		);
 	}
 
-	public function handle_request( $request ) {
+	/**
+	 * @param $request
+	 *
+	 * @return WP_REST_Response
+	 */
+	public function handle_request( $request ): WP_REST_Response {
 		$post_id = $request['id'];
-		$result  = $this->scan_repository->get_scan_by_post_id( $post_id );
+		$result  = $this->scan_repository->find_scan_by_post_id( $post_id );
 
 		if ( $result ) {
 			return rest_ensure_response( json_decode( $result, true ) );

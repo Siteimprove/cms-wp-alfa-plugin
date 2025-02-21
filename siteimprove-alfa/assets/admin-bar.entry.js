@@ -36,17 +36,19 @@ import * as alfaJson from "@siteimprove/alfa-json";
         const value = $('html').clone().find('#wpadminbar').remove().end(); // get DOM and remove the admin bar
         const alfaPage = await AlfaJQuery.toPage(value);
 
-        return evaluateAndSave(alfaPage, window.location.href);
+        return evaluateAndSave(alfaPage);
     }
 
-    async function evaluateAndSave(alfaPage, targetUrl) {
+    // TODO: change ajax to REST API
+    async function evaluateAndSave(alfaPage) {
         const outcomes = await AlfaAudit.of(alfaPage, rules).evaluate();
+        const auditScan = prepareAuditScan(outcomes);
 
         var dataToSend = {
             action: 'save_scan_result',
             security: siteimproveAlfaSaveScanResultAjax.security,
             post_id: siteimproveAlfaSaveScanResultAjax.post_id,
-            data: JSON.stringify(prepareAuditScan(targetUrl, outcomes))
+            data: JSON.stringify(auditScan),
         };
 
         return $.post(siteimproveAlfaSaveScanResultAjax.ajax_url, dataToSend, function(response) {
@@ -54,19 +56,27 @@ import * as alfaJson from "@siteimprove/alfa-json";
         });
     }
 
-    function prepareAuditScan(url, outcomes) {
-        let failureCount = 0;
-
+    function prepareAuditScan(outcomes) {
         let auditScan = {
-            failures: 0,
-            failedItems: []
+            scan_results: [],
+            scan_stats: {}
         };
 
         outcomes.forEach((outcome) => {
             if (outcome._outcome === 'failed') {
-                failureCount++
-                auditScan.failures = failureCount;
-                auditScan.failedItems.push(outcome.toJSON({
+
+                // TODO: refactor
+                const rule = outcome.rule.uri.split('/').pop();
+                auditScan.scan_stats[rule] = auditScan.scan_stats[rule] || {};
+                outcome.rule.requirements.forEach((requirement) => {
+                    if (requirement.level) {
+                        requirement.level._values.forEach((level) => {
+                            auditScan.scan_stats[rule][level.value] = (auditScan.scan_stats[rule][level.value] || 0) + 1;
+                        })
+                    }
+                });
+
+                auditScan.scan_results.push(outcome.toJSON({
                     verbosity: alfaJson.Serializable.Verbosity.Low
                 }));
             }

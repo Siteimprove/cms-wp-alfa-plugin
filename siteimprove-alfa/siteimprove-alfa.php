@@ -22,6 +22,7 @@ namespace Siteimprove\Alfa;
 
 use Siteimprove\Alfa\Core\Database;
 use Siteimprove\Alfa\Core\Hook_Registry;
+use Siteimprove\Alfa\Repository\Daily_Stats_Repository;
 use Siteimprove\Alfa\Repository\Scan_Repository;
 
 if ( ! defined( 'WPINC' ) ) {
@@ -50,6 +51,11 @@ class Siteimprove_Alfa {
 	public function init(): void {
 		register_activation_hook( __FILE__, array( $this, 'activate' ) );
 		add_action( 'plugins_loaded', array( $this, 'plugins_loaded' ) );
+
+		// TODO: refactor
+		$cron = new Cron\Daily_Stats_Aggregation_Cron( new Scan_Repository(), new Daily_Stats_Repository() );
+		add_action( 'siteimprove_alfa_daily_stats_aggregation', array( $cron, 'aggregate_daily_stats' ) );
+		$cron->register_hooks();
 	}
 
 	/**
@@ -71,6 +77,7 @@ class Siteimprove_Alfa {
 
 		$hook_registry
 			->add( new Api\Get_Scan_Result_Api( new Scan_Repository() ) )
+			->add( new Api\Get_Daily_Stats_Api( new Daily_Stats_Repository() ) )
 			->add( new Admin\Admin_Bar( new Scan_Repository() ) );
 
 		$hook_registry->register_hooks();

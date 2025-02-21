@@ -15,7 +15,8 @@ class Database {
 		$sql         = "CREATE TABLE $scans_table (
 			id bigint(20) NOT NULL AUTO_INCREMENT,
 			post_id bigint(20) NOT NULL,
-			scan_result longtext NOT NULL,
+			scan_results longtext NOT NULL,
+			scan_stats text NOT NULL,
 			created_at datetime DEFAULT CURRENT_TIMESTAMP NOT NULL,
 			PRIMARY KEY  (id),
         	UNIQUE KEY post_id (post_id)
@@ -23,13 +24,9 @@ class Database {
 
 		$daily_stats_table = $wpdb->prefix . 'siteimprove_alfa_daily_stats';
 		$sql              .= "CREATE TABLE $daily_stats_table (
-			id bigint(20) NOT NULL AUTO_INCREMENT,
-			conformance varchar(32),
-			count_issues INT NOT NULL,
-			count_failures INT NOT NULL,
 			`date` DATE DEFAULT (CURDATE()) NOT NULL,
-			PRIMARY KEY  (id),
-    		INDEX date_idx (`date`)
+			aggregated_stats mediumtext NOT NULL,
+			PRIMARY KEY  (`date`)
 		) $charset_collate;";
 
 		require_once ABSPATH . 'wp-admin/includes/upgrade.php';

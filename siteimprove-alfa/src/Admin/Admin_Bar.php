@@ -38,6 +38,7 @@ class Admin_Bar implements Hook_Interface {
 
 		$post_id = get_the_ID();
 
+		// TODO: change ajax to use REST API (see dashboard.entry.js)
 		wp_localize_script(
 			SITEIMPROVE_ALFA_PLUGIN_NAME,
 			'siteimproveAlfaSaveScanResultAjax',
@@ -87,7 +88,11 @@ class Admin_Bar implements Hook_Interface {
 			wp_send_json_error( sprintf( 'Invalid JSON data: %s', json_last_error_msg() ) );
 		}
 
-		$result = $this->scan_repository->create_or_update_scan( (array) $data, (int) $_POST['post_id'] ?? null );
+		$result = $this->scan_repository->create_or_update_scan(
+			(array) $data['scan_results'],
+			(array) $data['scan_stats'],
+			(int) $_POST['post_id'] ?? null
+		);
 
 		if ( $result ) {
 			wp_send_json_success( $data );
