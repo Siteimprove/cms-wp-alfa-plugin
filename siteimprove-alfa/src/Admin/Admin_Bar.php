@@ -34,7 +34,7 @@ class Admin_Bar implements Hook_Interface {
 		$post_id = get_the_ID();
 		wp_localize_script(
 			SITEIMPROVE_ALFA_PLUGIN_NAME,
-			'siteimprove_alfa_save_scan_data',
+			'siteimproveAlfaSaveScanData',
 			array(
 				'post_id'   => $post_id,
 				'view_link' => get_edit_post_link( $post_id ),

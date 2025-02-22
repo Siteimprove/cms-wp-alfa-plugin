@@ -23,3 +23,21 @@ jobs:
 
       - name: Check PHP Code Sniff
         run: ./siteimprove-alfa/vendor/bin/phpcs siteimprove-alfa --standard=phpcs.xml.dist --report-summary
+
+  eslint:
+    name: ESLint
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '23'
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Run ESLint
+        run: npx eslint siteimprove-alfa
