@@ -2,8 +2,10 @@
 
 namespace Siteimprove\Alfa\Api;
 
-use Siteimprove\Alfa\Repository\Daily_Stats_Repository;
 use Siteimprove\Alfa\Core\Hook_Interface;
+use Siteimprove\Alfa\Service\Daily_Stats_Processor;
+use Siteimprove\Alfa\Service\Repository\Daily_Stats_Repository;
+use Siteimprove\Alfa\Service\Repository\Scan_Repository;
 use WP_REST_Response;
 
 class Get_Daily_Stats_Api implements Hook_Interface {
@@ -12,16 +14,21 @@ class Get_Daily_Stats_Api implements Hook_Interface {
 	private const ROUTE           = '/daily-stats';
 	private const METHOD          = 'GET';
 
-	/**
-	 * @var Daily_Stats_Repository
-	 */
+	private Scan_Repository $scan_repository;
 	private Daily_Stats_Repository $daily_stats_repository;
+	private Daily_Stats_Processor $daily_stats_processor;
 
 	/**
 	 * @param Daily_Stats_Repository $daily_stats_repository
 	 */
-	public function __construct( Daily_Stats_Repository $daily_stats_repository ) {
+	public function __construct(
+		Scan_Repository $scan_repository,
+		Daily_Stats_Repository $daily_stats_repository,
+		Daily_Stats_Processor $daily_stats_processor
+	) {
+		$this->scan_repository = $scan_repository;
 		$this->daily_stats_repository = $daily_stats_repository;
+		$this->daily_stats_processor = $daily_stats_processor;
 	}
 
 	public function register_hooks(): void {
@@ -49,59 +56,20 @@ class Get_Daily_Stats_Api implements Hook_Interface {
 		// TODO: add filtering based on request
 		$results = $this->daily_stats_repository->find_daily_stats();
 
-		if (!$results) { return rest_ensure_response([]); }
-
-		// TODO: refactor and simplify code
-		$issues = [];
-		$occurrences = [];
-		$endDate = date('Y-m-d', strtotime('-1 day'));
-		$fill_date = $results[0]->date;
-
-		foreach ($results as $i => $result) {
-			$stats = json_decode($result->aggregated_stats, true);
-
-			$issue_counters = $occurrence_counters = [];
-			foreach ($stats['rules'] as $levelGroup) {
-				foreach ($levelGroup as $level => $amount) {
-					$issue_counters[$level] = ($issue_counters[$level] ?? 0) + 1;
-					$occurrence_counters[$level] = ($occurrence_counters[$level] ?? 0) + $amount;
-				}
-			}
-
-			while ($i > 0 && $fill_date < $result->date) {
-				$last_issues = end($issues);
-				$last_issues['date'] = $fill_date;
-				$issues[] = $last_issues;
-
-				$last_occurrences = end($occurrences);
-				$last_occurrences['date'] = $fill_date;
-				$occurrences[] = $last_occurrences;
-
-				$fill_date = date('Y-m-d', strtotime($fill_date . ' +1 day'));
-			}
-
-			$issues[] = ['date' => $result->date, 'pages' => $stats['scans'], 'conformance' => $issue_counters];
-			$occurrences[] = ['date' => $result->date, 'pages' => $stats['scans'], 'conformance' => $occurrence_counters];
-
-			$fill_date = date('Y-m-d', strtotime($result->date . ' +1 day'));
+		if ( ! $results ) {
+			return rest_ensure_response( array() );
 		}
 
-		// TODO: refactor code duplication
-		while ($fill_date <= $endDate) {
-			$last_issues = end($issues);
-			$last_issues['date'] = $fill_date;
-			$issues[] = $last_issues;
+		// prepare daily stats from history
+		$daily_stats = $this->daily_stats_processor->prepare_daily_stats( $results );
 
-			$last_occurrences = end($occurrences);
-			$last_occurrences['date'] = $fill_date;
-			$occurrences[] = $last_occurrences;
+		// prepare today's stat from scans
+		$scans = $this->scan_repository->find_all_scan_stats();
+		$aggregated_stats = $this->daily_stats_processor->aggregate_scan_stats( $scans );
+		list($daily_stats->issues[], $daily_stats->occurrences[]) = $this->daily_stats_processor->prepare_stat_record($aggregated_stats,  wp_date( 'Y-m-d'));
+		// TODO: seems like that even though the data is available for the current day, the chart doesn't render it for some reason. Could be timezone mismatch, or explicitly filtering out today's date.
 
-			$fill_date = date('Y-m-d', strtotime($fill_date . ' +1 day'));
-		}
-
-		// TODO: also query and return up-to-date data for today's date
-
-		return rest_ensure_response(['issues' => $issues, 'occurrences' => $occurrences]);
+		return rest_ensure_response( $daily_stats );
 	}
 
 	/**

@@ -3,7 +3,7 @@
 namespace Siteimprove\Alfa\Admin;
 
 use Siteimprove\Alfa\Core\Hook_Interface;
-use Siteimprove\Alfa\Repository\Scan_Repository;
+use Siteimprove\Alfa\Service\Repository\Scan_Repository;
 
 class Admin_Bar implements Hook_Interface {
 

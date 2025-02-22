@@ -2,8 +2,8 @@
 
 namespace Siteimprove\Alfa\Api;
 
-use Siteimprove\Alfa\Repository\Scan_Repository;
 use Siteimprove\Alfa\Core\Hook_Interface;
+use Siteimprove\Alfa\Service\Repository\Scan_Repository;
 use WP_REST_Response;
 
 class Get_Scan_Result_Api implements Hook_Interface {

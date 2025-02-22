@@ -1,6 +1,6 @@
 <?php
 
-namespace Siteimprove\Alfa\Repository;
+namespace Siteimprove\Alfa\Service\Repository;
 
 class Scan_Repository {
 
