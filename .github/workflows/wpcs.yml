@@ -37,7 +37,14 @@ jobs:
           node-version: '23'
 
       - name: Install Dependencies
-        run: npm install
+        run: |
+          apt-get update && apt-get install -y openssh-client
+          mkdir -p ~/.ssh
+          echo "${{ secrets.CI_DEPLOY_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          eval "$(ssh-agent -s)"
+          ssh-add ~/.ssh/id_rsa
+          npm install
 
       - name: Run ESLint
         run: npx eslint siteimprove-alfa
