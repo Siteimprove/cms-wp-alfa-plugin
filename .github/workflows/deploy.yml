@@ -17,25 +17,29 @@ jobs:
 
       - name: Setup Tools
         run: |
-          apt-get update && apt-get install -y zip unzip openssh-client
+          apt-get update && apt-get install -y zip unzip openssh-client git
           curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
       - name: Install Composer dependencies
         working-directory: ./siteimprove-alfa
         run: composer install --no-dev --prefer-dist --no-progress --no-suggest
 
-#      - name: Set up Node.js
-#        uses: actions/setup-node@v2
-#        with:
-#          node-version: '23'
-#
-#      - name: Install Node.js dependencies
-#        working-directory: ./siteimprove-alfa
-#        run: npm install
-#
-#      - name: Build assets
-#        working-directory: ./siteimprove-alfa
-#        run: npm run build
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '23'
+
+      - name: Install Node.js dependencies
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.CI_DEPLOY_KEY }}" > ~/.ssh/id_rsa_siteimprove
+          chmod 600 ~/.ssh/id_rsa_siteimprove
+          eval "$(ssh-agent -s)"
+          ssh-add ~/.ssh/id_rsa_siteimprove
+          npm install
+
+      - name: Build assets
+        run: npm run build
 
       - name: Archive Release
         uses: Siteimprove/zip-release@main
@@ -64,10 +68,10 @@ jobs:
         # Install new plugin
         run: |
           mkdir -p ~/.ssh
-          echo "${{ secrets.TERMINUS_SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
-          chmod 600 ~/.ssh/id_rsa
+          echo "${{ secrets.TERMINUS_SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa_pantheon
+          chmod 600 ~/.ssh/id_rsa_pantheon
           eval "$(ssh-agent -s)"
-          ssh-add ~/.ssh/id_rsa
+          ssh-add ~/.ssh/id_rsa_pantheon
           terminus auth:login --machine-token=${{ secrets.TERMINUS_TOKEN }}
           terminus wp ${{ vars.PANTHEON_SITE_ID }}.dev -- plugin delete siteimprove-alfa --quiet
           terminus wp ${{ vars.PANTHEON_SITE_ID }}.dev -- plugin install ${{ steps.artifact-upload-step.outputs.artifact-url }} --activate
