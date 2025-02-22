@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Siteimprove\Alfa\Service\Repository;
 
@@ -20,9 +20,10 @@ class Daily_Stats_Repository {
 			'aggregated_stats' => wp_json_encode( $stats ),
 		);
 
-		$exists = (bool) $wpdb->get_var(
+		$exists = (bool) $wpdb->get_var( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 			$wpdb->prepare(
-				"SELECT COUNT(*) FROM $table_name WHERE date = %s",
+				'SELECT COUNT(*) FROM %i WHERE date = %s',
+				$table_name,
 				$date
 			)
 		);
@@ -44,8 +45,8 @@ class Daily_Stats_Repository {
 		global $wpdb;
 
 		$table_name = $wpdb->prefix . 'siteimprove_alfa_daily_stats';
-		$date_from  = wp_date( 'Y-m-d', $timestamp_from ?? strtotime( '-6 months', current_time( 'timestamp' ) ) );
-		$date_to    = wp_date( 'Y-m-d', $timestamp_to ?? current_time( 'timestamp' ) );
+		$date_from  = wp_date( 'Y-m-d', $timestamp_from ?? strtotime( '-6 months', current_time( 'timestamp' ) ) ); // phpcs:ignore WordPress.DateTime.CurrentTimeTimestamp.Requested
+		$date_to    = wp_date( 'Y-m-d', $timestamp_to ?? current_time( 'timestamp' ) ); // phpcs:ignore WordPress.DateTime.CurrentTimeTimestamp.Requested
 
 		// TODO: if the last data point is behind the date_from time, then the first data point will be only the first entry from the selected date range, thus data before that data point won't be shown.
 

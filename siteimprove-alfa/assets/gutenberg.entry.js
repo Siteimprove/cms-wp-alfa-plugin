@@ -21,8 +21,8 @@ import { SinglePageReporting } from "@siteimprove/accessibility-cms-components";
         useEffect(() => {
             if (postId) {
                 apiFetch({ path: `/siteimprove-alfa/scan-result/${postId}` })
-                    .then((res) => {
-                        setData(res);
+                    .then((response) => {
+                        setData({failedItems: response});
                     })
                     .catch((error) => {
                         console.error('Error fetching data:', error);

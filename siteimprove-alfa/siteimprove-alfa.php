@@ -26,6 +26,7 @@ use Siteimprove\Alfa\Admin\Gutenberg_Sidebar;
 use Siteimprove\Alfa\Admin\Navigation;
 use Siteimprove\Alfa\Api\Get_Daily_Stats_Api;
 use Siteimprove\Alfa\Api\Get_Scan_Result_Api;
+use Siteimprove\Alfa\Api\Post_Save_Scan_Api;
 use Siteimprove\Alfa\Core\Database;
 use Siteimprove\Alfa\Core\Hook_Registry;
 use Siteimprove\Alfa\Core\Service_Container;
@@ -56,15 +57,24 @@ class Siteimprove_Alfa {
 
 	public function __construct() {
 		$this->container = ( new Service_Container() )
-			->register( 'scan_repository', function() {
-				return new Scan_Repository();
-			})
-			->register( 'daily_stats_repository', function() {
-				return new Daily_Stats_Repository();
-			})
-			->register( 'daily_stats_processor', function() {
-				return new Daily_Stats_Processor();
-			});
+			->register(
+				'scan_repository',
+				function () {
+					return new Scan_Repository();
+				}
+			)
+			->register(
+				'daily_stats_repository',
+				function () {
+					return new Daily_Stats_Repository();
+				}
+			)
+			->register(
+				'daily_stats_processor',
+				function () {
+					return new Daily_Stats_Processor();
+				}
+			);
 	}
 
 	/**
@@ -102,13 +112,16 @@ class Siteimprove_Alfa {
 		}
 
 		$hook_registry
-			->add( new Get_Scan_Result_Api( $this->container->get('scan_repository') ) )
-			->add( new Get_Daily_Stats_Api(
-				$this->container->get('scan_repository'),
-				$this->container->get('daily_stats_repository'),
-				$this->container->get('daily_stats_processor')
-			))
-			->add( new Admin_Bar( $this->container->get('scan_repository') ) );
+			->add( new Post_Save_Scan_Api( $this->container->get( 'scan_repository' ) ) )
+			->add( new Get_Scan_Result_Api( $this->container->get( 'scan_repository' ) ) )
+			->add(
+				new Get_Daily_Stats_Api(
+					$this->container->get( 'scan_repository' ),
+					$this->container->get( 'daily_stats_repository' ),
+					$this->container->get( 'daily_stats_processor' )
+				)
+			)
+			->add( new Admin_Bar() );
 
 		$hook_registry->register_hooks();
 	}

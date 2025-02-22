@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Siteimprove\Alfa\Cron;
 
@@ -20,11 +20,11 @@ class Daily_Stats_Aggregation_Cron {
 	public function __construct(
 		Scan_Repository $scan_repository,
 		Daily_Stats_Repository $daily_stats_repository,
-		Daily_Stats_Processor  $daily_stats_processor
+		Daily_Stats_Processor $daily_stats_processor
 	) {
 		$this->scan_repository        = $scan_repository;
 		$this->daily_stats_repository = $daily_stats_repository;
-		$this->daily_stats_processor = $daily_stats_processor;
+		$this->daily_stats_processor  = $daily_stats_processor;
 
 		add_action( 'siteimprove_alfa_daily_stats_aggregation', array( $this, 'aggregate_daily_stats' ) );
 	}
@@ -35,7 +35,7 @@ class Daily_Stats_Aggregation_Cron {
 	public function schedule(): void {
 		if ( ! wp_next_scheduled( 'siteimprove_alfa_daily_stats_aggregation' ) ) {
 			wp_schedule_event(
-				strtotime( 'today midnight', current_time( 'timestamp' ) ),
+				strtotime( 'today midnight', current_time( 'timestamp' ) ), // phpcs:ignore WordPress.DateTime.CurrentTimeTimestamp.Requested
 				'daily',
 				'siteimprove_alfa_daily_stats_aggregation'
 			);

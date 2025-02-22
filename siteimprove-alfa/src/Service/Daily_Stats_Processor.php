@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types = 1);
 
 namespace Siteimprove\Alfa\Service;
 
@@ -19,8 +19,8 @@ class Daily_Stats_Processor {
 
 		foreach ( $scans as $scan ) {
 			$stats = json_decode( $scan->scan_stats, true );
-			foreach ( $stats as $rule => $conformanceLevels ) {
-				foreach ( $conformanceLevels as $level => $amount ) {
+			foreach ( $stats as $rule => $conformance_levels ) {
+				foreach ( $conformance_levels as $level => $amount ) {
 					$aggregated_stats['rules'][ $rule ][ $level ] = ( $aggregated_stats['rules'][ $rule ][ $level ] ?? 0 ) + $amount;
 				}
 			}
@@ -57,7 +57,7 @@ class Daily_Stats_Processor {
 		}
 
 		// Fill in the remaining empty dates until yesterday with repeated data.
-		$end_date = date( 'Y-m-d', strtotime( '-1 day' ) );
+		$end_date = wp_date( 'Y-m-d', strtotime( '-1 day' ) );
 		while ( $date <= $end_date ) {
 			$daily_stats = $this->fill_empty_date( $daily_stats, $date, 'issues' );
 			$daily_stats = $this->fill_empty_date( $daily_stats, $date, 'occurrences' );
@@ -87,7 +87,7 @@ class Daily_Stats_Processor {
 	 * @return string
 	 */
 	private function next_day( string $date ): string {
-		return date( 'Y-m-d', strtotime( $date . ' +1 day' ) );
+		return wp_date( 'Y-m-d', strtotime( $date . ' +1 day' ) );
 	}
 
 	/**
@@ -97,7 +97,8 @@ class Daily_Stats_Processor {
 	 * @return array [date: <string>, pages: <int>, conformance: [<string>: <int>]]
 	 */
 	public function prepare_stat_record( array $stats, string $date ): array {
-		$issues = $occurrences = array();
+		$issues      = array();
+		$occurrences = array();
 		foreach ( $stats['rules'] as $level_group ) {
 			foreach ( $level_group as $level => $amount ) {
 				$issues[ $level ]      = ( $issues[ $level ] ?? 0 ) + 1;
@@ -115,8 +116,7 @@ class Daily_Stats_Processor {
 				'date'        => $date,
 				'pages'       => $stats['scans'],
 				'conformance' => $occurrences,
-			)
+			),
 		);
 	}
-
 }

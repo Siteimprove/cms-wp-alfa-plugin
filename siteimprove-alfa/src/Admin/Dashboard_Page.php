@@ -11,7 +11,7 @@ class Dashboard_Page extends Abstract_Page implements Hook_Interface {
 	 * @return void
 	 */
 	public function register_hooks(): void {
-		add_action( 'admin_enqueue_scripts', array($this, 'enqueue_scripts') );
+		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
 	}
 
 	/**
@@ -31,6 +31,6 @@ class Dashboard_Page extends Abstract_Page implements Hook_Interface {
 	 * @return void
 	 */
 	public function render_page(): void {
-		$this->render('views/dashboard.php');
+		$this->render( 'views/dashboard.php' );
 	}
 }
