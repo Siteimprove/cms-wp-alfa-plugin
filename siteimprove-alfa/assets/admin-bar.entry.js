@@ -8,7 +8,7 @@ import * as alfaJson from '@siteimprove/alfa-json';
 (function ($) {
 	'use strict';
 
-	const { __ } = wp.i18n;
+	const { __, sprintf } = wp.i18n;
 
 	$(document).on('ready', function () {
 		bindClickEvent();
@@ -21,34 +21,35 @@ import * as alfaJson from '@siteimprove/alfa-json';
 				e.preventDefault();
 
 				const $this = $(this);
-				$this
-					.find('.label')
-					.html(__('Checking Accessibility…', 'siteimprove-alfa'));
+				const $label = $this.find('.label');
+				$label.html(__('Checking Accessibility…', 'siteimprove-alfa'));
 
 				accessibilityCheck()
-					.then(() => {
-						$this
-							.find('.label')
-							.html(
-								__(
-									'Accessibility results saved',
-									'siteimprove-alfa'
+					.then((response) => {
+						if (response.count_issues > 0) {
+							$label.html(
+								sprintf(
+									/* translators: %d: Number of issues found */
+									__('%d issues found!', 'siteimprove-alfa'),
+									response.count_issues
 								)
 							);
+						} else {
+							$label.html(
+								__('No issues found!', 'siteimprove-alfa')
+							);
+						}
 						$this.prop(
 							'href',
 							siteimproveAlfaSaveScanData.view_link
 						);
 					})
-					.catch(() => {
-						$this
-							.find('.label')
-							.html(
-								__(
-									'Accessibility check failed',
-									'siteimprove-alfa'
-								)
-							);
+					.catch((error) => {
+						// eslint-disable-next-line no-console
+						console.error(error);
+						$label.html(
+							__('Accessibility check failed', 'siteimprove-alfa')
+						);
 						bindClickEvent();
 					});
 			}

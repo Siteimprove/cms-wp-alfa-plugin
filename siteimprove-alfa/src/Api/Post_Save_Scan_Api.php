@@ -64,7 +64,7 @@ class Post_Save_Scan_Api implements Hook_Interface {
 		$result = $this->scan_repository->create_or_update_scan( $scan_results, $scan_stats, $post_id );
 
 		if ( $result ) {
-			return new WP_REST_Response( $result );
+			return new WP_REST_Response( $this->create_response_summary( $scan_stats ) );
 		}
 
 		return new WP_REST_Response( 'Internal database error!', 500 );
@@ -75,5 +75,23 @@ class Post_Save_Scan_Api implements Hook_Interface {
 	 */
 	public function authenticate_request(): bool {
 		return current_user_can( 'manage_options' );
+	}
+
+	/**
+	 * @param array $scan_stats
+	 *
+	 * @return array
+	 */
+	private function create_response_summary( array $scan_stats ): array {
+		$scan_stats = array_filter(
+			$scan_stats,
+			function ( $item ) {
+				return ! empty( $item );
+			}
+		);
+
+		return array(
+			'count_issues' => count( $scan_stats ),
+		);
 	}
 }

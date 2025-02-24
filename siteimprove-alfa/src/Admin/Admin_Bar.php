@@ -31,6 +31,13 @@ class Admin_Bar implements Hook_Interface {
 			false
 		);
 
+		wp_enqueue_style(
+			SITEIMPROVE_ALFA_PLUGIN_NAME,
+			SITEIMPROVE_ALFA_PLUGIN_ROOT_URL . 'assets/admin-bar.css',
+			array(),
+			SITEIMPROVE_ALFA_VERSION,
+		);
+
 		$post_id = get_the_ID();
 		wp_localize_script(
 			SITEIMPROVE_ALFA_PLUGIN_NAME,
@@ -53,7 +60,6 @@ class Admin_Bar implements Hook_Interface {
 			return;
 		}
 
-		// TODO: make sure it's visible in mobile view
 		$wp_admin_bar->add_node(
 			array(
 				'id'    => 'stim-alfa-check-accessibility',
