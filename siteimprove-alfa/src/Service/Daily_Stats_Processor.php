@@ -35,11 +35,15 @@ class Daily_Stats_Processor {
 	 * @return stdClass {issues: [date: <string>, pages: <int>, conformance: [<string>: <int>]]], occurrences: [date: <string>, pages: <int>, conformance: [<string>: <int>]]]}
 	 */
 	public function prepare_daily_stats( array $results ): stdClass {
-		$daily_stats = new StdClass();
-
+		$daily_stats              = new StdClass();
 		$daily_stats->issues      = array();
 		$daily_stats->occurrences = array();
-		$date                     = $results[0]->date;
+
+		if ( empty( $results ) ) {
+			return $daily_stats;
+		}
+
+		$date = $results[0]->date;
 
 		foreach ( $results as $i => $result ) {
 			$stats = json_decode( $result->aggregated_stats, true );

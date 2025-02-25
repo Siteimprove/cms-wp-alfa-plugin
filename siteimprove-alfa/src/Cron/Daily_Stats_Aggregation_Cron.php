@@ -50,7 +50,7 @@ class Daily_Stats_Aggregation_Cron {
 
 		$aggregated_stats = $this->daily_stats_processor->aggregate_scan_stats( $scans );
 
-		$this->daily_stats_repository->insert_or_update_stats(
+		$this->daily_stats_repository->create_or_update_stats(
 			strtotime( '-1 day', current_time( 'timestamp' ) ), // phpcs:ignore WordPress.DateTime.CurrentTimeTimestamp.Requested
 			$aggregated_stats
 		);
