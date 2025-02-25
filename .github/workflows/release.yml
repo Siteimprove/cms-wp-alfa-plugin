@@ -17,7 +17,7 @@ jobs:
 
       - name: Setup Tools
         run: |
-          apt-get update && apt-get install -y zip unzip
+          apt-get update && apt-get install -y zip unzip openssh-client git
           curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
       - name: Install Composer dependencies
@@ -28,8 +28,14 @@ jobs:
         with:
           node-version: '23'
 
-      - name: Install Node.js dependencies
-        run: npm install
+      - name: Install Dependencies
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.CI_DEPLOY_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          eval "$(ssh-agent -s)"
+          ssh-add ~/.ssh/id_rsa
+          npm install
 
       - name: Build assets
         run: npm run build
@@ -44,5 +50,7 @@ jobs:
       - name: Create Release
         uses: Siteimprove/release-action@v1
         with:
+          allowUpdates: true
+          generateReleaseNotes: true
           artifacts: "siteimprove-alfa.zip"
           token: ${{ secrets.GITHUB_TOKEN }}

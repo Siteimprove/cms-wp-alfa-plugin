@@ -20,9 +20,20 @@
 
 namespace Siteimprove\Alfa;
 
+use Siteimprove\Alfa\Admin\Admin_Bar;
+use Siteimprove\Alfa\Admin\Dashboard_Page;
+use Siteimprove\Alfa\Admin\Gutenberg_Sidebar;
+use Siteimprove\Alfa\Admin\Navigation;
+use Siteimprove\Alfa\Api\Get_Daily_Stats_Api;
+use Siteimprove\Alfa\Api\Get_Scan_Result_Api;
+use Siteimprove\Alfa\Api\Post_Save_Scan_Api;
 use Siteimprove\Alfa\Core\Database;
 use Siteimprove\Alfa\Core\Hook_Registry;
-use Siteimprove\Alfa\Repository\Scan_Repository;
+use Siteimprove\Alfa\Core\Service_Container;
+use Siteimprove\Alfa\Cron\Daily_Stats_Aggregation_Cron;
+use Siteimprove\Alfa\Service\Daily_Stats_Processor;
+use Siteimprove\Alfa\Service\Repository\Daily_Stats_Repository;
+use Siteimprove\Alfa\Service\Repository\Scan_Repository;
 
 if ( ! defined( 'WPINC' ) ) {
 	die; // If this file is called directly, abort.
@@ -42,38 +53,37 @@ define( 'SITEIMPROVE_ALFA_PLUGIN_ROOT_URL', trailingslashit( plugin_dir_url( __F
  */
 class Siteimprove_Alfa {
 
-	/**
-	 * Init plugin.
-	 *
-	 * @return void
-	 */
-	public function init(): void {
-		register_activation_hook( __FILE__, array( $this, 'activate' ) );
-		add_action( 'plugins_loaded', array( $this, 'plugins_loaded' ) );
+	private Service_Container $container;
+
+	public function __construct() {
+		$this->container = ( new Service_Container() )
+			->register(
+				'scan_repository',
+				function () {
+					return new Scan_Repository();
+				}
+			)
+			->register(
+				'daily_stats_repository',
+				function () {
+					return new Daily_Stats_Repository();
+				}
+			)
+			->register(
+				'daily_stats_processor',
+				function () {
+					return new Daily_Stats_Processor();
+				}
+			);
 	}
 
 	/**
 	 * @return void
 	 */
-	public function plugins_loaded(): void {
-		if ( ! current_user_can( 'manage_options' ) ) {
-			return;
-		}
-
-		$hook_registry = new Hook_Registry();
-
-		if ( is_admin() ) {
-			$hook_registry
-				->add( new Admin\Navigation() )
-				->add( new Admin\Dashboard_Page() )
-				->add( new Admin\Gutenberg_Sidebar() );
-		}
-
-		$hook_registry
-			->add( new Api\Get_Scan_Result_Api( new Scan_Repository() ) )
-			->add( new Admin\Admin_Bar( new Scan_Repository() ) );
-
-		$hook_registry->register_hooks();
+	public function init(): void {
+		register_activation_hook( __FILE__, array( $this, 'activate' ) );
+		add_action( 'plugins_loaded', array( $this, 'register_hooks' ) );
+		$this->schedule_cron();
 	}
 
 	/**
@@ -82,6 +92,51 @@ class Siteimprove_Alfa {
 	public function activate(): void {
 		$db = new Database();
 		$db->install();
+	}
+
+	/**
+	 * @return void
+	 */
+	public function register_hooks(): void {
+		if ( ! current_user_can( 'manage_options' ) ) {
+			return;
+		}
+
+		$hook_registry = new Hook_Registry();
+
+		if ( is_admin() ) {
+			$hook_registry
+				->add( new Navigation() )
+				->add( new Dashboard_Page() )
+				->add( new Gutenberg_Sidebar() );
+		}
+
+		$hook_registry
+			->add( new Post_Save_Scan_Api( $this->container->get( 'scan_repository' ) ) )
+			->add( new Get_Scan_Result_Api( $this->container->get( 'scan_repository' ) ) )
+			->add(
+				new Get_Daily_Stats_Api(
+					$this->container->get( 'scan_repository' ),
+					$this->container->get( 'daily_stats_repository' ),
+					$this->container->get( 'daily_stats_processor' )
+				)
+			)
+			->add( new Admin_Bar() );
+
+		$hook_registry->register_hooks();
+	}
+
+	/**
+	 * @return void
+	 */
+	public function schedule_cron(): void {
+		$daily_stats_aggregation_cron = new Daily_Stats_Aggregation_Cron(
+			$this->container->get( 'scan_repository' ),
+			$this->container->get( 'daily_stats_repository' ),
+			$this->container->get( 'daily_stats_processor' )
+		);
+
+		$daily_stats_aggregation_cron->schedule();
 	}
 }
 

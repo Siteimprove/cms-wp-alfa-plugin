@@ -17,7 +17,7 @@ abstract class Abstract_Page {
 		}
 
 		if ( ! file_exists( $view ) ) {
-			throw new \RuntimeException( "View file not found: $view" ); // phpcs:ignore WordPress.Security.EscapeOutput.ExceptionNotEscaped
+			throw new \LogicException( esc_html( sprintf( 'View file not found: %s', $view ) ) );
 		}
 
 		$this->include_view( $view, $params );

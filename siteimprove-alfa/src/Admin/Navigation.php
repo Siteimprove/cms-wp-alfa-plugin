@@ -10,15 +10,7 @@ class Navigation implements Hook_Interface {
 	 * @return void
 	 */
 	public function register_hooks(): void {
-		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_styles' ) );
 		add_action( 'admin_menu', array( $this, 'init_menu' ) );
-	}
-
-	/**
-	 * @return void
-	 */
-	public function enqueue_styles(): void {
-		wp_enqueue_style( SITEIMPROVE_ALFA_PLUGIN_NAME, SITEIMPROVE_ALFA_PLUGIN_ROOT_URL . 'assets/siteimprove-alfa-admin.css', array(), SITEIMPROVE_ALFA_VERSION, 'all' );
 	}
 
 	/**

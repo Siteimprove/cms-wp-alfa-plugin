@@ -1,4 +1,4 @@
-name: WPCS check
+name: CI
 
 on: pull_request
 
@@ -23,3 +23,28 @@ jobs:
 
       - name: Check PHP Code Sniff
         run: ./siteimprove-alfa/vendor/bin/phpcs siteimprove-alfa --standard=phpcs.xml.dist --report-summary
+
+  eslint:
+    name: ESLint
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '23'
+
+      - name: Install Dependencies
+        run: |
+          apt-get update && apt-get install -y openssh-client
+          mkdir -p ~/.ssh
+          echo "${{ secrets.CI_DEPLOY_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          eval "$(ssh-agent -s)"
+          ssh-add ~/.ssh/id_rsa
+          npm install
+
+      - name: Run ESLint
+        run: npx eslint siteimprove-alfa
