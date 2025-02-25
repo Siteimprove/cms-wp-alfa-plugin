@@ -9,9 +9,17 @@ import * as alfaJson from '@siteimprove/alfa-json';
 	'use strict';
 
 	const { __, sprintf } = wp.i18n;
+	const urlParams = new URLSearchParams(window.location.search);
+	const isAutoCheckEnabled =
+		urlParams.has('siteimprove-auto-check') &&
+		urlParams.get('siteimprove-auto-check') === 'true';
 
 	$(document).on('ready', function () {
 		bindClickEvent();
+
+		if (isAutoCheckEnabled) {
+			$('#wp-admin-bar-stim-alfa-check-accessibility a').trigger('click');
+		}
 	});
 
 	function bindClickEvent() {
@@ -26,6 +34,12 @@ import * as alfaJson from '@siteimprove/alfa-json';
 
 				accessibilityCheck()
 					.then((response) => {
+						if (isAutoCheckEnabled) {
+							window.location.href =
+								siteimproveAlfaSaveScanData.view_link;
+							return;
+						}
+
 						if (response.count_issues > 0) {
 							$label.html(
 								sprintf(
