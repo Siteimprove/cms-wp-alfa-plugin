@@ -1,4 +1,4 @@
-# WordPress plugin integration for Siteimprove Alfa
+# WordPress plugin integration for Siteimprove Alfa .
 
 ## Introduction
 
