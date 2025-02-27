@@ -2,6 +2,7 @@ import { JQuery as AlfaJQuery } from '@siteimprove/alfa-jquery';
 import { Audit as AlfaAudit } from '@siteimprove/alfa-act/dist/audit';
 import rules from '@siteimprove/alfa-rules';
 import * as alfaJson from '@siteimprove/alfa-json';
+import { getRuleMeta } from '@siteimprove/accessibility-cms-components/src/helpers/transformAuditResults';
 
 /* global siteimproveAlfaSaveScanData, jQuery */
 
@@ -98,16 +99,10 @@ import * as alfaJson from '@siteimprove/alfa-json';
 			if (outcome._outcome === 'failed') {
 				// process outcome stat
 				const rule = outcome.rule.uri.split('/').pop();
+				const conformance = getRuleMeta(rule).conformance;
 				auditScan.scan_stats[rule] = auditScan.scan_stats[rule] || {};
-				outcome.rule.requirements.forEach((requirement) => {
-					if (requirement.level) {
-						requirement.level._values.forEach((level) => {
-							auditScan.scan_stats[rule][level.value] =
-								(auditScan.scan_stats[rule][level.value] || 0) +
-								1;
-						});
-					}
-				});
+				auditScan.scan_stats[rule][conformance] =
+					(auditScan.scan_stats[rule][conformance] || 0) + 1;
 
 				// process outcome result
 				auditScan.scan_results.push(
