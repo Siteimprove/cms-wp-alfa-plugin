@@ -46,7 +46,7 @@ class Daily_Stats_Aggregation_Cron {
 	 * @return void
 	 */
 	public function aggregate_daily_stats(): void {
-		$scans = $this->scan_repository->find_all_scan_stats();
+		$scans = $this->scan_repository->find_all_scans( array( 'scan_stats' ) );
 
 		$aggregated_stats = $this->daily_stats_processor->aggregate_scan_stats( $scans );
 
