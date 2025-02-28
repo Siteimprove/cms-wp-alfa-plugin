@@ -14,12 +14,14 @@ class Database {
 		$scans_table = $wpdb->prefix . 'siteimprove_alfa_scans';
 		$sql         = "CREATE TABLE $scans_table (
 			id bigint(20) NOT NULL AUTO_INCREMENT,
-			post_id bigint(20) NOT NULL,
+			post_id bigint(20) DEFAULT NULL,
+			url text DEFAULT NULL,
 			scan_results longtext NOT NULL,
 			scan_stats text NOT NULL,
 			created_at datetime DEFAULT CURRENT_TIMESTAMP NOT NULL,
 			PRIMARY KEY  (id),
         	UNIQUE KEY post_id (post_id)
+        	UNIQUE KEY url (url)
 		) $charset_collate;";
 
 		$daily_stats_table = $wpdb->prefix . 'siteimprove_alfa_daily_stats';

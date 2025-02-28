@@ -18,13 +18,17 @@ class Dashboard_Page extends Abstract_Page implements Hook_Interface {
 	 * @return void
 	 */
 	public function enqueue_scripts(): void {
-		wp_enqueue_script(
-			SITEIMPROVE_ALFA_PLUGIN_NAME,
-			SITEIMPROVE_ALFA_PLUGIN_ROOT_URL . 'assets/dashboard.bundle.js',
-			array( 'wp-api-fetch', 'react', 'react-dom' ),
-			SITEIMPROVE_ALFA_VERSION,
-			false
-		);
+		global $pagenow;
+
+		if ('admin.php' === $pagenow && 'siteimprove_alfa' === $_GET['page'] ?? null) {
+			wp_enqueue_script(
+				SITEIMPROVE_ALFA_PLUGIN_NAME,
+				SITEIMPROVE_ALFA_PLUGIN_ROOT_URL . 'assets/dashboard.bundle.js',
+				array( 'wp-api-fetch', 'react', 'react-dom' ),
+				SITEIMPROVE_ALFA_VERSION,
+				false
+			);
+		}
 	}
 
 	/**

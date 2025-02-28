@@ -18,8 +18,7 @@ class Admin_Bar implements Hook_Interface {
 	 * @return void
 	 */
 	public function enqueue_scripts(): void {
-		// Only relevant if admin bar is showing, and the current page represents a single post.
-		if ( ! is_admin_bar_showing() || ! is_singular() ) {
+		if ( ! is_admin_bar_showing() ) {
 			return;
 		}
 
@@ -38,13 +37,13 @@ class Admin_Bar implements Hook_Interface {
 			SITEIMPROVE_ALFA_VERSION,
 		);
 
-		$post_id = get_the_ID();
+		$post_id = is_singular() ? get_the_ID() : null;
 		wp_localize_script(
 			SITEIMPROVE_ALFA_PLUGIN_NAME,
 			'siteimproveAlfaSaveScanData',
 			array(
 				'post_id'   => $post_id,
-				'view_link' => get_edit_post_link( $post_id ),
+				'view_link' => $post_id ? get_edit_post_link( $post_id ) : admin_url( 'admin.php?page=siteimprove_alfa' ),
 			)
 		);
 	}
@@ -55,8 +54,8 @@ class Admin_Bar implements Hook_Interface {
 	 * @return void
 	 */
 	public function add_admin_bar_node( $wp_admin_bar ): void {
-		// Only relevant if admin bar is showing on the public site, and the current page represents a single post.
-		if ( ! is_admin_bar_showing() || is_admin() || ! is_singular() ) {
+		// Only relevant if admin bar is showing on the public site.
+		if ( ! is_admin_bar_showing() || is_admin() ) {
 			return;
 		}
 

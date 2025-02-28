@@ -91,6 +91,7 @@ import { getRuleMeta } from '@siteimprove/accessibility-cms-components/src/helpe
 	function processAuditScan(outcomes, postId) {
 		const auditScan = {
 			post_id: postId,
+			url: !postId ? window.location.href : null,
 			scan_results: [],
 			scan_stats: {},
 		};
