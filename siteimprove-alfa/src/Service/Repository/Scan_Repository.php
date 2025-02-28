@@ -10,9 +10,9 @@ class Scan_Repository {
 	 * @param int|null $post_id ID of post, or NULL if URL is defined.
 	 * @param string|null $url URL of page, or NULL if post_id is defined.
 	 *
-	 * @return int|null The ID of the inserted or updated row on success, null otherwise.
+	 * @return bool
 	 */
-	public function create_or_update_scan( array $scan_results, array $scan_stats, ?int $post_id, ?string $url ): ?int {
+	public function create_or_update_scan( array $scan_results, array $scan_stats, ?int $post_id, ?string $url ): bool {
 		global $wpdb;
 
 		$table_name = $wpdb->prefix . 'siteimprove_alfa_scans';
@@ -24,20 +24,29 @@ class Scan_Repository {
 			'created_at'   => current_time( 'mysql' ),
 		);
 
-		$result = $wpdb->update( // phpcs:ignore WordPress.DB.DirectDatabaseQuery
-			$table_name,
-			$data,
-			array(
-				'post_id' => $post_id,
-				'url'     => $url,
+		$exists = (bool) $wpdb->get_var( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+			$wpdb->prepare(
+				'SELECT COUNT(*) FROM %i WHERE %i = %s',
+				$table_name,
+				$post_id ? 'post_id' : 'url',
+				$post_id ?: $url // phpcs:ignore Universal.Operators.DisallowShortTernary.Found
 			)
 		);
 
-		if ( ! $result ) {
+		if ( $exists ) {
+			$result = $wpdb->update( // phpcs:ignore WordPress.DB.DirectDatabaseQuery
+				$table_name,
+				$data,
+				array(
+					'post_id' => $post_id,
+					'url'     => $url,
+				)
+			);
+		} else {
 			$result = $wpdb->insert( $table_name, $data ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery
 		}
 
-		return $result ? $result : null;
+		return ( false !== $result );
 	}
 
 	/**
@@ -54,6 +63,26 @@ class Scan_Repository {
 				'SELECT scan_results FROM %i WHERE post_id = %d',
 				$table_name,
 				$post_id
+			)
+		);
+
+		return $result;
+	}
+
+	/**
+	 * @param string $url
+	 *
+	 * @return string|null
+	 */
+	public function find_scan_by_url( string $url ): ?string {
+		global $wpdb;
+
+		$table_name = $wpdb->prefix . 'siteimprove_alfa_scans';
+		$result     = $wpdb->get_var( // phpcs:ignore WordPress.DB.DirectDatabaseQuery
+			$wpdb->prepare(
+				'SELECT scan_results FROM %i WHERE url = %s',
+				$table_name,
+				$url
 			)
 		);
 

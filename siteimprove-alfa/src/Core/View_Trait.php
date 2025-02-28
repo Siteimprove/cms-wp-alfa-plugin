@@ -2,7 +2,7 @@
 
 namespace Siteimprove\Alfa\Core;
 
-abstract class Abstract_Page {
+trait View_Trait {
 
 	/**
 	 * @param string $view

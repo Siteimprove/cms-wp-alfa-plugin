@@ -10,7 +10,7 @@ use WP_REST_Response;
 class Get_Scan_Result_Api implements Hook_Interface {
 
 	private const ROUTE_NAMESPACE = 'siteimprove-alfa';
-	private const ROUTE           = '/scan-result/(?P<id>\d+)';
+	private const ROUTE           = '/scan-result(?:/(?P<id>\d+))?';
 	private const METHOD          = 'GET';
 
 	/**
@@ -55,17 +55,18 @@ class Get_Scan_Result_Api implements Hook_Interface {
 	public function handle_request( WP_REST_Request $request ): WP_REST_Response {
 		$post_id = $request['id'] ? (int) $request['id'] : null;
 
-		if ( ! $post_id ) {
-			return new WP_REST_Response( 'Missing or invalid data!', 400 );
+		if ( $post_id ) {
+			$result = $this->scan_repository->find_scan_by_post_id( $post_id );
+		} else {
+			$url    = sanitize_url( $request->get_header( 'referer' ) );
+			$result = $this->scan_repository->find_scan_by_url( $url );
 		}
-
-		$result = $this->scan_repository->find_scan_by_post_id( $post_id );
 
 		if ( $result ) {
 			return new WP_REST_Response( json_decode( $result, true ) );
 		}
 
-		return new WP_REST_Response( array(), 404 );
+		return new WP_REST_Response( array() );
 	}
 
 	/**

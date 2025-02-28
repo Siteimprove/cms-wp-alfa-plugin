@@ -3,74 +3,80 @@ import { Audit as AlfaAudit } from '@siteimprove/alfa-act/dist/audit';
 import rules from '@siteimprove/alfa-rules';
 import * as alfaJson from '@siteimprove/alfa-json';
 import { getRuleMeta } from '@siteimprove/accessibility-cms-components/src/helpers/transformAuditResults';
+import { renderSinglePageReporting } from '@siteimprove/accessibility-cms-components';
 
 /* global siteimproveAlfaSaveScanData, jQuery */
 
 (function ($) {
 	'use strict';
 
-	const { __, sprintf } = wp.i18n;
+	const { __ } = wp.i18n;
+	let isPageScanned = false;
 
 	$(document).on('ready', function () {
-		bindClickEvent();
-	});
+		$('.siteimprove-scan-button').on('click', onScanClick);
 
-	function bindClickEvent() {
-		$('#wp-admin-bar-stim-alfa-check-accessibility a').one(
+		$('#siteimprove-scan-panel-button, #siteimprove-scan-hide').on(
 			'click',
-			function (e) {
-				e.preventDefault();
-
-				const $this = $(this);
-				const $label = $this.find('.label');
-				$label.html(__('Checking Accessibility…', 'siteimprove-alfa'));
-
-				accessibilityCheck()
-					.then((response) => {
-						if (response.count_issues > 0) {
-							$label.html(
-								sprintf(
-									/* translators: %d: Number of issues found */
-									__('%d issues found!', 'siteimprove-alfa'),
-									response.count_issues
-								)
-							);
-						} else {
-							$label.html(
-								__('No issues found!', 'siteimprove-alfa')
-							);
-						}
-						$this.prop(
-							'href',
-							siteimproveAlfaSaveScanData.view_link
-						);
-					})
-					.catch((error) => {
-						// eslint-disable-next-line no-console
-						console.error(error);
-						$label.html(
-							__('Accessibility check failed', 'siteimprove-alfa')
-						);
-						bindClickEvent();
-					});
+			function () {
+				$('#siteimprove-scan-panel').toggle();
+				if (!isPageScanned) {
+					isPageScanned = true;
+					$('.siteimprove-scan-button').trigger('click');
+				}
 			}
 		);
-	}
+	});
+
+	const onScanClick = function () {
+		const $this = $(this);
+		const $label = $this.find('.label');
+		$label.html(__('Checking page…', 'siteimprove-alfa'));
+		$this.attr('disabled', 'disabled');
+
+		accessibilityCheck()
+			.then((auditScan) => {
+				wp.apiFetch({
+					path: '/siteimprove-alfa/save-scan',
+					method: 'POST',
+					data: auditScan,
+				}).then((response) => {
+					$label.html(__('Check page', 'siteimprove-alfa'));
+					if (response.count_issues > 0) {
+						renderSinglePageReporting(
+							{ failedItems: auditScan.scan_results },
+							'siteimprove-scan-results'
+						);
+					} else {
+						$('#siteimprove-scan-results').html(
+							__('No issues found!', 'siteimprove-alfa')
+						);
+					}
+				});
+				$this.removeAttr('disabled');
+			})
+			.catch((error) => {
+				// eslint-disable-next-line no-console
+				console.error(error);
+				$label.html(__('Page check failed!', 'siteimprove-alfa'));
+				$this.removeAttr('disabled');
+			});
+	};
 
 	/**
 	 * @return {Promise<(function(Object): {type: string, request: Object})|*>}  Processed audit scan object.
 	 */
 	async function accessibilityCheck() {
-		const htmlDom = $('html').clone().find('#wpadminbar').remove().end(); // get DOM and remove the admin bar
+		// clode the DOM and remove the admin bar and the scan panel
+		const htmlDom = $('html')
+			.clone()
+			.find('#wpadminbar, .siteimprove-component')
+			.remove()
+			.end();
+
 		const alfaPage = await AlfaJQuery.toPage(htmlDom);
 
-		return evaluatePage(alfaPage).then((auditScan) => {
-			return wp.apiFetch({
-				path: '/siteimprove-alfa/save-scan',
-				method: 'POST',
-				data: auditScan,
-			});
-		});
+		return await evaluatePage(alfaPage);
 	}
 
 	/**

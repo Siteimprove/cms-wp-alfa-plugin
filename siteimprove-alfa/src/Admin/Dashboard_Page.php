@@ -2,10 +2,12 @@
 
 namespace Siteimprove\Alfa\Admin;
 
-use Siteimprove\Alfa\Core\Abstract_Page;
+use Siteimprove\Alfa\Core\View_Trait;
 use Siteimprove\Alfa\Core\Hook_Interface;
 
-class Dashboard_Page extends Abstract_Page implements Hook_Interface {
+class Dashboard_Page implements Hook_Interface {
+
+	use View_Trait;
 
 	/**
 	 * @return void
@@ -20,7 +22,7 @@ class Dashboard_Page extends Abstract_Page implements Hook_Interface {
 	public function enqueue_scripts(): void {
 		global $pagenow;
 
-		if ('admin.php' === $pagenow && 'siteimprove_alfa' === $_GET['page'] ?? null) {
+		if ( 'admin.php' === $pagenow && 'siteimprove_alfa' === $_GET['page'] ?? null ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 			wp_enqueue_script(
 				SITEIMPROVE_ALFA_PLUGIN_NAME,
 				SITEIMPROVE_ALFA_PLUGIN_ROOT_URL . 'assets/dashboard.bundle.js',

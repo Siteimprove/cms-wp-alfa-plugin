@@ -20,7 +20,7 @@
 
 namespace Siteimprove\Alfa;
 
-use Siteimprove\Alfa\Admin\Admin_Bar;
+use Siteimprove\Alfa\Admin\Scan_Panel;
 use Siteimprove\Alfa\Admin\Dashboard_Page;
 use Siteimprove\Alfa\Admin\Gutenberg_Sidebar;
 use Siteimprove\Alfa\Admin\Navigation;
@@ -125,7 +125,7 @@ class Siteimprove_Alfa {
 					$this->container->get( 'daily_stats_processor' )
 				)
 			)
-			->add( new Admin_Bar() );
+			->add( new Scan_Panel() );
 
 		$hook_registry->register_hooks();
 	}

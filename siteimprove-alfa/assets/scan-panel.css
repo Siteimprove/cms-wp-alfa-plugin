@@ -1,0 +1,83 @@
+#siteimprove-scan-panel-button {
+    position: fixed;
+    top: 100px;
+    right: 10px;
+    border: none;
+    width: 70px;
+    height: 70px;
+    background-image: url("./img/FAB.svg");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-color: transparent;
+    cursor: pointer;
+    z-index: 4325235230;
+}
+
+#siteimprove-scan-panel {
+    position: fixed;
+    top: 100px;
+    bottom: 100px;
+    right: 10px;
+    background: white;
+    border: 1px solid #ddd;
+    z-index: 4325235231;
+    width: 265px;
+    font-size: 14px;
+    font-family: "Manrope", "Arial", "sans-serif";
+    display: flex;
+    flex-direction: column;
+}
+
+#siteimprove-scan-panel .scan-panel-header {
+    background: #0D4CD3;
+    color: white;
+    font-size: 14px;
+    padding: 9px 0 9px 16px;
+    line-height: 32px;
+    font-weight: bold;
+    flex-shrink: 0; /* Keeps the header static in size */
+}
+
+#siteimprove-scan-panel .scan-panel-body {
+    overflow-y: auto; /* Only the body will scroll */
+    flex-grow: 1; /* Allows the body to fill the rest of the panel */
+    padding: 0 10px;
+}
+
+#siteimprove-scan-hide {
+    width: 40px;
+    height: 32px;
+    margin: 0;
+    background-image: url("./img/hide.svg");
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-color: transparent;
+    float: right;
+    border: none;
+    cursor: pointer;
+}
+
+.siteimprove-scan-button {
+    width: 100%;
+    height: 32px;
+    line-height: 32px;
+    margin: 10px 0;
+    padding: 0;
+    background: none;
+    border: 1px solid #767676;
+    cursor: pointer;
+}
+
+.siteimprove-scan-button .label:before {
+    content: "";
+    position: relative;
+    top: 4px;
+    margin: 0 5px;
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    background-image: url("./img/update.svg");
+    background-size: cover;
+    background-repeat: no-repeat;
+ }

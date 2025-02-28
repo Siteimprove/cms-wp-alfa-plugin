@@ -8,9 +8,9 @@ class Daily_Stats_Repository {
 	 * @param int $timestamp
 	 * @param array $stats
 	 *
-	 * @return int|null The ID of the inserted or updated row on success, null otherwise.
+	 * @return bool
 	 */
-	public function create_or_update_stats( int $timestamp, array $stats ): ?int {
+	public function create_or_update_stats( int $timestamp, array $stats ): bool {
 		global $wpdb;
 
 		$table_name = $wpdb->prefix . 'siteimprove_alfa_daily_stats';
@@ -29,10 +29,12 @@ class Daily_Stats_Repository {
 		);
 
 		if ( $exists ) {
-			return $wpdb->update( $table_name, $data, array( 'date' => $date ) ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery
+			$result = $wpdb->update( $table_name, $data, array( 'date' => $date ) ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery
+		} else {
+			$result = $wpdb->insert( $table_name, $data ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery
 		}
 
-		return $wpdb->insert( $table_name, $data ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery
+		return ( false !== $result );
 	}
 
 	/**
