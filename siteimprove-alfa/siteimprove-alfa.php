@@ -20,11 +20,13 @@
 
 namespace Siteimprove\Alfa;
 
-use Siteimprove\Alfa\Admin\Admin_Bar;
+use Siteimprove\Alfa\Admin\Scan_Panel;
 use Siteimprove\Alfa\Admin\Dashboard_Page;
 use Siteimprove\Alfa\Admin\Gutenberg_Sidebar;
 use Siteimprove\Alfa\Admin\Navigation;
 use Siteimprove\Alfa\Api\Get_Daily_Stats_Api;
+use Siteimprove\Alfa\Api\Get_Issues_Api;
+use Siteimprove\Alfa\Api\Get_Pages_With_Issues_Api;
 use Siteimprove\Alfa\Api\Get_Scan_Result_Api;
 use Siteimprove\Alfa\Api\Post_Save_Scan_Api;
 use Siteimprove\Alfa\Core\Database;
@@ -114,6 +116,8 @@ class Siteimprove_Alfa {
 		$hook_registry
 			->add( new Post_Save_Scan_Api( $this->container->get( 'scan_repository' ) ) )
 			->add( new Get_Scan_Result_Api( $this->container->get( 'scan_repository' ) ) )
+			->add( new Get_Issues_Api( $this->container->get( 'scan_repository' ) ) )
+			->add( new Get_Pages_With_Issues_Api( $this->container->get( 'scan_repository' ) ) )
 			->add(
 				new Get_Daily_Stats_Api(
 					$this->container->get( 'scan_repository' ),
@@ -121,7 +125,7 @@ class Siteimprove_Alfa {
 					$this->container->get( 'daily_stats_processor' )
 				)
 			)
-			->add( new Admin_Bar() );
+			->add( new Scan_Panel() );
 
 		$hook_registry->register_hooks();
 	}

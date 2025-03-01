@@ -32,10 +32,16 @@ class Get_Daily_Stats_Api implements Hook_Interface {
 		$this->daily_stats_processor  = $daily_stats_processor;
 	}
 
+	/**
+	 * @return void
+	 */
 	public function register_hooks(): void {
 		add_action( 'rest_api_init', array( $this, 'register_routes' ) );
 	}
 
+	/**
+	 * @return void
+	 */
 	public function register_routes(): void {
 		register_rest_route(
 			static::ROUTE_NAMESPACE,
@@ -55,7 +61,7 @@ class Get_Daily_Stats_Api implements Hook_Interface {
 	 */
 	public function handle_request( WP_REST_Request $request ): WP_REST_Response {
 		// prepare today's stat from scans
-		$scans = $this->scan_repository->find_all_scan_stats();
+		$scans = $this->scan_repository->find_all_scans( array( 'scan_stats' ) );
 		if ( empty( $scans ) ) {
 			return new WP_REST_Response( array() );
 		}

@@ -4,7 +4,7 @@ const TerserPlugin = require("terser-webpack-plugin")
 module.exports = {
   mode: "development",
   entry: {
-    "admin-bar": "./siteimprove-alfa/assets/admin-bar.entry.js",
+    "scan-panel": "./siteimprove-alfa/assets/scan-panel.entry.js",
     "dashboard": "./siteimprove-alfa/assets/dashboard.entry.js",
     "gutenberg": "./siteimprove-alfa/assets/gutenberg.entry.js",
   },
