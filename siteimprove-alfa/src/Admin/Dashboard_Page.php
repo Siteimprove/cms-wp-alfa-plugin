@@ -22,6 +22,13 @@ class Dashboard_Page implements Hook_Interface {
 	public function enqueue_scripts(): void {
 		global $pagenow;
 
+		wp_enqueue_style(
+			SITEIMPROVE_ALFA_PLUGIN_NAME,
+			SITEIMPROVE_ALFA_PLUGIN_ROOT_URL . 'assets/siteimprove-alfa.css',
+			array(),
+			SITEIMPROVE_ALFA_VERSION,
+		);
+
 		if ( 'admin.php' === $pagenow && 'siteimprove_alfa' === $_GET['page'] ?? null ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 			wp_enqueue_script(
 				SITEIMPROVE_ALFA_PLUGIN_NAME,

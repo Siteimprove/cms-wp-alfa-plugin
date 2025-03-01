@@ -52,15 +52,15 @@ class Scan_Repository {
 	/**
 	 * @param int $post_id
 	 *
-	 * @return string|null
+	 * @return mixed
 	 */
-	public function find_scan_by_post_id( int $post_id ): ?string {
+	public function find_scan_by_post_id( int $post_id ): mixed {
 		global $wpdb;
 
 		$table_name = $wpdb->prefix . 'siteimprove_alfa_scans';
-		$result     = $wpdb->get_var( // phpcs:ignore WordPress.DB.DirectDatabaseQuery
+		$result     = $wpdb->get_row( // phpcs:ignore WordPress.DB.DirectDatabaseQuery
 			$wpdb->prepare(
-				'SELECT scan_results FROM %i WHERE post_id = %d',
+				'SELECT scan_results, created_at FROM %i WHERE post_id = %d',
 				$table_name,
 				$post_id
 			)
@@ -72,15 +72,15 @@ class Scan_Repository {
 	/**
 	 * @param string $url
 	 *
-	 * @return string|null
+	 * @return mixed
 	 */
-	public function find_scan_by_url( string $url ): ?string {
+	public function find_scan_by_url( string $url ): mixed {
 		global $wpdb;
 
 		$table_name = $wpdb->prefix . 'siteimprove_alfa_scans';
-		$result     = $wpdb->get_var( // phpcs:ignore WordPress.DB.DirectDatabaseQuery
+		$result     = $wpdb->get_row( // phpcs:ignore WordPress.DB.DirectDatabaseQuery
 			$wpdb->prepare(
-				'SELECT scan_results FROM %i WHERE url = %s',
+				'SELECT scan_results, created_at FROM %i WHERE url = %s',
 				$table_name,
 				$url
 			)

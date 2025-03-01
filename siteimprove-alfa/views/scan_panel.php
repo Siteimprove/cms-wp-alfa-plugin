@@ -6,7 +6,7 @@
 	</div>
 	<div class="scan-panel-body">
 		<div class="scan-panel-control">
-			<button class="siteimprove-scan-button"><span class="label"><?php esc_html_e( 'Check page', 'siteimprove-alfa' ); ?></span></button>
+			<button class="siteimprove-scan-button"><span><?php esc_html_e( 'Check page', 'siteimprove-alfa' ); ?></span></button>
 		</div>
 		<div id="siteimprove-scan-results"></div>
 	</div>

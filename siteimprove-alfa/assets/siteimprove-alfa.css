@@ -36,12 +36,12 @@
     padding: 9px 0 9px 16px;
     line-height: 32px;
     font-weight: bold;
-    flex-shrink: 0; /* Keeps the header static in size */
+    flex-shrink: 0;
 }
 
 #siteimprove-scan-panel .scan-panel-body {
-    overflow-y: auto; /* Only the body will scroll */
-    flex-grow: 1; /* Allows the body to fill the rest of the panel */
+    overflow-y: auto;
+    flex-grow: 1;
     padding: 0 10px;
 }
 
@@ -67,9 +67,11 @@
     background: none;
     border: 1px solid #767676;
     cursor: pointer;
+    text-align: center;
+    display: block;
 }
 
-.siteimprove-scan-button .label:before {
+.siteimprove-scan-button span:before {
     content: "";
     position: relative;
     top: 4px;
@@ -80,4 +82,37 @@
     background-image: url("./img/update.svg");
     background-size: cover;
     background-repeat: no-repeat;
- }
+}
+
+#wpcontent:has(#siteimprove-dashboard-header) {
+    padding: 0;
+}
+
+#siteimprove-dashboard-header {
+    background: #0D4CD3;
+    color: white;
+    padding: 10px 22px;
+    font-size: 16px;
+    font-family: "Manrope", "Arial", "sans-serif";
+}
+
+#siteimprove-dashboard-container {
+    padding-left: 20px;
+}
+
+.siteimprove-dashboard-heading {
+    background: #FFF;
+    height: 48px;
+    line-height: 48px;
+    margin-bottom: 2px;
+    padding-left: 15px;
+}
+
+#siteimprove-daily-stats {
+    background-color: #FFF;
+}
+
+.siteimprove-scan-button-container {
+    margin-bottom: 20px;
+    font-size: 12px;
+}

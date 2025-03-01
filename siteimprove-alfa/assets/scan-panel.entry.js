@@ -11,6 +11,10 @@ import { renderSinglePageReporting } from '@siteimprove/accessibility-cms-compon
 	'use strict';
 
 	const { __ } = wp.i18n;
+	const urlParams = new URLSearchParams(window.location.search);
+	const isAutoCheckEnabled =
+		urlParams.has('siteimprove-auto-check') &&
+		urlParams.get('siteimprove-auto-check') === 'true';
 	let isPageScanned = false;
 
 	$(document).on('ready', function () {
@@ -26,6 +30,10 @@ import { renderSinglePageReporting } from '@siteimprove/accessibility-cms-compon
 				}
 			}
 		);
+
+		if (isAutoCheckEnabled) {
+			$('#siteimprove-scan-panel-button').trigger('click');
+		}
 	});
 
 	const onScanClick = function () {

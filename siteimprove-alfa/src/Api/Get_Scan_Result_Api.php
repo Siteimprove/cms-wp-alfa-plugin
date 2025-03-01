@@ -63,7 +63,12 @@ class Get_Scan_Result_Api implements Hook_Interface {
 		}
 
 		if ( $result ) {
-			return new WP_REST_Response( json_decode( $result, true ) );
+			return new WP_REST_Response(
+				array(
+					'failedItems' => json_decode( $result->scan_results, true ),
+					'date'        => $result->created_at,
+				)
+			);
 		}
 
 		return new WP_REST_Response( array() );

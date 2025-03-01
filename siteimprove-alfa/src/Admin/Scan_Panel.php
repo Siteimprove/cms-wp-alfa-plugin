@@ -35,7 +35,7 @@ class Scan_Panel implements Hook_Interface {
 
 		wp_enqueue_style(
 			SITEIMPROVE_ALFA_PLUGIN_NAME,
-			SITEIMPROVE_ALFA_PLUGIN_ROOT_URL . 'assets/scan-panel.css',
+			SITEIMPROVE_ALFA_PLUGIN_ROOT_URL . 'assets/siteimprove-alfa.css',
 			array(),
 			SITEIMPROVE_ALFA_VERSION,
 		);
