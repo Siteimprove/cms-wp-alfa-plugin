@@ -17,8 +17,9 @@
 #siteimprove-scan-panel {
     position: fixed;
     top: 100px;
-    bottom: 100px;
+    max-height: calc(100vh - 120px);
     right: 10px;
+    overflow-y: auto;
     background: white;
     border: 1px solid #ddd;
     z-index: 4325235231;

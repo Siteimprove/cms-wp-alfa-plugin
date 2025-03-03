@@ -5,7 +5,7 @@ import * as alfaJson from '@siteimprove/alfa-json';
 import { getRuleMeta } from '@siteimprove/accessibility-cms-components/src/helpers/transformAuditResults';
 import { renderSinglePageReporting } from '@siteimprove/accessibility-cms-components';
 
-/* global siteimproveAlfaSaveScanData, jQuery */
+/* global siteimproveAlfaSaveScanData, jQuery, requestAnimationFrame */
 
 (function ($) {
 	'use strict';
@@ -17,7 +17,7 @@ import { renderSinglePageReporting } from '@siteimprove/accessibility-cms-compon
 		urlParams.get('siteimprove-auto-check') === 'true';
 	let isPageScanned = false;
 
-	$(document).on('ready', function () {
+	$(window).on('load', function () {
 		$('.siteimprove-scan-button').on('click', onScanClick);
 
 		$('#siteimprove-scan-panel-button, #siteimprove-scan-hide').on(
@@ -37,38 +37,45 @@ import { renderSinglePageReporting } from '@siteimprove/accessibility-cms-compon
 	});
 
 	const onScanClick = function () {
-		const $this = $(this);
-		const $label = $this.find('.label');
-		$label.html(__('Checking page…', 'siteimprove-alfa'));
-		$this.attr('disabled', 'disabled');
+		requestAnimationFrame(() => {
+			const $this = $(this);
+			const $label = $this.find('span');
+			$label.html(__('Checking page…', 'siteimprove-alfa'));
+			$this.attr('disabled', 'disabled');
 
-		accessibilityCheck()
-			.then((auditScan) => {
-				wp.apiFetch({
-					path: '/siteimprove-alfa/save-scan',
-					method: 'POST',
-					data: auditScan,
-				}).then((response) => {
-					$label.html(__('Check page', 'siteimprove-alfa'));
-					if (response.count_issues > 0) {
-						renderSinglePageReporting(
-							{ failedItems: auditScan.scan_results },
-							'siteimprove-scan-results'
+			requestAnimationFrame(() =>
+				accessibilityCheck()
+					.then((auditScan) => {
+						wp.apiFetch({
+							path: '/siteimprove-alfa/save-scan',
+							method: 'POST',
+							data: auditScan,
+						}).then((response) => {
+							if (response.count_issues > 0) {
+								renderSinglePageReporting(
+									{ failedItems: auditScan.scan_results },
+									'siteimprove-scan-results'
+								);
+							} else {
+								$('#siteimprove-scan-results').html(
+									__('No issues found!', 'siteimprove-alfa')
+								);
+							}
+
+							$label.html(__('Check page', 'siteimprove-alfa'));
+							$this.removeAttr('disabled');
+						});
+					})
+					.catch((error) => {
+						// eslint-disable-next-line no-console
+						console.error(error);
+						$label.html(
+							__('Page check failed!', 'siteimprove-alfa')
 						);
-					} else {
-						$('#siteimprove-scan-results').html(
-							__('No issues found!', 'siteimprove-alfa')
-						);
-					}
-				});
-				$this.removeAttr('disabled');
-			})
-			.catch((error) => {
-				// eslint-disable-next-line no-console
-				console.error(error);
-				$label.html(__('Page check failed!', 'siteimprove-alfa'));
-				$this.removeAttr('disabled');
-			});
+						$this.removeAttr('disabled');
+					})
+			);
+		});
 	};
 
 	/**
@@ -110,7 +117,7 @@ import { renderSinglePageReporting } from '@siteimprove/accessibility-cms-compon
 			scan_stats: {},
 		};
 
-		outcomes.forEach((outcome) => {
+		for (const outcome of outcomes) {
 			if (outcome._outcome === 'failed') {
 				// process outcome stat
 				const rule = outcome.rule.uri.split('/').pop();
@@ -126,7 +133,7 @@ import { renderSinglePageReporting } from '@siteimprove/accessibility-cms-compon
 					})
 				);
 			}
-		});
+		}
 
 		return auditScan;
 	}
