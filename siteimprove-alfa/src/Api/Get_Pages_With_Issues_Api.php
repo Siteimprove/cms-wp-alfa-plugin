@@ -50,28 +50,9 @@ class Get_Pages_With_Issues_Api implements Hook_Interface {
 	 * @return WP_REST_Response
 	 */
 	public function handle_request(): WP_REST_Response {
-		$scans = $this->scan_repository->find_all_scans();
+		$pages = $this->scan_repository->find_pages_with_issues();
 
-		if ( ! count( $scans ) ) {
-			return new WP_REST_Response( array() );
-		}
-
-		$posts = $this->get_posts_by_scans( $scans );
-
-		$results = array_map(
-			function ( $item ) use ( $posts ) {
-				return array(
-					'post_id'      => $item->post_id ?? null,
-					'title'        => $item->post_id ? get_the_title( $posts[ $item->post_id ] ) : null,
-					'url'          => $item->post_id ? get_permalink( $posts[ $item->post_id ] ) : $item->url,
-					'scan_results' => $item->scan_results,
-					'scan_stats'   => $item->scan_stats,
-				);
-			},
-			$scans
-		);
-
-		return new WP_REST_Response( $results );
+		return new WP_REST_Response( $pages );
 	}
 
 	/**
@@ -79,37 +60,5 @@ class Get_Pages_With_Issues_Api implements Hook_Interface {
 	 */
 	public function authenticate_request(): bool {
 		return current_user_can( 'manage_options' );
-	}
-
-	/**
-	 * @param array $scans
-	 *
-	 * @return \WP_Post[]
-	 */
-	private function get_posts_by_scans( array $scans ): array {
-		$post_ids = array_filter(
-			array_map(
-				function ( $item ) {
-					return $item->post_id;
-				},
-				$scans
-			)
-		);
-
-		$posts_data = get_posts(
-			array(
-				'include'     => $post_ids,
-				'post_type'   => 'any',
-				'post_status' => array( 'publish', 'draft', 'pending', 'private' ),
-				'numberposts' => - 1,
-			)
-		);
-
-		$posts = array();
-		foreach ( $posts_data as $post ) {
-			$posts[ $post->ID ] = $post;
-		}
-
-		return $posts;
 	}
 }

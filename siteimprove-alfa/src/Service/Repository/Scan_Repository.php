@@ -6,34 +6,34 @@ class Scan_Repository {
 
 	/**
 	 * @param array $scan_results
-	 * @param array $scan_stats
-	 * @param int|null $post_id ID of post, or NULL if URL is defined.
-	 * @param string|null $url URL of page, or NULL if post_id is defined.
+	 * @param string $url Unique URL of a page.
+	 * @param string $title Title of the page.
+	 * @param int|null $post_id Unique post ID or NULL.
 	 *
-	 * @return bool
+	 * @return int|null ID of the scan, or NULL if query failed.
 	 */
-	public function create_or_update_scan( array $scan_results, array $scan_stats, ?int $post_id, ?string $url ): bool {
+	public function create_or_update_scan( array $scan_results, string $url, string $title, ?int $post_id ): ?int {
 		global $wpdb;
 
-		$table_name = $wpdb->prefix . 'siteimprove_alfa_scans';
+		$table_name = $wpdb->prefix . 'siteimprove_accessibility_scans';
 		$data       = array(
 			'post_id'      => $post_id,
 			'url'          => $url,
+			'title'        => $title,
 			'scan_results' => wp_json_encode( $scan_results ),
-			'scan_stats'   => wp_json_encode( $scan_stats ),
 			'created_at'   => current_time( 'mysql' ),
 		);
 
-		$exists = (bool) $wpdb->get_var( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+		$scan_id = (int) $wpdb->get_var( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 			$wpdb->prepare(
-				'SELECT COUNT(*) FROM %i WHERE %i = %s',
+				'SELECT id FROM %i WHERE %i = %s',
 				$table_name,
 				$post_id ? 'post_id' : 'url',
 				$post_id ?: $url // phpcs:ignore Universal.Operators.DisallowShortTernary.Found
 			)
 		);
 
-		if ( $exists ) {
+		if ( $scan_id ) {
 			$result = $wpdb->update( // phpcs:ignore WordPress.DB.DirectDatabaseQuery
 				$table_name,
 				$data,
@@ -42,11 +42,13 @@ class Scan_Repository {
 					'url'     => $url,
 				)
 			);
-		} else {
-			$result = $wpdb->insert( $table_name, $data ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery
+
+			return ( false !== $result ) ? $scan_id : NULL;
 		}
 
-		return ( false !== $result );
+		$result = $wpdb->insert( $table_name, $data ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery
+
+		return ( false !== $result ) ? $wpdb->insert_id : NULL;
 	}
 
 	/**
@@ -57,7 +59,7 @@ class Scan_Repository {
 	public function find_scan_by_post_id( int $post_id ): mixed {
 		global $wpdb;
 
-		$table_name = $wpdb->prefix . 'siteimprove_alfa_scans';
+		$table_name = $wpdb->prefix . 'siteimprove_accessibility_scans';
 		$result     = $wpdb->get_row( // phpcs:ignore WordPress.DB.DirectDatabaseQuery
 			$wpdb->prepare(
 				'SELECT scan_results, created_at FROM %i WHERE post_id = %d',
@@ -77,7 +79,7 @@ class Scan_Repository {
 	public function find_scan_by_url( string $url ): mixed {
 		global $wpdb;
 
-		$table_name = $wpdb->prefix . 'siteimprove_alfa_scans';
+		$table_name = $wpdb->prefix . 'siteimprove_accessibility_scans';
 		$result     = $wpdb->get_row( // phpcs:ignore WordPress.DB.DirectDatabaseQuery
 			$wpdb->prepare(
 				'SELECT scan_results, created_at FROM %i WHERE url = %s',
@@ -90,20 +92,43 @@ class Scan_Repository {
 	}
 
 	/**
-	 * @param array $select Name of the selected fields.
-	 *
-	 * @return array
+	 * @return int
 	 */
-	public function find_all_scans( array $select = array( '*' ) ): array {
+	public function get_total_scan_count(): int {
 		global $wpdb;
 
-		$table_name = $wpdb->prefix . 'siteimprove_alfa_scans';
-		$fields     = join( ', ', $select );
+		$table_name = $wpdb->prefix . 'siteimprove_accessibility_scans';
 
+		// TODO: caching?
+		return (int) $wpdb->get_var( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+			$wpdb->prepare(
+				'SELECT COUNT(*) FROM %i',
+				$table_name
+			)
+		);
+	}
+
+	/**
+	 * @return array
+	 */
+	public function find_pages_with_issues(): array {
+		global $wpdb;
+
+		$scans_table = $wpdb->prefix . 'siteimprove_accessibility_scans';
+		$occurrences_table = $wpdb->prefix . 'siteimprove_accessibility_occurrences';
+		$rules_table = $wpdb->prefix . 'siteimprove_accessibility_rules';
+
+		// TODO: caching?
 		return $wpdb->get_results( // phpcs:ignore WordPress.DB.DirectDatabaseQuery
 			$wpdb->prepare(
-				"SELECT $fields FROM %i", // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-				$table_name
+				"SELECT s.id, s.title, s.url, COUNT(r.id) issues, SUM(o.occurrence) occurrence
+			    FROM %i s
+			    JOIN %i o ON o.scan_id = s.id
+			    JOIN %i r ON r.id = o.rule_id
+				GROUP BY s.id",
+				$scans_table,
+				$occurrences_table,
+				$rules_table
 			)
 		);
 	}
