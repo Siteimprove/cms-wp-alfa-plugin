@@ -21,7 +21,7 @@
 namespace Siteimprove\Alfa;
 
 use Siteimprove\Alfa\Admin\Scan_Panel;
-use Siteimprove\Alfa\Admin\Dashboard_Page;
+use Siteimprove\Alfa\Admin\Dashboard;
 use Siteimprove\Alfa\Admin\Gutenberg_Sidebar;
 use Siteimprove\Alfa\Admin\Navigation;
 use Siteimprove\Alfa\Api\Get_Daily_Stats_Api;
@@ -119,7 +119,7 @@ class Siteimprove_Alfa {
 		if ( is_admin() ) {
 			$hook_registry
 				->add( new Navigation() )
-				->add( new Dashboard_Page() )
+				->add( new Dashboard() )
 				->add( new Gutenberg_Sidebar() );
 		}
 

@@ -5,7 +5,8 @@ module.exports = {
   mode: "development",
   entry: {
     "scan-panel": "./siteimprove-alfa/assets/scan-panel.entry.js",
-    "dashboard": "./siteimprove-alfa/assets/dashboard.entry.js",
+    "issues": "./siteimprove-alfa/assets/issues.entry.js",
+    "reports": "./siteimprove-alfa/assets/reports.entry.js",
     "gutenberg": "./siteimprove-alfa/assets/gutenberg.entry.js",
   },
   output: {
