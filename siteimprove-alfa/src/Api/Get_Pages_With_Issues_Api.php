@@ -52,6 +52,14 @@ class Get_Pages_With_Issues_Api implements Hook_Interface {
 	public function handle_request(): WP_REST_Response {
 		$pages = $this->scan_repository->find_pages_with_issues();
 
+		$pages = array_map(
+			function ( $page ) {
+				$page->issues = explode( ',', $page->issues );
+				return $page;
+			},
+			$pages
+		);
+
 		return new WP_REST_Response( $pages );
 	}
 

@@ -119,8 +119,9 @@
     font-family: "Manrope", "Arial", "sans-serif";
 }
 
-#siteimprove-dashboard-container {
+.siteimprove-dashboard-container {
     padding-left: 20px;
+    margin-bottom: 40px;
 }
 
 .siteimprove-dashboard-heading {
@@ -131,6 +132,11 @@
     padding-left: 15px;
 }
 
-#siteimprove-daily-stats {
+.siteimprove-component-container {
     background-color: #FFF;
+}
+
+.siteimprove-component-placeholder {
+    line-height: 150px;
+    text-align: center;
 }

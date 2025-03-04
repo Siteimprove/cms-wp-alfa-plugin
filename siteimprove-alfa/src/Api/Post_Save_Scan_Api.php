@@ -78,7 +78,7 @@ class Post_Save_Scan_Api implements Hook_Interface {
 
 		$this->issue_repository->delete_scan_occurrences( $scan_id );
 
-		foreach ($scan_stats as $rule => $details) {
+		foreach ( $scan_stats as $rule => $details ) {
 			$rule_id = $this->issue_repository->create_or_update_rule( $rule, $details['conformance'] );
 
 			$this->issue_repository->create_occurrence( $scan_id, $rule_id, $details['occurrence'] );

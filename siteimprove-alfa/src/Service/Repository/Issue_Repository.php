@@ -19,7 +19,6 @@ class Issue_Repository {
 			'conformance' => $conformance,
 		);
 
-		// TODO: add caching?
 		$rule_id = (int) $wpdb->get_var( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 			$wpdb->prepare(
 				'SELECT id FROM %i WHERE rule = %s',
@@ -37,12 +36,12 @@ class Issue_Repository {
 				)
 			);
 
-			return false !== $result ? $rule_id : NULL;
+			return false !== $result ? $rule_id : null;
 		}
 
 		$result = $wpdb->insert( $table_name, $data ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery
 
-		return ( false !== $result ) ? $wpdb->insert_id : NULL;
+		return ( false !== $result ) ? $wpdb->insert_id : null;
 	}
 
 	/**
@@ -53,7 +52,7 @@ class Issue_Repository {
 	public function delete_scan_occurrences( int $scan_id ): bool {
 		global $wpdb;
 		$table_name = $wpdb->prefix . 'siteimprove_accessibility_occurrences';
-		$result = $wpdb->delete( $table_name, array( 'scan_id' => $scan_id ), array( '%d' ) );
+		$result     = $wpdb->delete( $table_name, array( 'scan_id' => $scan_id ), array( '%d' ) ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 
 		return false !== $result;
 	}
@@ -69,16 +68,16 @@ class Issue_Repository {
 		global $wpdb;
 		$table_name = $wpdb->prefix . 'siteimprove_accessibility_occurrences';
 
-		$result = $wpdb->insert(
+		$result = $wpdb->insert( // phpcs:ignore WordPress.DB.DirectDatabaseQuery
 			$table_name,
 			array(
 				'scan_id'    => $scan_id,
 				'rule_id'    => $rule_id,
 				'occurrence' => $occurrence,
 			)
-		); // phpcs:ignore WordPress.DB.DirectDatabaseQuery
+		);
 
-		return ( false !== $result ) ? $wpdb->insert_id : NULL;
+		return ( false !== $result ) ? $wpdb->insert_id : null;
 	}
 
 	/**
@@ -87,15 +86,15 @@ class Issue_Repository {
 	public function find_all_issues(): array {
 		global $wpdb;
 
-		$rules_table = $wpdb->prefix . 'siteimprove_accessibility_rules';
+		$rules_table       = $wpdb->prefix . 'siteimprove_accessibility_rules';
 		$occurrences_table = $wpdb->prefix . 'siteimprove_accessibility_occurrences';
 
 		return $wpdb->get_results( // phpcs:ignore WordPress.DB.DirectDatabaseQuery
 			$wpdb->prepare(
-				"SELECT r.rule, r.conformance, SUM(o.occurrence) occurrence
+				'SELECT r.rule, r.conformance, SUM(o.occurrence) occurrence
 			    FROM %i r
 			    JOIN %i o ON o.rule_id = r.id
-				GROUP BY r.id",
+				GROUP BY r.id',
 				$rules_table,
 				$occurrences_table
 			)
@@ -108,18 +107,17 @@ class Issue_Repository {
 	public function find_issues_with_pages(): array {
 		global $wpdb;
 
-		$rules_table = $wpdb->prefix . 'siteimprove_accessibility_rules';
+		$rules_table       = $wpdb->prefix . 'siteimprove_accessibility_rules';
 		$occurrences_table = $wpdb->prefix . 'siteimprove_accessibility_occurrences';
-		$scans_table = $wpdb->prefix . 'siteimprove_accessibility_scans';
+		$scans_table       = $wpdb->prefix . 'siteimprove_accessibility_scans';
 
-		// TODO: caching?
 		return $wpdb->get_results( // phpcs:ignore WordPress.DB.DirectDatabaseQuery
 			$wpdb->prepare(
-				"SELECT r.id, r.rule, SUM(o.occurrence) occurrence, COUNT(s.id) pages
+				'SELECT r.id, r.rule, SUM(o.occurrence) occurrences, COUNT(s.id) pages
 			    FROM %i r
 			    JOIN %i o ON o.rule_id = r.id
 			    JOIN %i s ON s.id = o.scan_id
-				GROUP BY r.id",
+				GROUP BY r.id',
 				$rules_table,
 				$occurrences_table,
 				$scans_table

@@ -43,12 +43,12 @@ class Scan_Repository {
 				)
 			);
 
-			return ( false !== $result ) ? $scan_id : NULL;
+			return ( false !== $result ) ? $scan_id : null;
 		}
 
 		$result = $wpdb->insert( $table_name, $data ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery
 
-		return ( false !== $result ) ? $wpdb->insert_id : NULL;
+		return ( false !== $result ) ? $wpdb->insert_id : null;
 	}
 
 	/**
@@ -114,18 +114,18 @@ class Scan_Repository {
 	public function find_pages_with_issues(): array {
 		global $wpdb;
 
-		$scans_table = $wpdb->prefix . 'siteimprove_accessibility_scans';
+		$scans_table       = $wpdb->prefix . 'siteimprove_accessibility_scans';
 		$occurrences_table = $wpdb->prefix . 'siteimprove_accessibility_occurrences';
-		$rules_table = $wpdb->prefix . 'siteimprove_accessibility_rules';
+		$rules_table       = $wpdb->prefix . 'siteimprove_accessibility_rules';
 
 		// TODO: caching?
 		return $wpdb->get_results( // phpcs:ignore WordPress.DB.DirectDatabaseQuery
 			$wpdb->prepare(
-				"SELECT s.id, s.title, s.url, COUNT(r.id) issues, SUM(o.occurrence) occurrence
+				'SELECT s.id, s.title, s.url, SUM(o.occurrence) occurrences, GROUP_CONCAT(r.id) issues
 			    FROM %i s
 			    JOIN %i o ON o.scan_id = s.id
 			    JOIN %i r ON r.id = o.rule_id
-				GROUP BY s.id",
+				GROUP BY s.id',
 				$scans_table,
 				$occurrences_table,
 				$rules_table

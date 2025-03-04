@@ -19,7 +19,7 @@ class Daily_Stats_Processor {
 	private Issue_Repository $issue_repository;
 
 	public function __construct( Scan_Repository $scan_repository, Issue_Repository $issue_repository ) {
-		$this->scan_repository = $scan_repository;
+		$this->scan_repository  = $scan_repository;
 		$this->issue_repository = $issue_repository;
 	}
 
