@@ -125,18 +125,44 @@
 }
 
 .siteimprove-dashboard-heading {
-    background: #FFF;
     height: 48px;
     line-height: 48px;
     margin-bottom: 2px;
-    padding-left: 15px;
 }
 
 .siteimprove-component-container {
     background-color: #FFF;
+    box-shadow: #E0E0E0 2px 2px 4px;
 }
 
 .siteimprove-component-placeholder {
     line-height: 150px;
     text-align: center;
+}
+
+/**
+ * Settings form
+ */
+
+#siteimprove-settings-form {
+    background-color: #F6F6F6;
+    box-shadow: #E0E0E0 2px 2px 4px;
+}
+
+#siteimprove-settings-form h2 {
+    background-color: #FFF;
+    padding-left: 20px;
+    line-height: 48px;
+    margin-top: 0;
+}
+
+#siteimprove-settings-form tr {
+    display: block;
+    background-color: #FFF;
+    margin: 2px 20px;
+    padding-left: 20px;
+}
+
+#siteimprove-settings-form .submit {
+    margin-left: 20px;
 }

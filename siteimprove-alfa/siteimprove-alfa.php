@@ -20,10 +20,12 @@
 
 namespace Siteimprove\Alfa;
 
+use Siteimprove\Alfa\Admin\Reports_Page;
 use Siteimprove\Alfa\Admin\Scan_Panel;
-use Siteimprove\Alfa\Admin\Dashboard;
+use Siteimprove\Alfa\Admin\Issues_Page;
 use Siteimprove\Alfa\Admin\Gutenberg_Sidebar;
 use Siteimprove\Alfa\Admin\Navigation;
+use Siteimprove\Alfa\Admin\Settings_Page;
 use Siteimprove\Alfa\Api\Get_Daily_Stats_Api;
 use Siteimprove\Alfa\Api\Get_Issues_Api;
 use Siteimprove\Alfa\Api\Get_Pages_With_Issues_Api;
@@ -119,7 +121,9 @@ class Siteimprove_Alfa {
 		if ( is_admin() ) {
 			$hook_registry
 				->add( new Navigation() )
-				->add( new Dashboard() )
+				->add( new Issues_Page() )
+				->add( new Reports_Page() )
+				->add( new Settings_Page() )
 				->add( new Gutenberg_Sidebar() );
 		}
 
