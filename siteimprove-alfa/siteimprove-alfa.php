@@ -20,10 +20,12 @@
 
 namespace Siteimprove\Alfa;
 
+use Siteimprove\Alfa\Admin\Reports_Page;
 use Siteimprove\Alfa\Admin\Scan_Panel;
-use Siteimprove\Alfa\Admin\Dashboard_Page;
+use Siteimprove\Alfa\Admin\Issues_Page;
 use Siteimprove\Alfa\Admin\Gutenberg_Sidebar;
 use Siteimprove\Alfa\Admin\Navigation;
+use Siteimprove\Alfa\Admin\Settings_Page;
 use Siteimprove\Alfa\Api\Get_Daily_Stats_Api;
 use Siteimprove\Alfa\Api\Get_Issues_Api;
 use Siteimprove\Alfa\Api\Get_Pages_With_Issues_Api;
@@ -35,6 +37,7 @@ use Siteimprove\Alfa\Core\Service_Container;
 use Siteimprove\Alfa\Cron\Daily_Stats_Aggregation_Cron;
 use Siteimprove\Alfa\Service\Daily_Stats_Processor;
 use Siteimprove\Alfa\Service\Repository\Daily_Stats_Repository;
+use Siteimprove\Alfa\Service\Repository\Issue_Repository;
 use Siteimprove\Alfa\Service\Repository\Scan_Repository;
 
 if ( ! defined( 'WPINC' ) ) {
@@ -66,6 +69,12 @@ class Siteimprove_Alfa {
 				}
 			)
 			->register(
+				'issue_repository',
+				function () {
+					return new Issue_Repository();
+				}
+			)
+			->register(
 				'daily_stats_repository',
 				function () {
 					return new Daily_Stats_Repository();
@@ -74,7 +83,10 @@ class Siteimprove_Alfa {
 			->register(
 				'daily_stats_processor',
 				function () {
-					return new Daily_Stats_Processor();
+					return new Daily_Stats_Processor(
+						$this->container->get( 'scan_repository' ),
+						$this->container->get( 'issue_repository' )
+					);
 				}
 			);
 	}
@@ -109,18 +121,24 @@ class Siteimprove_Alfa {
 		if ( is_admin() ) {
 			$hook_registry
 				->add( new Navigation() )
-				->add( new Dashboard_Page() )
+				->add( new Issues_Page() )
+				->add( new Reports_Page() )
+				->add( new Settings_Page() )
 				->add( new Gutenberg_Sidebar() );
 		}
 
 		$hook_registry
-			->add( new Post_Save_Scan_Api( $this->container->get( 'scan_repository' ) ) )
+			->add(
+				new Post_Save_Scan_Api(
+					$this->container->get( 'scan_repository' ),
+					$this->container->get( 'issue_repository' )
+				)
+			)
 			->add( new Get_Scan_Result_Api( $this->container->get( 'scan_repository' ) ) )
-			->add( new Get_Issues_Api( $this->container->get( 'scan_repository' ) ) )
+			->add( new Get_Issues_Api( $this->container->get( 'issue_repository' ) ) )
 			->add( new Get_Pages_With_Issues_Api( $this->container->get( 'scan_repository' ) ) )
 			->add(
 				new Get_Daily_Stats_Api(
-					$this->container->get( 'scan_repository' ),
 					$this->container->get( 'daily_stats_repository' ),
 					$this->container->get( 'daily_stats_processor' )
 				)
@@ -135,7 +153,6 @@ class Siteimprove_Alfa {
 	 */
 	public function schedule_cron(): void {
 		$daily_stats_aggregation_cron = new Daily_Stats_Aggregation_Cron(
-			$this->container->get( 'scan_repository' ),
 			$this->container->get( 'daily_stats_repository' ),
 			$this->container->get( 'daily_stats_processor' )
 		);

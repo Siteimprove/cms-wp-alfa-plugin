@@ -3,7 +3,7 @@
 namespace Siteimprove\Alfa\Api;
 
 use Siteimprove\Alfa\Core\Hook_Interface;
-use Siteimprove\Alfa\Service\Repository\Scan_Repository;
+use Siteimprove\Alfa\Service\Repository\Issue_Repository;
 use WP_REST_Response;
 
 class Get_Issues_Api implements Hook_Interface {
@@ -13,15 +13,15 @@ class Get_Issues_Api implements Hook_Interface {
 	private const METHOD          = 'GET';
 
 	/**
-	 * @var Scan_Repository
+	 * @var Issue_Repository
 	 */
-	private Scan_Repository $scan_repository;
+	private Issue_Repository $issue_repository;
 
 	/**
-	 * @param Scan_Repository $scan_repository
+	 * @param Issue_Repository $issue_repository
 	 */
-	public function __construct( Scan_Repository $scan_repository ) {
-		$this->scan_repository = $scan_repository;
+	public function __construct( Issue_Repository $issue_repository ) {
+		$this->issue_repository = $issue_repository;
 	}
 
 	/**
@@ -50,22 +50,7 @@ class Get_Issues_Api implements Hook_Interface {
 	 * @return WP_REST_Response
 	 */
 	public function handle_request(): WP_REST_Response {
-		$scans = $this->scan_repository->find_all_scans( array( 'scan_stats' ) );
-
-		if ( ! count( $scans ) ) {
-			return new WP_REST_Response( array() );
-		}
-
-		$issues = array();
-		foreach ( $scans as $scan ) {
-			$stats = json_decode( $scan->scan_stats, true );
-			foreach ( $stats as $rule => $conformance_levels ) {
-				$issues[ $rule ]['pages'] = ( $issues[ $rule ]['pages'] ?? 0 ) + 1;
-				foreach ( $conformance_levels as $amount ) {
-					$issues[ $rule ]['occurrences'] = ( $issues[ $rule ]['occurrences'] ?? 0 ) + $amount;
-				}
-			}
-		}
+		$issues = $this->issue_repository->find_issues_with_pages();
 
 		return new WP_REST_Response( $issues );
 	}

@@ -2,28 +2,42 @@
 
 namespace Siteimprove\Alfa\Service;
 
+use Siteimprove\Alfa\Service\Repository\Issue_Repository;
+use Siteimprove\Alfa\Service\Repository\Scan_Repository;
 use stdClass;
 
 class Daily_Stats_Processor {
 
 	/**
-	 * @param array $scans
-	 *
+	 * @var Scan_Repository
+	 */
+	private Scan_Repository $scan_repository;
+
+	/**
+	 * @var Issue_Repository
+	 */
+	private Issue_Repository $issue_repository;
+
+	public function __construct( Scan_Repository $scan_repository, Issue_Repository $issue_repository ) {
+		$this->scan_repository  = $scan_repository;
+		$this->issue_repository = $issue_repository;
+	}
+
+	/**
 	 * @return array {scans: <int>, rules: [<string>: [<string>: <int>]]}
 	 */
-	public function aggregate_scan_stats( array $scans ): array {
+	public function get_aggregated_issues(): array {
+		$scan_count = $this->scan_repository->get_total_scan_count();
+		$issues     = $this->issue_repository->find_all_issues();
+
 		$aggregated_stats = array(
-			'scans' => count( $scans ),
+			'scans' => $scan_count,
 			'rules' => array(),
 		);
 
-		foreach ( $scans as $scan ) {
-			$stats = json_decode( $scan->scan_stats, true );
-			foreach ( $stats as $rule => $conformance_levels ) {
-				foreach ( $conformance_levels as $level => $amount ) {
-					$aggregated_stats['rules'][ $rule ][ $level ] = ( $aggregated_stats['rules'][ $rule ][ $level ] ?? 0 ) + $amount;
-				}
-			}
+		foreach ( $issues as $issue ) {
+			// TODO: consider simplifying structure (impacts the prepare_stat_record() method, and the data that has been already stored in database)
+			$aggregated_stats['rules'][ $issue->rule ][ $issue->conformance ] = ( $aggregated_stats['rules'][ $issue->rule ][ $issue->conformance ] ?? 0 ) + $issue->occurrence;
 		}
 
 		return $aggregated_stats;

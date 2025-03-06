@@ -5,9 +5,11 @@ namespace Siteimprove\Alfa\Admin;
 use Siteimprove\Alfa\Core\View_Trait;
 use Siteimprove\Alfa\Core\Hook_Interface;
 
-class Dashboard_Page implements Hook_Interface {
+class Issues_Page implements Hook_Interface {
 
 	use View_Trait;
+
+	const MENU_SLUG = 'siteimprove_accessibility_issues';
 
 	/**
 	 * @return void
@@ -22,20 +24,13 @@ class Dashboard_Page implements Hook_Interface {
 	public function enqueue_scripts(): void {
 		global $pagenow;
 
-		wp_enqueue_style(
-			SITEIMPROVE_ALFA_PLUGIN_NAME,
-			SITEIMPROVE_ALFA_PLUGIN_ROOT_URL . 'assets/siteimprove-alfa.css',
-			array(),
-			SITEIMPROVE_ALFA_VERSION,
-		);
-
-		if ( 'admin.php' === $pagenow && 'siteimprove_alfa' === $_GET['page'] ?? null ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		if ( 'admin.php' === $pagenow && isset( $_GET['page'] ) && static::MENU_SLUG === $_GET['page'] ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 			wp_enqueue_script(
 				SITEIMPROVE_ALFA_PLUGIN_NAME,
-				SITEIMPROVE_ALFA_PLUGIN_ROOT_URL . 'assets/dashboard.bundle.js',
-				array( 'wp-api-fetch', 'react', 'react-dom' ),
+				SITEIMPROVE_ALFA_PLUGIN_ROOT_URL . 'assets/issues.bundle.js',
+				array( 'wp-api-fetch', 'react', 'react-dom', 'jquery' ),
 				SITEIMPROVE_ALFA_VERSION,
-				false
+				true
 			);
 		}
 	}
@@ -44,6 +39,6 @@ class Dashboard_Page implements Hook_Interface {
 	 * @return void
 	 */
 	public function render_page(): void {
-		$this->render( 'views/dashboard.php' );
+		$this->render( 'views/issues.php' );
 	}
 }

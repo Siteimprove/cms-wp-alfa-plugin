@@ -4,6 +4,7 @@ namespace Siteimprove\Alfa\Api;
 
 use Siteimprove\Alfa\Core\Hook_Interface;
 use Siteimprove\Alfa\Service\Repository\Scan_Repository;
+use WP_REST_Request;
 use WP_REST_Response;
 
 class Get_Pages_With_Issues_Api implements Hook_Interface {
@@ -47,31 +48,20 @@ class Get_Pages_With_Issues_Api implements Hook_Interface {
 	}
 
 	/**
+	 * @param WP_REST_Request $request
+	 *
 	 * @return WP_REST_Response
 	 */
-	public function handle_request(): WP_REST_Response {
-		$scans = $this->scan_repository->find_all_scans();
+	public function handle_request( WP_REST_Request $request ): WP_REST_Response {
+		$params = $this->sanitize_request_params( $request );
+		$pages  = $this->scan_repository->find_pages_with_issues( $params );
 
-		if ( ! count( $scans ) ) {
-			return new WP_REST_Response( array() );
-		}
-
-		$posts = $this->get_posts_by_scans( $scans );
-
-		$results = array_map(
-			function ( $item ) use ( $posts ) {
-				return array(
-					'post_id'      => $item->post_id ?? null,
-					'title'        => $item->post_id ? get_the_title( $posts[ $item->post_id ] ) : null,
-					'url'          => $item->post_id ? get_permalink( $posts[ $item->post_id ] ) : $item->url,
-					'scan_results' => $item->scan_results,
-					'scan_stats'   => $item->scan_stats,
-				);
-			},
-			$scans
+		$result = array(
+			'total'   => $this->scan_repository->count_pages_with_issues( $params ),
+			'records' => $pages,
 		);
 
-		return new WP_REST_Response( $results );
+		return new WP_REST_Response( $result );
 	}
 
 	/**
@@ -82,34 +72,26 @@ class Get_Pages_With_Issues_Api implements Hook_Interface {
 	}
 
 	/**
-	 * @param array $scans
+	 * @param WP_REST_Request $request
 	 *
-	 * @return \WP_Post[]
+	 * @return array
 	 */
-	private function get_posts_by_scans( array $scans ): array {
-		$post_ids = array_filter(
-			array_map(
-				function ( $item ) {
-					return $item->post_id;
-				},
-				$scans
-			)
+	private function sanitize_request_params( WP_REST_Request $request ): array {
+		$column_map = array(
+			'Title'       => 'title',
+			'URL'         => 'url',
+			'issuesCount' => 'issues_count',
+			'occurrences' => 'occurrences',
+			'lastChecked' => 'lastChecked',
 		);
 
-		$posts_data = get_posts(
-			array(
-				'include'     => $post_ids,
-				'post_type'   => 'any',
-				'post_status' => array( 'publish', 'draft', 'pending', 'private' ),
-				'numberposts' => - 1,
-			)
+		return array(
+			'limit'          => (int) $request->get_param( 'pageSize' ) ?? 10,
+			'offset'         => ( (int) $request->get_param( 'pageSize' ) ?? 10 ) * ( (int) $request->get_param( 'page' ) - 1 ),
+			'sort_field'     => $column_map[ $request->get_param( 'sort' )['property'] ?? null ] ?? null,
+			'sort_direction' => $request->get_param( 'sort' )['direction'] ?? 'ASC',
+			'search_term'    => $request->get_param( 'query' ) ?? null,
+			'search_field'   => $column_map[ $request->get_param( 'searchType' ) ?? null ] ?? null,
 		);
-
-		$posts = array();
-		foreach ( $posts_data as $post ) {
-			$posts[ $post->ID ] = $post;
-		}
-
-		return $posts;
 	}
 }

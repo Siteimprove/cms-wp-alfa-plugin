@@ -3,6 +3,7 @@
 namespace Siteimprove\Alfa\Api;
 
 use Siteimprove\Alfa\Core\Hook_Interface;
+use Siteimprove\Alfa\Service\Repository\Issue_Repository;
 use Siteimprove\Alfa\Service\Repository\Scan_Repository;
 use WP_REST_Request;
 use WP_REST_Response;
@@ -19,10 +20,17 @@ class Post_Save_Scan_Api implements Hook_Interface {
 	private Scan_Repository $scan_repository;
 
 	/**
-	 * @param Scan_Repository $scan_repository
+	 * @var Issue_Repository
 	 */
-	public function __construct( Scan_Repository $scan_repository ) {
-		$this->scan_repository = $scan_repository;
+	private Issue_Repository $issue_repository;
+
+	/**
+	 * @param Scan_Repository $scan_repository
+	 * @param Issue_Repository $issue_repository
+	 */
+	public function __construct( Scan_Repository $scan_repository, Issue_Repository $issue_repository ) {
+		$this->scan_repository  = $scan_repository;
+		$this->issue_repository = $issue_repository;
 	}
 
 	/**
@@ -54,22 +62,29 @@ class Post_Save_Scan_Api implements Hook_Interface {
 	 */
 	public function handle_request( WP_REST_Request $request ): WP_REST_Response {
 		$post_id      = $request['post_id'] ? (int) $request['post_id'] : null;
-		$url          = ( null === $post_id && $request['url'] ) ? sanitize_url( $request['url'] ) : null;
+		$url          = $request['url'] ? sanitize_url( $request['url'] ) : null;
+		$title        = $request['title'] ? sanitize_text_field( $request['title'] ) : null;
 		$scan_results = rest_is_object( $request['scan_results'] ) ? rest_sanitize_object( $request['scan_results'] ) : null;
 		$scan_stats   = rest_is_object( $request['scan_stats'] ) ? rest_sanitize_object( $request['scan_stats'] ) : null;
 
-		// Either post_id or URL is not null, while the other is null
-		if ( ! ( null === $post_id xor null === $url ) || ! $scan_results || ! $scan_stats ) {
+		if ( ! $url || ! $title || ! $scan_results || ! $scan_stats ) {
 			return new WP_REST_Response( 'Missing or invalid data!', 400 );
 		}
 
-		$result = $this->scan_repository->create_or_update_scan( $scan_results, $scan_stats, $post_id, $url );
-
-		if ( $result ) {
-			return new WP_REST_Response( $this->create_response_summary( $scan_stats ) );
+		$scan_id = $this->scan_repository->create_or_update_scan( $scan_results, $url, $title, $post_id );
+		if ( ! $scan_id ) {
+			return new WP_REST_Response( 'Internal database error: scan saving failed!', 500 );
 		}
 
-		return new WP_REST_Response( 'Internal database error!', 500 );
+		$this->issue_repository->delete_scan_occurrences( $scan_id );
+
+		foreach ( $scan_stats as $rule => $details ) {
+			$rule_id = $this->issue_repository->create_or_update_rule( $rule, $details['conformance'] );
+
+			$this->issue_repository->create_occurrence( $scan_id, $rule_id, $details['occurrence'] );
+		}
+
+		return new WP_REST_Response( $this->create_response_summary( $scan_stats ) );
 	}
 
 	/**

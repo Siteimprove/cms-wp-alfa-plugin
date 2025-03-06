@@ -13,7 +13,7 @@ class Daily_Stats_Repository {
 	public function create_or_update_stats( int $timestamp, array $stats ): bool {
 		global $wpdb;
 
-		$table_name = $wpdb->prefix . 'siteimprove_alfa_daily_stats';
+		$table_name = $wpdb->prefix . 'siteimprove_accessibility_daily_stats';
 		$date       = wp_date( 'Y-m-d', $timestamp );
 		$data       = array(
 			'date'             => $date,
@@ -46,7 +46,7 @@ class Daily_Stats_Repository {
 	public function find_daily_stats( ?int $timestamp_from = null, ?int $timestamp_to = null ): array {
 		global $wpdb;
 
-		$table_name = $wpdb->prefix . 'siteimprove_alfa_daily_stats';
+		$table_name = $wpdb->prefix . 'siteimprove_accessibility_daily_stats';
 		$date_from  = wp_date( 'Y-m-d', $timestamp_from ?? strtotime( '-6 months', current_time( 'timestamp' ) ) ); // phpcs:ignore WordPress.DateTime.CurrentTimeTimestamp.Requested
 		$date_to    = wp_date( 'Y-m-d', $timestamp_to ?? current_time( 'timestamp' ) ); // phpcs:ignore WordPress.DateTime.CurrentTimeTimestamp.Requested
 

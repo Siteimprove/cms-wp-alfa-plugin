@@ -20,16 +20,15 @@ import { renderSinglePageReporting } from '@siteimprove/accessibility-cms-compon
 	$(window).on('load', function () {
 		$('.siteimprove-scan-button').on('click', onScanClick);
 
-		$('#siteimprove-scan-panel-button, #siteimprove-scan-hide').on(
-			'click',
-			function () {
+		$('#siteimprove-scan-panel-button, #siteimprove-scan-hide')
+			.show()
+			.on('click', function () {
 				$('#siteimprove-scan-panel').toggle();
 				if (!isPageScanned) {
 					isPageScanned = true;
 					$('.siteimprove-scan-button').trigger('click');
 				}
-			}
-		);
+			});
 
 		if (isAutoCheckEnabled) {
 			$('#siteimprove-scan-panel-button').trigger('click');
@@ -112,7 +111,8 @@ import { renderSinglePageReporting } from '@siteimprove/accessibility-cms-compon
 	function processAuditScan(outcomes, postId) {
 		const auditScan = {
 			post_id: postId,
-			url: !postId ? window.location.href : null,
+			url: window.location.href,
+			title: document.title,
 			scan_results: [],
 			scan_stats: {},
 		};
@@ -122,9 +122,11 @@ import { renderSinglePageReporting } from '@siteimprove/accessibility-cms-compon
 				// process outcome stat
 				const rule = outcome.rule.uri.split('/').pop();
 				const conformance = getRuleMeta(rule).conformance;
-				auditScan.scan_stats[rule] = auditScan.scan_stats[rule] || {};
-				auditScan.scan_stats[rule][conformance] =
-					(auditScan.scan_stats[rule][conformance] || 0) + 1;
+				auditScan.scan_stats[rule] = auditScan.scan_stats[rule] || {
+					conformance,
+					occurrence: 0,
+				};
+				auditScan.scan_stats[rule].occurrence += 1;
 
 				// process outcome result
 				auditScan.scan_results.push(

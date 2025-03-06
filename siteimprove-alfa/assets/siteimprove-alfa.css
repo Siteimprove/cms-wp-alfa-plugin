@@ -1,3 +1,7 @@
+/**
+ * Scan panel
+ */
+
 #siteimprove-scan-panel-button {
     position: fixed;
     top: 100px;
@@ -12,6 +16,7 @@
     background-color: transparent;
     cursor: pointer;
     z-index: 4325235230;
+    display: none;
 }
 
 #siteimprove-scan-panel {
@@ -40,6 +45,10 @@
     flex-shrink: 0;
 }
 
+#siteimprove-scan-panel .scan-panel-header a {
+    text-decoration: none;
+}
+
 #siteimprove-scan-panel .scan-panel-body {
     overflow-y: auto;
     flex-grow: 1;
@@ -57,6 +66,15 @@
     float: right;
     border: none;
     cursor: pointer;
+}
+
+/**
+ * "Scan page" button
+ */
+
+.siteimprove-scan-button-container {
+    margin-bottom: 20px;
+    font-size: 12px;
 }
 
 .siteimprove-scan-button {
@@ -85,6 +103,10 @@
     background-repeat: no-repeat;
 }
 
+/**
+ * Dashboard
+ */
+
 #wpcontent:has(#siteimprove-dashboard-header) {
     padding: 0;
 }
@@ -97,23 +119,50 @@
     font-family: "Manrope", "Arial", "sans-serif";
 }
 
-#siteimprove-dashboard-container {
+.siteimprove-dashboard-container {
     padding-left: 20px;
+    margin-bottom: 40px;
 }
 
 .siteimprove-dashboard-heading {
-    background: #FFF;
     height: 48px;
     line-height: 48px;
     margin-bottom: 2px;
-    padding-left: 15px;
 }
 
-#siteimprove-daily-stats {
+.siteimprove-component-container {
     background-color: #FFF;
+    box-shadow: #E0E0E0 2px 2px 4px;
 }
 
-.siteimprove-scan-button-container {
-    margin-bottom: 20px;
-    font-size: 12px;
+.siteimprove-component-placeholder {
+    line-height: 150px;
+    text-align: center;
+}
+
+/**
+ * Settings form
+ */
+
+#siteimprove-settings-form {
+    background-color: #F6F6F6;
+    box-shadow: #E0E0E0 2px 2px 4px;
+}
+
+#siteimprove-settings-form h2 {
+    background-color: #FFF;
+    padding-left: 20px;
+    line-height: 48px;
+    margin-top: 0;
+}
+
+#siteimprove-settings-form tr {
+    display: block;
+    background-color: #FFF;
+    margin: 2px 20px;
+    padding-left: 20px;
+}
+
+#siteimprove-settings-form .submit {
+    margin-left: 20px;
 }
