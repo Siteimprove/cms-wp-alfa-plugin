@@ -21,7 +21,7 @@ jobs:
           curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
       - name: Install Composer dependencies
-        working-directory: ./siteimprove-alfa
+        working-directory: ./siteimprove-accessibility
         run: composer install --no-dev --prefer-dist --no-progress --no-suggest
 
       - name: Set up Node.js
@@ -45,15 +45,15 @@ jobs:
         uses: Siteimprove/zip-release@main
         with:
           type: 'zip'
-          path: './siteimprove-alfa/'
-          filename: 'siteimprove-alfa.zip'
+          path: './siteimprove-accessibility/'
+          filename: 'siteimprove-accessibility.zip'
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         id: artifact-upload-step
         with:
-          name: 'siteimprove-alfa'
-          path: 'siteimprove-alfa.zip'
+          name: 'siteimprove-accessibility'
+          path: 'siteimprove-accessibility.zip'
           overwrite: 'true'
           retention-days: 1
 
@@ -73,5 +73,5 @@ jobs:
           eval "$(ssh-agent -s)"
           ssh-add ~/.ssh/id_rsa_pantheon
           terminus auth:login --machine-token=${{ secrets.TERMINUS_TOKEN }}
-          terminus wp ${{ vars.PANTHEON_SITE_ID }}.dev -- plugin delete siteimprove-alfa --quiet
+          terminus wp ${{ vars.PANTHEON_SITE_ID }}.dev -- plugin delete siteimprove-accessibility --quiet
           terminus wp ${{ vars.PANTHEON_SITE_ID }}.dev -- plugin install ${{ steps.artifact-upload-step.outputs.artifact-url }} --activate
