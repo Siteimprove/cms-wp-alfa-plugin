@@ -1,8 +1,8 @@
 <button id="siteimprove-scan-panel-button" class="siteimprove-component"></button>
 <div id="siteimprove-scan-panel" class="siteimprove-component" style="display: none">
 	<div class="scan-panel-header">
-		<a href="<?php echo esc_url( admin_url( 'admin.php?page=siteimprove_alfa' ) ); ?>">
-			<?php esc_html_e( 'Siteimprove | Alfa', 'siteimprove-alfa' ); ?>
+		<a href="<?php echo esc_url( admin_url( sprintf( 'admin.php?page=%s', \Siteimprove\Alfa\Admin\Issues_Page::MENU_SLUG ) ) ); ?>">
+			<?php esc_html_e( 'Siteimprove Accessibility', 'siteimprove-alfa' ); ?>
 		</a>
 		<button id="siteimprove-scan-hide"></button>
 	</div>

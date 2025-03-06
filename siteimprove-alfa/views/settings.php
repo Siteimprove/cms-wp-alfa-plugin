@@ -12,14 +12,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 <div class="siteimprove-dashboard-container wrap">
 	<div class="siteimprove-dashboard-heading">
-		<h1><?php echo esc_html(get_admin_page_title()); ?></h1>
+		<h1><?php echo esc_html( get_admin_page_title() ); ?></h1>
 	</div>
 
-    <form method="post" action="options.php" id="siteimprove-settings-form">
+	<form method="post" action="options.php" id="siteimprove-settings-form">
 		<?php
-		settings_fields('siteimprove_accessibility_settings');
-		do_settings_sections('siteimprove_accessibility_settings');
-		submit_button(__('Update settings', 'siteimprove-accessibility'));
+		settings_fields( 'siteimprove_accessibility_settings' );
+		do_settings_sections( 'siteimprove_accessibility_settings' );
+		submit_button( __( 'Update settings', 'siteimprove-accessibility' ) );
 		?>
-    </form>
+	</form>
 </div>

@@ -122,7 +122,10 @@ import { renderSinglePageReporting } from '@siteimprove/accessibility-cms-compon
 				// process outcome stat
 				const rule = outcome.rule.uri.split('/').pop();
 				const conformance = getRuleMeta(rule).conformance;
-				auditScan.scan_stats[rule] = auditScan.scan_stats[rule] || {conformance: conformance, occurrence: 0};
+				auditScan.scan_stats[rule] = auditScan.scan_stats[rule] || {
+					conformance,
+					occurrence: 0,
+				};
 				auditScan.scan_stats[rule].occurrence += 1;
 
 				// process outcome result
