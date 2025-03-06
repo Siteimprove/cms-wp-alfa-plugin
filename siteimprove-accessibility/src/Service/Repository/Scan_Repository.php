@@ -38,8 +38,7 @@ class Scan_Repository {
 				$table_name,
 				$data,
 				array(
-					'post_id' => $post_id,
-					'url'     => $url,
+					'id' => $scan_id,
 				)
 			);
 
@@ -92,7 +91,7 @@ class Scan_Repository {
 	/**
 	 * @return int
 	 */
-	public function get_total_scan_count(): int {
+	public function count_all_scans(): int {
 		global $wpdb;
 
 		$table_name = $wpdb->prefix . 'siteimprove_accessibility_scans';
@@ -114,9 +113,14 @@ class Scan_Repository {
 		global $wpdb;
 
 		list($query, $args) = $this->prepare_pages_with_issues_query( $params );
-		$results            = $wpdb->get_results( $wpdb->prepare( $query, $args ) ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL.NotPrepared
 
-		return array_map( array( $this, 'cast_page_fields' ), $results );
+		$scans = $wpdb->get_results( $wpdb->prepare( $query, $args ) ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL.NotPrepared
+
+		if ( ! empty( $scans ) ) {
+			$scans = $this->expand_scans_with_issues( $scans );
+		}
+
+		return array_map( array( $this, 'cast_page_fields' ), $scans );
 	}
 
 	/**
@@ -127,12 +131,65 @@ class Scan_Repository {
 	public function count_pages_with_issues( array $params ): int {
 		global $wpdb;
 
-		$params['limit']  = null;
-		$params['offset'] = null;
-
-		list( $query, $args ) = $this->prepare_pages_with_issues_query( $params );
+		list( $query, $args ) = $this->prepare_pages_with_issues_query( $params, false );
 
 		return (int) $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM ($query) subquery", $args ) ); // phpcs:ignore WordPress.DB
+	}
+
+	/**
+	 * @param array $params
+	 * @param bool $use_limit
+	 *
+	 * @return array( query<string>, args<array>)
+	 */
+	private function prepare_pages_with_issues_query( array $params, bool $use_limit = true ): array {
+		global $wpdb;
+
+		$params = $this->sanitize_request_params( $params );
+		$args   = array();
+
+		$scans_table       = $wpdb->prefix . 'siteimprove_accessibility_scans';
+		$occurrences_table = $wpdb->prefix . 'siteimprove_accessibility_occurrences';
+
+		$query = "SELECT
+				s.id,
+				s.title,
+				s.url,
+				COUNT(o.rule_id) as issuesCount,
+				SUM(o.occurrence) as occurrences,
+				s.created_at as lastChecked
+	        FROM $scans_table s
+	        JOIN $occurrences_table o ON o.scan_id = s.id
+	        WHERE 1 = 1";
+
+		// Rule filtering
+		if ( $params['rule_id'] ) {
+			$query .= ' AND o.rule_id = %d';
+			$args[] = $params['rule_id'];
+		}
+
+		// Dynamic search filtering
+		if ( ! empty( $params['search_term'] ) && ! empty( $params['search_field'] ) ) {
+			$query .= " AND {$params['search_field']} LIKE %s";
+			$args[] = '%' . $wpdb->esc_like( $params['search_term'] ) . '%';
+		}
+
+		// Add GROUP BY
+		$query .= ' GROUP BY s.id';
+
+		// Sorting
+		if ( ! empty( $params['sort_field'] ) && ! empty( $params['sort_direction'] ) ) {
+			$query .= " ORDER BY {$params['sort_field']} {$params['sort_direction']}";
+		}
+
+		// Limit and Offset
+		if ( $use_limit && isset( $params['limit'] ) && isset( $params['offset'] ) ) {
+			$query .= ' LIMIT %d OFFSET %d';
+			$args[] = $params['limit'];
+			$args[] = $params['offset'];
+		}
+
+		return array( $query, $args );
 	}
 
 	/**
@@ -140,42 +197,59 @@ class Scan_Repository {
 	 *
 	 * @return array
 	 */
-	private function prepare_pages_with_issues_query( array $params ): array {
+	private function sanitize_request_params( array $params ): array {
+		$valid_field_names = array(
+			'title',
+			'url',
+			'occurrences',
+			'issuesCount',
+			'lastChecked',
+		);
+
+		return array(
+			'limit'          => (int) $params['pageSize'] ?? 10,
+			'offset'         => ( (int) $params['pageSize'] ?? 10 ) * ( (int) ( $params['page'] ?? 1 ) - 1 ),
+			'sort_field'     => in_array( $params['sort']['property'], $valid_field_names, true ) ? $params['sort']['property'] : null,
+			'sort_direction' => strtoupper( $params['sort']['direction'] ?? '' ) === 'DESC' ? 'DESC' : 'ASC',
+			'search_term'    => $params['query'] ?? null,
+			'search_field'   => in_array( $params['searchType'], $valid_field_names, true ) ? $params['searchType'] : null,
+			'rule_id'        => (int) $params['ruleId'] ?? null,
+		);
+	}
+
+	/**
+	 * @param array $scans
+	 *
+	 * @return array
+	 */
+	public function expand_scans_with_issues( array $scans ): array {
 		global $wpdb;
-		$args = array();
 
-		$scans_table       = $wpdb->prefix . 'siteimprove_accessibility_scans';
 		$occurrences_table = $wpdb->prefix . 'siteimprove_accessibility_occurrences';
-		$rules_table       = $wpdb->prefix . 'siteimprove_accessibility_rules';
+		$scan_ids          = array_map(
+			function ( \stdClass $record ) {
+				return (int) $record->id;
+			},
+			$scans
+		);
 
-		$sql = "SELECT s.id, s.title, s.url, SUM(o.occurrence) as occurrences, GROUP_CONCAT(r.id) as issues, COUNT(r.id) as issues_count, s.created_at as lastChecked
-	        FROM $scans_table s
-	        JOIN $occurrences_table o ON o.scan_id = s.id
-	        JOIN $rules_table r ON r.id = o.rule_id
-	        WHERE 1=1";
+		$query = sprintf( "SELECT * FROM $occurrences_table o WHERE o.scan_id IN (%s)", implode( ', ', $scan_ids ) );
 
-		// Dynamic search filtering
-		if ( ! empty( $params['search_term'] ) && ! empty( $params['search_field'] ) ) {
-			$sql   .= " AND {$params['search_field']} LIKE %s";
-			$args[] = '%' . $wpdb->esc_like( $params['search_term'] ) . '%';
+		$occurrences = $wpdb->get_results( $wpdb->prepare( $query ) );  // phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL.NotPrepared
+		foreach ( $occurrences as $occurrence ) {
+			foreach ( $scans as $scan ) {
+				if ( $scan->id === $occurrence->scan_id ) {
+					$scan->issues   = is_array( $scan->issues ) ? $scan->issues : array();
+					$scan->issues[] = array(
+						'id'          => (int) $occurrence->rule_id,
+						'occurrences' => (int) $occurrence->occurrence,
+					);
+					break;
+				}
+			}
 		}
 
-		// Add GROUP BY
-		$sql .= ' GROUP BY s.id';
-
-		// Sorting
-		if ( ! empty( $params['sort_field'] ) && ! empty( $params['sort_direction'] ) ) {
-			$sql .= " ORDER BY {$params['sort_field']} {$params['sort_direction']}";
-		}
-
-		// Limit and Offset
-		if ( isset( $params['limit'] ) && isset( $params['offset'] ) ) {
-			$sql   .= ' LIMIT %d OFFSET %d';
-			$args[] = $params['limit'];
-			$args[] = $params['offset'];
-		}
-
-		return array( $sql, $args );
+		return $scans;
 	}
 
 	/**
@@ -186,7 +260,7 @@ class Scan_Repository {
 	private function cast_page_fields( \stdClass $page ): \stdClass {
 		$page->id          = (int) $page->id;
 		$page->occurrences = (int) $page->occurrences;
-		$page->issues      = array_map( 'intval', explode( ',', $page->issues ) );
+		$page->issuesCount = (int) $page->issuesCount; // phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
 
 		return $page;
 	}
