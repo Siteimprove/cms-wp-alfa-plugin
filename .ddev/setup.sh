@@ -12,8 +12,8 @@ if ! wp core is-installed --allow-root; then
     wp core install --url='$DDEV_PRIMARY_URL' --title="DDEV WordPress" --admin_user="admin" --admin_password="password" --admin_email="admin@example.com"
 fi
 
-SOURCE_PLUGIN_DIR="/var/www/html/siteimprove-alfa"
-TARGET_PLUGIN_DIR="/var/www/html/wordpress/wp-content/plugins/siteimprove-alfa"
+SOURCE_PLUGIN_DIR="/var/www/html/siteimprove-accessibility"
+TARGET_PLUGIN_DIR="/var/www/html/wordpress/wp-content/plugins/siteimprove-accessibility"
 
 # Ensure the plugin directory does not already exist (prevent overwriting an actual plugin directory)
 if ! [ -d "$TARGET_PLUGIN_DIR" ]; then
@@ -22,7 +22,7 @@ if ! [ -d "$TARGET_PLUGIN_DIR" ]; then
 fi
 
 # Activate the plugin
-wp plugin activate siteimprove-alfa
+wp plugin activate siteimprove-accessibility
 
 # Install land activate additional plugins for development environment
 wp plugin install debug-bar

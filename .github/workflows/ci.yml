@@ -22,7 +22,7 @@ jobs:
         run: composer install --prefer-dist --no-progress --no-suggest
 
       - name: Check PHP Code Sniff
-        run: ./siteimprove-alfa/vendor/bin/phpcs siteimprove-alfa --standard=phpcs.xml.dist --report-summary
+        run: ./siteimprove-accessibility/vendor/bin/phpcs siteimprove-accessibility --standard=phpcs.xml.dist --report-summary
 
   eslint:
     name: ESLint
@@ -47,4 +47,4 @@ jobs:
           npm install
 
       - name: Run ESLint
-        run: npx eslint siteimprove-alfa
+        run: npx eslint siteimprove-accessibility

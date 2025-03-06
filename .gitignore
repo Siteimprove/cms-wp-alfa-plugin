@@ -3,6 +3,6 @@
 .vscode
 .npmrc
 node_modules
-/siteimprove-alfa/vendor/
+/siteimprove-accessibility/vendor/
 wordpress/*
-siteimprove-alfa/assets/*.bundle.*
+siteimprove-accessibility/assets/*.bundle.*
