@@ -1,7 +1,8 @@
-import { JQuery as AlfaJQuery } from '@siteimprove/alfa-jquery';
 import { Audit as AlfaAudit } from '@siteimprove/alfa-act/dist/audit';
-import rules from '@siteimprove/alfa-rules';
-import * as alfaJson from '@siteimprove/alfa-json';
+import { JQuery as AlfaJQuery } from '@siteimprove/alfa-jquery';
+import * as AlfaJson from '@siteimprove/alfa-json';
+import AlfaRules from '@siteimprove/alfa-rules';
+import { Rules as AlfaRuleFilter } from '@siteimprove/alfa-test-utils';
 import { getRuleMeta } from '@siteimprove/accessibility-cms-components/src/helpers/transformAuditResults';
 import { renderSinglePageReporting } from '@siteimprove/accessibility-cms-components';
 
@@ -43,44 +44,32 @@ import { renderSinglePageReporting } from '@siteimprove/accessibility-cms-compon
 			$this.attr('disabled', 'disabled');
 
 			requestAnimationFrame(() =>
-				accessibilityCheck()
-					.then((auditScan) => {
-						wp.apiFetch({
-							path: '/siteimprove-accessibility/save-scan',
-							method: 'POST',
-							data: auditScan,
-						}).then((response) => {
-							if (response.count_issues > 0) {
-								renderSinglePageReporting(
-									{ failedItems: auditScan.scan_results },
-									'siteimprove-scan-results'
-								);
-							} else {
-								$('#siteimprove-scan-results').html(
-									__(
-										'No issues found!',
-										'siteimprove-accessibility'
-									)
-								);
-							}
-
-							$label.html(
-								__('Check page', 'siteimprove-accessibility')
+				accessibilityCheck().then((auditScan) => {
+					wp.apiFetch({
+						path: '/siteimprove-accessibility/save-scan',
+						method: 'POST',
+						data: auditScan,
+					}).then((response) => {
+						if (response.count_issues > 0) {
+							renderSinglePageReporting(
+								{ failedItems: auditScan.scan_results },
+								'siteimprove-scan-results'
 							);
-							$this.removeAttr('disabled');
-						});
-					})
-					.catch((error) => {
-						// eslint-disable-next-line no-console
-						console.error(error);
+						} else {
+							$('#siteimprove-scan-results').html(
+								__(
+									'No issues found!',
+									'siteimprove-accessibility'
+								)
+							);
+						}
+
 						$label.html(
-							__(
-								'Page check failed!',
-								'siteimprove-accessibility'
-							)
+							__('Check page', 'siteimprove-accessibility')
 						);
 						$this.removeAttr('disabled');
-					})
+					});
+				})
 			);
 		});
 	};
@@ -89,7 +78,7 @@ import { renderSinglePageReporting } from '@siteimprove/accessibility-cms-compon
 	 * @return {Promise<(function(Object): {type: string, request: Object})|*>}  Processed audit scan object.
 	 */
 	async function accessibilityCheck() {
-		// clode the DOM and remove the admin bar and the scan panel
+		// clone the DOM and remove the admin bar and the scan panel
 		const htmlDom = $('html')
 			.clone()
 			.find('#wpadminbar, .siteimprove-component')
@@ -106,12 +95,23 @@ import { renderSinglePageReporting } from '@siteimprove/accessibility-cms-compon
 	 * @return {Promise<(function(Object): {type: string, request: Object})|*>}  Processed audit scan object.
 	 */
 	async function evaluatePage(alfaPage) {
-		const outcomes = await AlfaAudit.of(alfaPage, rules).evaluate();
+		const customRules = getCustomRules();
+		const alfaResult = await AlfaAudit.of(alfaPage, customRules).evaluate();
 
 		return processAuditScan(
-			outcomes,
+			alfaResult,
 			siteimproveAccessibilitySaveScanData.post_id
 		);
+	}
+
+	/**
+	 * This method is responsible to define which rules to use for the evaluation.
+	 *
+	 * @return {Object} List of rules to run the evaluation with.
+	 */
+	function getCustomRules() {
+		// Currently we only use AA and A conformance level rules.
+		return AlfaRules.filter((rule) => AlfaRuleFilter.aaFilter(rule));
 	}
 
 	/**
@@ -142,7 +142,7 @@ import { renderSinglePageReporting } from '@siteimprove/accessibility-cms-compon
 				// process outcome result
 				auditScan.scan_results.push(
 					outcome.toJSON({
-						verbosity: alfaJson.Serializable.Verbosity.Low,
+						verbosity: AlfaJson.Serializable.Verbosity.Low,
 					})
 				);
 			}

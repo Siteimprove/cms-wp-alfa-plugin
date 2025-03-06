@@ -13,7 +13,7 @@ jobs:
       image: php:8.0
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
       - name: Setup Tools
         run: |
@@ -24,7 +24,7 @@ jobs:
         run: composer install --no-dev --prefer-dist --no-progress --no-suggest
 
       - name: Set up Node.js
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v4
         with:
           node-version: '23'
 
@@ -35,6 +35,8 @@ jobs:
           chmod 600 ~/.ssh/id_rsa
           eval "$(ssh-agent -s)"
           ssh-add ~/.ssh/id_rsa
+          echo "@siteimprove:registry=https://npm.pkg.github.com/" >> ~/.npmrc
+          echo "//npm.pkg.github.com/:_authToken=${{ secrets.CI_TOKEN }}" >> ~/.npmrc
           npm install
 
       - name: Build assets
