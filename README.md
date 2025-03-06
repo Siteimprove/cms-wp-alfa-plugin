@@ -1,15 +1,15 @@
-# WordPress plugin integration for Siteimprove Alfa
+# WordPress plugin integration for Siteimprove Accessibility
 
 ## Introduction
 
-This repository is used to set up a local development environment for Siteimprove Alfa WordPress Plugin, using DDEV.
+This repository is used to set up a local development environment for Siteimprove Accessibility WordPress Plugin, using DDEV.
 The goal of this repository is to focus on plugin development, while the entire WordPress site is set up
 automatically and can be reinstalled at any time.
 
 ## Directory Structure
 
 - `.ddev/`: Contains the DDEV configuration files.
-- `siteimprove-alfa/`: Contains the Siteimprove Alfa WordPress Plugin.
+- `siteimprove-accessibility/`: Contains the Siteimprove Accessibility WordPress Plugin.
 - `wordpress/`: Contains the WordPress installation. This directory is created automatically by DDEV.
 
 ## Setting up local development environment
@@ -49,9 +49,9 @@ use is [Rancher Desktop](https://rancherdesktop.io/), which is a free and open-s
 
 To set up the frontend development environment, follow these steps:
 
-1. Navigate to the `siteimprove-alfa` directory:
+1. Navigate to the `siteimprove-accessibility` directory:
     ```sh
-    cd siteimprove-alfa
+    cd siteimprove-accessibility
     ```
 
 2. Install the necessary npm packages:

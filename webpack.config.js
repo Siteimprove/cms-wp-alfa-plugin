@@ -4,14 +4,14 @@ const TerserPlugin = require("terser-webpack-plugin")
 module.exports = {
   mode: "development",
   entry: {
-    "scan-panel": "./siteimprove-alfa/assets/scan-panel.entry.js",
-    "issues": "./siteimprove-alfa/assets/issues.entry.js",
-    "reports": "./siteimprove-alfa/assets/reports.entry.js",
-    "gutenberg": "./siteimprove-alfa/assets/gutenberg.entry.js",
+    "scan-panel": "./siteimprove-accessibility/assets/scan-panel.entry.js",
+    "issues": "./siteimprove-accessibility/assets/issues.entry.js",
+    "reports": "./siteimprove-accessibility/assets/reports.entry.js",
+    "gutenberg": "./siteimprove-accessibility/assets/gutenberg.entry.js",
   },
   output: {
     path: path.resolve(__dirname, ""),
-    filename: "siteimprove-alfa/assets/[name].bundle.js",
+    filename: "siteimprove-accessibility/assets/[name].bundle.js",
   },
   module: {
     rules: [

@@ -1,7 +1,7 @@
 {
     "autoload": {
         "psr-4": {
-            "Siteimprove\\Alfa\\": "siteimprove-alfa/src/"
+            "Siteimprove\\Accessibility\\": "siteimprove-accessibility/src/"
         }
     },
     "require": {
@@ -13,13 +13,13 @@
         "phpcsstandards/phpcsutils": "^1.0"
     },
     "config": {
-        "vendor-dir": "./siteimprove-alfa/vendor",
+        "vendor-dir": "./siteimprove-accessibility/vendor",
         "allow-plugins": {
             "dealerdirect/phpcodesniffer-composer-installer": true
         }
     },
     "scripts": {
-        "lint": "./siteimprove-alfa/vendor/bin/phpcs siteimprove-alfa --standard=phpcs.xml.dist",
-        "lint-fix": "./siteimprove-alfa/vendor/bin/phpcbf siteimprove-alfa --standard=phpcs.xml.dist"
+        "lint": "./siteimprove-accessibility/vendor/bin/phpcs siteimprove-accessibility --standard=phpcs.xml.dist",
+        "lint-fix": "./siteimprove-accessibility/vendor/bin/phpcbf siteimprove-accessibility --standard=phpcs.xml.dist"
     }
 }
