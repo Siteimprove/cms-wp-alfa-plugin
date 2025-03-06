@@ -111,7 +111,7 @@ class Issue_Repository {
 		$occurrences_table = $wpdb->prefix . 'siteimprove_accessibility_occurrences';
 		$scans_table       = $wpdb->prefix . 'siteimprove_accessibility_scans';
 
-		return $wpdb->get_results( // phpcs:ignore WordPress.DB.DirectDatabaseQuery
+		$results = $wpdb->get_results( // phpcs:ignore WordPress.DB.DirectDatabaseQuery
 			$wpdb->prepare(
 				'SELECT r.id, r.rule, SUM(o.occurrence) occurrences, COUNT(s.id) pages
 			    FROM %i r
@@ -123,5 +123,20 @@ class Issue_Repository {
 				$scans_table
 			)
 		);
+
+		return array_map( array( $this, 'cast_issue_attributes' ), $results );
+	}
+
+	/**
+	 * @param \stdClass $issue
+	 *
+	 * @return \stdClass
+	 */
+	private function cast_issue_attributes( \stdClass $issue ): \stdClass {
+		$issue->id          = (int) $issue->id;
+		$issue->occurrences = (int) $issue->occurrences;
+		$issue->pages       = (int) $issue->pages;
+
+		return $issue;
 	}
 }

@@ -52,11 +52,9 @@ class Get_Daily_Stats_Api implements Hook_Interface {
 	}
 
 	/**
-	 * @param WP_REST_Request $request
-	 *
 	 * @return WP_REST_Response
 	 */
-	public function handle_request( WP_REST_Request $request ): WP_REST_Response {
+	public function handle_request(): WP_REST_Response {
 		// prepare daily stats from history
 		$results     = $this->daily_stats_repository->find_daily_stats();
 		$daily_stats = $this->daily_stats_processor->prepare_daily_stats( $results );
