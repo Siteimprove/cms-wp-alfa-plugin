@@ -1,9 +1,23 @@
+<?php
+
+use Siteimprove\Accessibility\Siteimprove_Accessibility;
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+/**
+ * @var array $widget_position_options
+ * @var string $selected
+ */
+
+?>
+
 <fieldset>
-	<select>
-		<option><?php esc_html_e( 'Top-right', 'siteimprove_accessibility' ); ?></option>
-		<option><?php esc_html_e( 'Bottom-right', 'siteimprove_accessibility' ); ?></option>
-		<option><?php esc_html_e( 'Top-left', 'siteimprove_accessibility' ); ?></option>
-		<option><?php esc_html_e( 'Bottom-left', 'siteimprove_accessibility' ); ?></option>
+	<select name="<?php echo Siteimprove_Accessibility::OPTION_WIDGET_POSITION; ?>">
+        <?php foreach ( $widget_position_options as $key => $value ): ?>
+            <option value="<?php echo $key;?>" <?php echo selected( $selected === $key ); ?>><?php echo $value; ?></option>
+        <?php endforeach; ?>
 	</select>
 	<p><?php esc_html_e( 'Choose widget position on page when previewing page.', 'siteimprove_accessibility' ); ?></p>
 </fieldset>
