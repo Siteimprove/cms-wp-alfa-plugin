@@ -3,6 +3,7 @@
 namespace Siteimprove\Accessibility\Admin;
 
 use Siteimprove\Accessibility\Core\Hook_Interface;
+use Siteimprove\Accessibility\Siteimprove_Accessibility;
 
 class Navigation implements Hook_Interface {
 
@@ -31,11 +32,12 @@ class Navigation implements Hook_Interface {
 	 */
 	public function init_menu(): void {
 		$issues_page = new Issues_Page();
+		$capability = get_option( Siteimprove_Accessibility::OPTION_ALLOWED_USER_ROLE );
 
 		add_menu_page(
 			__( 'Siteimprove Accessibility', 'siteimprove-accessibility' ),
 			__( 'Siteimprove Accessibility', 'siteimprove-accessibility' ),
-			'manage_options',
+			$capability,
 			$issues_page::MENU_SLUG,
 			array( $issues_page, 'render_page' ),
 			plugins_url( 'siteimprove-accessibility/assets/img/si-icon.svg' ),
@@ -45,7 +47,7 @@ class Navigation implements Hook_Interface {
 			$issues_page::MENU_SLUG,
 			__( 'Accessibility issues', 'siteimprove-accessibility' ),
 			__( 'Issues', 'siteimprove-accessibility' ),
-			'manage_options',
+			$capability,
 			$issues_page::MENU_SLUG,
 			array( $issues_page, 'render_page' ),
 		);
@@ -55,17 +57,17 @@ class Navigation implements Hook_Interface {
 			$issues_page::MENU_SLUG,
 			__( 'Progress over time', 'siteimprove-accessibility' ),
 			__( 'Reports', 'siteimprove-accessibility' ),
-			'manage_options',
+			$capability,
 			$reports_page::MENU_SLUG,
 			array( $reports_page, 'render_page' ),
 		);
 
-		$settings_page = new Settings_Page();
+		$settings_page = new Settings();
 		add_submenu_page(
 			$issues_page::MENU_SLUG,
 			__( 'Settings', 'siteimprove-accessibility' ),
 			__( 'Settings', 'siteimprove-accessibility' ),
-			'manage_options',
+			'manage_options', // Only for administrators.
 			$settings_page::MENU_SLUG,
 			array( $settings_page, 'render_page' ),
 		);

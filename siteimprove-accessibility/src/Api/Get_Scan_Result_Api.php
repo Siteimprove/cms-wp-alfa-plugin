@@ -4,6 +4,7 @@ namespace Siteimprove\Accessibility\Api;
 
 use Siteimprove\Accessibility\Core\Hook_Interface;
 use Siteimprove\Accessibility\Service\Repository\Scan_Repository;
+use Siteimprove\Accessibility\Siteimprove_Accessibility;
 use WP_REST_Request;
 use WP_REST_Response;
 
@@ -78,6 +79,6 @@ class Get_Scan_Result_Api implements Hook_Interface {
 	 * @return bool
 	 */
 	public function authenticate_request(): bool {
-		return current_user_can( 'manage_options' );
+		return current_user_can( get_option( Siteimprove_Accessibility::OPTION_ALLOWED_USER_ROLE ) );
 	}
 }

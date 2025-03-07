@@ -5,7 +5,7 @@ namespace Siteimprove\Accessibility\Api;
 use Siteimprove\Accessibility\Core\Hook_Interface;
 use Siteimprove\Accessibility\Service\Daily_Stats_Processor;
 use Siteimprove\Accessibility\Service\Repository\Daily_Stats_Repository;
-use WP_REST_Request;
+use Siteimprove\Accessibility\Siteimprove_Accessibility;
 use WP_REST_Response;
 
 class Get_Daily_Stats_Api implements Hook_Interface {
@@ -71,6 +71,6 @@ class Get_Daily_Stats_Api implements Hook_Interface {
 	 * @return bool
 	 */
 	public function authenticate_request(): bool {
-		return current_user_can( 'manage_options' );
+		return current_user_can( get_option( Siteimprove_Accessibility::OPTION_ALLOWED_USER_ROLE ) );
 	}
 }

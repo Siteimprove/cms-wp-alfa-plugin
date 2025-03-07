@@ -6,11 +6,26 @@ use Siteimprove\Accessibility\Core\Hook_Interface;
 use Siteimprove\Accessibility\Core\View_Trait;
 use Siteimprove\Accessibility\Siteimprove_Accessibility;
 
-class Settings_Page implements Hook_Interface {
+class Settings implements Hook_Interface {
 
 	use View_Trait;
 
 	const MENU_SLUG = 'siteimprove_accessibility_settings';
+
+	/**
+	 * @return void
+	 */
+	public function init_options(): void {
+		if ( ! get_option(Siteimprove_Accessibility::OPTION_IS_WIDGET_ENABLED, null) ) {
+			add_option(Siteimprove_Accessibility::OPTION_IS_WIDGET_ENABLED, 1);
+		}
+		if ( ! get_option(Siteimprove_Accessibility::OPTION_WIDGET_POSITION, null) ) {
+			add_option(Siteimprove_Accessibility::OPTION_WIDGET_POSITION, 'top-right');
+		}
+		if ( ! get_option(Siteimprove_Accessibility::OPTION_ALLOWED_USER_ROLE, null) ) {
+			add_option(Siteimprove_Accessibility::OPTION_ALLOWED_USER_ROLE, 'edit_private_posts');
+		}
+	}
 
 	/**
 	 * @return void
@@ -95,7 +110,6 @@ class Settings_Page implements Hook_Interface {
 			'siteimprove_accessibility_settings',
 			Siteimprove_Accessibility::OPTION_IS_WIDGET_ENABLED,
 			array(
-				'default' => true,
 				'sanitize_callback' => array($this, 'sanitize_is_widget_enabled'),
 			)
 		);
@@ -104,7 +118,6 @@ class Settings_Page implements Hook_Interface {
 			'siteimprove_accessibility_settings',
 			Siteimprove_Accessibility::OPTION_WIDGET_POSITION,
 			array(
-				'default' => 'top-right',
 				'sanitize_callback' => array($this, 'sanitize_widget_position'),
 			)
 		);
@@ -113,7 +126,6 @@ class Settings_Page implements Hook_Interface {
 			'siteimprove_accessibility_settings',
 			Siteimprove_Accessibility::OPTION_ALLOWED_USER_ROLE,
 			array(
-				'default' => 'administrator',
 				'sanitize_callback' => array($this, 'sanitize_allowed_user_role'),
 			)
 		);
@@ -209,10 +221,10 @@ class Settings_Page implements Hook_Interface {
 	 */
 	private function get_allowed_user_role_options(): array {
 		return array(
-			'administrator' => __( 'Administrator', 'siteimprove-accessibility' ),
-			'editor'  => __( 'Editor', 'siteimprove-accessibility' ),
-			'author' => __( 'Author', 'siteimprove-accessibility' ),
-			'contributor' => __( 'Contributor', 'siteimprove-accessibility' ),
+			'manage_options' => __( 'Administrator', 'siteimprove-accessibility' ),
+			'edit_private_posts'  => __( 'Editor', 'siteimprove-accessibility' ),
+			'edit_published_posts' => __( 'Author', 'siteimprove-accessibility' ),
+			'edit_posts' => __( 'Contributor', 'siteimprove-accessibility' ),
 		);
 	}
 }

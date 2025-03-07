@@ -3,6 +3,7 @@
 namespace Siteimprove\Accessibility\Admin;
 
 use Siteimprove\Accessibility\Core\Hook_Interface;
+use Siteimprove\Accessibility\Siteimprove_Accessibility;
 
 class Gutenberg_Sidebar implements Hook_Interface {
 
@@ -17,9 +18,9 @@ class Gutenberg_Sidebar implements Hook_Interface {
 	 * @return void
 	 */
 	public function enqueue_scripts(): void {
-		// Only relevant for post and page editor.
+		// Only relevant for users with necessary roles and for post and page editor.
 		$screen = get_current_screen();
-		if ( 'post' !== $screen->base || ( 'post' !== $screen->post_type && 'page' !== $screen->post_type ) ) {
+		if ( ! $this->has_access() || 'post' !== $screen->base || ( 'post' !== $screen->post_type && 'page' !== $screen->post_type ) ) {
 			return;
 		}
 
@@ -30,5 +31,12 @@ class Gutenberg_Sidebar implements Hook_Interface {
 			SITEIMPROVE_ACCESSIBILITY_VERSION,
 			false
 		);
+	}
+
+	/**
+	 * @return bool
+	 */
+	private function has_access(): bool {
+		return current_user_can( get_option( Siteimprove_Accessibility::OPTION_ALLOWED_USER_ROLE ) );
 	}
 }
