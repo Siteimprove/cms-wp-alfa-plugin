@@ -53,7 +53,7 @@ class Get_Pages_With_Issues_Api implements Hook_Interface {
 	 * @return WP_REST_Response
 	 */
 	public function handle_request( WP_REST_Request $request ): WP_REST_Response {
-		$params = $this->sanitize_request_params( $request );
+		$params = $request->get_params();
 		$pages  = $this->scan_repository->find_pages_with_issues( $params );
 
 		$result = array(
@@ -69,29 +69,5 @@ class Get_Pages_With_Issues_Api implements Hook_Interface {
 	 */
 	public function authenticate_request(): bool {
 		return current_user_can( 'manage_options' );
-	}
-
-	/**
-	 * @param WP_REST_Request $request
-	 *
-	 * @return array
-	 */
-	private function sanitize_request_params( WP_REST_Request $request ): array {
-		$column_map = array(
-			'Title'       => 'title',
-			'URL'         => 'url',
-			'issuesCount' => 'issues_count',
-			'occurrences' => 'occurrences',
-			'lastChecked' => 'lastChecked',
-		);
-
-		return array(
-			'limit'          => (int) $request->get_param( 'pageSize' ) ?? 10,
-			'offset'         => ( (int) $request->get_param( 'pageSize' ) ?? 10 ) * ( (int) $request->get_param( 'page' ) - 1 ),
-			'sort_field'     => $column_map[ $request->get_param( 'sort' )['property'] ?? null ] ?? null,
-			'sort_direction' => $request->get_param( 'sort' )['direction'] ?? 'ASC',
-			'search_term'    => $request->get_param( 'query' ) ?? null,
-			'search_field'   => $column_map[ $request->get_param( 'searchType' ) ?? null ] ?? null,
-		);
 	}
 }

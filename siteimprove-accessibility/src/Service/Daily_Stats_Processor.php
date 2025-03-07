@@ -27,7 +27,7 @@ class Daily_Stats_Processor {
 	 * @return array {scans: <int>, rules: [<string>: [<string>: <int>]]}
 	 */
 	public function get_aggregated_issues(): array {
-		$scan_count = $this->scan_repository->get_total_scan_count();
+		$scan_count = $this->scan_repository->count_all_scans();
 		$issues     = $this->issue_repository->find_all_issues();
 
 		$aggregated_stats = array(
