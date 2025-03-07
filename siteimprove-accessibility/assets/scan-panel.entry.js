@@ -21,8 +21,8 @@ import { renderSinglePageReporting } from '@siteimprove/accessibility-cms-compon
 	$(window).on('load', function () {
 		$('.siteimprove-scan-button').on('click', onScanClick);
 
+		$('#siteimprove-scan-panel-button.visible').show();
 		$('#siteimprove-scan-panel-button, #siteimprove-scan-hide')
-			.show()
 			.on('click', function () {
 				$('#siteimprove-scan-panel').toggle();
 				if (!isPageScanned) {

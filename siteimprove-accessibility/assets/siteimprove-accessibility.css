@@ -4,8 +4,6 @@
 
 #siteimprove-scan-panel-button {
     position: fixed;
-    top: 100px;
-    right: 10px;
     border: none;
     width: 70px;
     height: 70px;
@@ -21,9 +19,7 @@
 
 #siteimprove-scan-panel {
     position: fixed;
-    top: 100px;
     max-height: calc(100vh - 120px);
-    right: 10px;
     overflow-y: auto;
     background: white;
     border: 1px solid #ddd;
@@ -33,6 +29,26 @@
     font-family: "Manrope", "Arial", "sans-serif";
     display: flex;
     flex-direction: column;
+}
+
+#siteimprove-scan-panel-button.top-right, #siteimprove-scan-panel.top-right {
+    top: 100px;
+    right: 10px;
+}
+
+#siteimprove-scan-panel-button.top-left, #siteimprove-scan-panel.top-left {
+    top: 100px;
+    left: 10px;
+}
+
+#siteimprove-scan-panel-button.bottom-right, #siteimprove-scan-panel.bottom-right {
+    bottom: 100px;
+    right: 10px;
+}
+
+#siteimprove-scan-panel-button.bottom-left, #siteimprove-scan-panel.bottom-left {
+    bottom: 100px;
+    left: 10px;
 }
 
 #siteimprove-scan-panel .scan-panel-header {
