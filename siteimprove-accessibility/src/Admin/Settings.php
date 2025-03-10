@@ -16,14 +16,14 @@ class Settings implements Hook_Interface {
 	 * @return void
 	 */
 	public function init_options(): void {
-		if ( ! get_option(Siteimprove_Accessibility::OPTION_IS_WIDGET_ENABLED, null) ) {
-			add_option(Siteimprove_Accessibility::OPTION_IS_WIDGET_ENABLED, 1);
+		if ( ! get_option( Siteimprove_Accessibility::OPTION_IS_WIDGET_ENABLED, null ) ) {
+			add_option( Siteimprove_Accessibility::OPTION_IS_WIDGET_ENABLED, 1 );
 		}
-		if ( ! get_option(Siteimprove_Accessibility::OPTION_WIDGET_POSITION, null) ) {
-			add_option(Siteimprove_Accessibility::OPTION_WIDGET_POSITION, 'top-right');
+		if ( ! get_option( Siteimprove_Accessibility::OPTION_WIDGET_POSITION, null ) ) {
+			add_option( Siteimprove_Accessibility::OPTION_WIDGET_POSITION, 'top-right' );
 		}
-		if ( ! get_option(Siteimprove_Accessibility::OPTION_ALLOWED_USER_ROLE, null) ) {
-			add_option(Siteimprove_Accessibility::OPTION_ALLOWED_USER_ROLE, 'edit_private_posts');
+		if ( ! get_option( Siteimprove_Accessibility::OPTION_ALLOWED_USER_ROLE, null ) ) {
+			add_option( Siteimprove_Accessibility::OPTION_ALLOWED_USER_ROLE, 'edit_private_posts' );
 		}
 	}
 
@@ -47,7 +47,7 @@ class Settings implements Hook_Interface {
 			__( 'Settings', 'siteimprove-accessibility' )
 		);
 
-		array_unshift($links, $settings_link);
+		array_unshift( $links, $settings_link );
 
 		return $links;
 	}
@@ -110,7 +110,7 @@ class Settings implements Hook_Interface {
 			'siteimprove_accessibility_settings',
 			Siteimprove_Accessibility::OPTION_IS_WIDGET_ENABLED,
 			array(
-				'sanitize_callback' => array($this, 'sanitize_is_widget_enabled'),
+				'sanitize_callback' => array( $this, 'sanitize_is_widget_enabled' ),
 			)
 		);
 
@@ -118,7 +118,7 @@ class Settings implements Hook_Interface {
 			'siteimprove_accessibility_settings',
 			Siteimprove_Accessibility::OPTION_WIDGET_POSITION,
 			array(
-				'sanitize_callback' => array($this, 'sanitize_widget_position'),
+				'sanitize_callback' => array( $this, 'sanitize_widget_position' ),
 			)
 		);
 
@@ -126,7 +126,7 @@ class Settings implements Hook_Interface {
 			'siteimprove_accessibility_settings',
 			Siteimprove_Accessibility::OPTION_ALLOWED_USER_ROLE,
 			array(
-				'sanitize_callback' => array($this, 'sanitize_allowed_user_role'),
+				'sanitize_callback' => array( $this, 'sanitize_allowed_user_role' ),
 			)
 		);
 	}
@@ -146,7 +146,7 @@ class Settings implements Hook_Interface {
 			'views/partials/field_widget_position.php',
 			array(
 				'widget_position_options' => $this->get_widget_position_options(),
-				'selected' => get_option( Siteimprove_Accessibility::OPTION_WIDGET_POSITION ),
+				'selected'                => get_option( Siteimprove_Accessibility::OPTION_WIDGET_POSITION ),
 			)
 		);
 	}
@@ -159,7 +159,7 @@ class Settings implements Hook_Interface {
 			'views/partials/field_allowed_user_role.php',
 			array(
 				'allowed_user_role_options' => $this->get_allowed_user_role_options(),
-				'selected' => get_option( Siteimprove_Accessibility::OPTION_ALLOWED_USER_ROLE ),
+				'selected'                  => get_option( Siteimprove_Accessibility::OPTION_ALLOWED_USER_ROLE ),
 			)
 		);
 	}
@@ -176,8 +176,8 @@ class Settings implements Hook_Interface {
 	 *
 	 * @return int
 	 */
-	public function sanitize_is_widget_enabled($value): int {
-		return (int) rest_sanitize_boolean($value);
+	public function sanitize_is_widget_enabled( $value ): int {
+		return (int) rest_sanitize_boolean( $value );
 	}
 
 	/**
@@ -185,11 +185,11 @@ class Settings implements Hook_Interface {
 	 *
 	 * @return string
 	 */
-	public function sanitize_widget_position($value): string {
-		$value = sanitize_text_field( $value );
+	public function sanitize_widget_position( $value ): string {
+		$value   = sanitize_text_field( $value );
 		$options = $this->get_widget_position_options();
 
-		return array_key_exists($value, $options) ? $value : key( $options );
+		return array_key_exists( $value, $options ) ? $value : key( $options );
 	}
 
 	/**
@@ -197,11 +197,11 @@ class Settings implements Hook_Interface {
 	 *
 	 * @return string
 	 */
-	public function sanitize_allowed_user_role($value): string {
-		$value = sanitize_text_field( $value );
+	public function sanitize_allowed_user_role( $value ): string {
+		$value   = sanitize_text_field( $value );
 		$options = $this->get_allowed_user_role_options();
 
-		return array_key_exists($value, $options) ? $value : key( $options );
+		return array_key_exists( $value, $options ) ? $value : key( $options );
 	}
 
 	/**
@@ -209,10 +209,10 @@ class Settings implements Hook_Interface {
 	 */
 	private function get_widget_position_options(): array {
 		return array(
-			'top-right' => __( 'Top Right', 'siteimprove-accessibility' ),
-			'top-left'  => __( 'Top Left', 'siteimprove-accessibility' ),
+			'top-right'    => __( 'Top Right', 'siteimprove-accessibility' ),
+			'top-left'     => __( 'Top Left', 'siteimprove-accessibility' ),
 			'bottom-right' => __( 'Bottom Right', 'siteimprove-accessibility' ),
-			'bottom-left' => __( 'Bottom Left', 'siteimprove-accessibility' ),
+			'bottom-left'  => __( 'Bottom Left', 'siteimprove-accessibility' ),
 		);
 	}
 
@@ -221,10 +221,10 @@ class Settings implements Hook_Interface {
 	 */
 	private function get_allowed_user_role_options(): array {
 		return array(
-			'manage_options' => __( 'Administrator', 'siteimprove-accessibility' ),
-			'edit_private_posts'  => __( 'Editor', 'siteimprove-accessibility' ),
+			'manage_options'       => __( 'Administrator', 'siteimprove-accessibility' ),
+			'edit_private_posts'   => __( 'Editor', 'siteimprove-accessibility' ),
 			'edit_published_posts' => __( 'Author', 'siteimprove-accessibility' ),
-			'edit_posts' => __( 'Contributor', 'siteimprove-accessibility' ),
+			'edit_posts'           => __( 'Contributor', 'siteimprove-accessibility' ),
 		);
 	}
 }

@@ -22,14 +22,16 @@ import { renderSinglePageReporting } from '@siteimprove/accessibility-cms-compon
 		$('.siteimprove-scan-button').on('click', onScanClick);
 
 		$('#siteimprove-scan-panel-button.visible').show();
-		$('#siteimprove-scan-panel-button, #siteimprove-scan-hide')
-			.on('click', function () {
+		$('#siteimprove-scan-panel-button, #siteimprove-scan-hide').on(
+			'click',
+			function () {
 				$('#siteimprove-scan-panel').toggle();
 				if (!isPageScanned) {
 					isPageScanned = true;
 					$('.siteimprove-scan-button').trigger('click');
 				}
-			});
+			}
+		);
 
 		if (isAutoCheckEnabled) {
 			$('#siteimprove-scan-panel-button').trigger('click');

@@ -32,7 +32,7 @@ class Navigation implements Hook_Interface {
 	 */
 	public function init_menu(): void {
 		$issues_page = new Issues_Page();
-		$capability = get_option( Siteimprove_Accessibility::OPTION_ALLOWED_USER_ROLE );
+		$capability  = get_option( Siteimprove_Accessibility::OPTION_ALLOWED_USER_ROLE );
 
 		add_menu_page(
 			__( 'Siteimprove Accessibility', 'siteimprove-accessibility' ),
