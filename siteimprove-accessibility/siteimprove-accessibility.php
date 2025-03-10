@@ -23,7 +23,7 @@ use Siteimprove\Accessibility\Admin\Scan_Panel;
 use Siteimprove\Accessibility\Admin\Issues_Page;
 use Siteimprove\Accessibility\Admin\Gutenberg_Sidebar;
 use Siteimprove\Accessibility\Admin\Navigation;
-use Siteimprove\Accessibility\Admin\Settings_Page;
+use Siteimprove\Accessibility\Admin\Settings;
 use Siteimprove\Accessibility\Api\Get_Daily_Stats_Api;
 use Siteimprove\Accessibility\Api\Get_Issues_Api;
 use Siteimprove\Accessibility\Api\Get_Pages_With_Issues_Api;
@@ -55,6 +55,10 @@ define( 'SITEIMPROVE_ACCESSIBILITY_PLUGIN_ROOT_URL', trailingslashit( plugin_dir
  * Main plugin class.
  */
 class Siteimprove_Accessibility {
+
+	const OPTION_IS_WIDGET_ENABLED = 'siteimprove_accessibility_is_widget_enabled';
+	const OPTION_WIDGET_POSITION   = 'siteimprove_accessibility_widget_position';
+	const OPTION_ALLOWED_USER_ROLE = 'siteimprove_accessibility_allowed_user_role';
 
 	private Service_Container $container;
 
@@ -104,28 +108,23 @@ class Siteimprove_Accessibility {
 	public function activate(): void {
 		$db = new Database();
 		$db->install();
+
+		$settings = new Settings();
+		$settings->init_options();
 	}
 
 	/**
 	 * @return void
 	 */
 	public function register_hooks(): void {
-		if ( ! current_user_can( 'manage_options' ) ) {
-			return;
-		}
-
 		$hook_registry = new Hook_Registry();
-
-		if ( is_admin() ) {
-			$hook_registry
-				->add( new Navigation() )
-				->add( new Issues_Page() )
-				->add( new Reports_Page() )
-				->add( new Settings_Page() )
-				->add( new Gutenberg_Sidebar() );
-		}
-
 		$hook_registry
+			->add( new Settings() )
+			->add( new Navigation() )
+			->add( new Issues_Page() )
+			->add( new Reports_Page() )
+			->add( new Gutenberg_Sidebar() )
+			->add( new Scan_Panel() )
 			->add(
 				new Post_Save_Scan_Api(
 					$this->container->get( 'scan_repository' ),
@@ -140,8 +139,7 @@ class Siteimprove_Accessibility {
 					$this->container->get( 'daily_stats_repository' ),
 					$this->container->get( 'daily_stats_processor' )
 				)
-			)
-			->add( new Scan_Panel() );
+			);
 
 		$hook_registry->register_hooks();
 	}

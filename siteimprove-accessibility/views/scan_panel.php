@@ -1,7 +1,21 @@
-<button id="siteimprove-scan-panel-button" class="siteimprove-component"></button>
-<div id="siteimprove-scan-panel" class="siteimprove-component" style="display: none">
+<?php
+
+use Siteimprove\Accessibility\Admin\Issues_Page;
+use Siteimprove\Accessibility\Siteimprove_Accessibility;
+
+if ( ! defined( 'ABSPATH' ) ) {
+	exit;
+}
+
+?>
+
+<button id="siteimprove-scan-panel-button" class="siteimprove-component
+	<?php echo esc_attr( get_option( Siteimprove_Accessibility::OPTION_WIDGET_POSITION ) ); ?>
+	<?php echo get_option( Siteimprove_Accessibility::OPTION_IS_WIDGET_ENABLED ) ? 'visible' : ''; ?>
+"></button>
+<div id="siteimprove-scan-panel" class="siteimprove-component <?php echo esc_attr( get_option( Siteimprove_Accessibility::OPTION_WIDGET_POSITION ) ); ?>" style="display: none">
 	<div class="scan-panel-header">
-		<a href="<?php echo esc_url( admin_url( sprintf( 'admin.php?page=%s', \Siteimprove\Accessibility\Admin\Issues_Page::MENU_SLUG ) ) ); ?>">
+		<a href="<?php echo esc_url( admin_url( sprintf( 'admin.php?page=%s', Issues_Page::MENU_SLUG ) ) ); ?>">
 			<?php esc_html_e( 'Siteimprove Accessibility', 'siteimprove-accessibility' ); ?>
 		</a>
 		<button id="siteimprove-scan-hide"></button>
