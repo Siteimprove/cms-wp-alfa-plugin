@@ -5,7 +5,7 @@
     "watch": "webpack --watch --mode development"
   },
   "dependencies": {
-    "@siteimprove/accessibility-cms-components": "github:siteimprove/cms-alfa-fe-app#EPAM-147-Scan-Issue-Reporting",
+    "@siteimprove/accessibility-cms-components": "github:siteimprove/cms-alfa-fe-app#development",
     "@siteimprove/alfa-act": "^0.99.0",
     "@siteimprove/alfa-jquery": "^0.78",
     "@siteimprove/alfa-json": "^0.99.0",

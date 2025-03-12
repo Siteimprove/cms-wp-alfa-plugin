@@ -3,8 +3,7 @@ import { JQuery as AlfaJQuery } from '@siteimprove/alfa-jquery';
 import * as AlfaJson from '@siteimprove/alfa-json';
 import AlfaRules from '@siteimprove/alfa-rules';
 import { Rules as AlfaRuleFilter } from '@siteimprove/alfa-test-utils';
-import { getRuleMeta } from '@siteimprove/accessibility-cms-components/src/helpers/transformAuditResults';
-import { renderSinglePageReporting } from '@siteimprove/accessibility-cms-components';
+import { renderSinglePageReporting, getRuleMeta } from '@siteimprove/accessibility-cms-components';
 
 /* global siteimproveAccessibilitySaveScanData, jQuery, requestAnimationFrame */
 
