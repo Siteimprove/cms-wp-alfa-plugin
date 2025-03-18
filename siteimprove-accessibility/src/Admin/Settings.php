@@ -25,6 +25,9 @@ class Settings implements Hook_Interface {
 		if ( ! get_option( Siteimprove_Accessibility::OPTION_ALLOWED_USER_ROLE, null ) ) {
 			add_option( Siteimprove_Accessibility::OPTION_ALLOWED_USER_ROLE, 'edit_private_posts' );
 		}
+		if ( ! get_option( Siteimprove_Accessibility::OPTION_PREVIEW_AUTO_CHECK, null ) ) {
+			add_option( Siteimprove_Accessibility::OPTION_PREVIEW_AUTO_CHECK, 1 );
+		}
 	}
 
 	/**
@@ -97,6 +100,14 @@ class Settings implements Hook_Interface {
 		);
 
 		add_settings_field(
+			Siteimprove_Accessibility::OPTION_PREVIEW_AUTO_CHECK,
+			__( 'Preview auto-check', 'siteimprove-accessibility' ),
+			array( $this, 'render_field_preview_auto_check' ),
+			'siteimprove_accessibility_settings',
+			'siteimprove_accessibility_manage_features_section'
+		);
+
+		add_settings_field(
 			'siteimprove_accessibility_customer_support',
 			'Customer Support',
 			array( $this, 'render_field_customer_support' ),
@@ -127,6 +138,14 @@ class Settings implements Hook_Interface {
 			Siteimprove_Accessibility::OPTION_ALLOWED_USER_ROLE,
 			array(
 				'sanitize_callback' => array( $this, 'sanitize_allowed_user_role' ),
+			)
+		);
+
+		register_setting(
+			'siteimprove_accessibility_settings',
+			Siteimprove_Accessibility::OPTION_PREVIEW_AUTO_CHECK,
+			array(
+				'sanitize_callback' => array( $this, 'sanitize_preview_auto_check' ),
 			)
 		);
 	}
@@ -167,6 +186,13 @@ class Settings implements Hook_Interface {
 	/**
 	 * @return void
 	 */
+	public function render_field_preview_auto_check(): void {
+		$this->render( 'views/partials/field_preview_auto_check.php' );
+	}
+
+	/**
+	 * @return void
+	 */
 	public function render_field_customer_support(): void {
 		$this->render( 'views/partials/field_customer_support.php' );
 	}
@@ -202,6 +228,15 @@ class Settings implements Hook_Interface {
 		$options = $this->get_allowed_user_role_options();
 
 		return array_key_exists( $value, $options ) ? $value : key( $options );
+	}
+
+	/**
+	 * @param $value
+	 *
+	 * @return int
+	 */
+	public function sanitize_preview_auto_check( $value ): int {
+		return (int) rest_sanitize_boolean( $value );
 	}
 
 	/**

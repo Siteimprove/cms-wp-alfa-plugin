@@ -3,18 +3,17 @@ import { JQuery as AlfaJQuery } from '@siteimprove/alfa-jquery';
 import * as AlfaJson from '@siteimprove/alfa-json';
 import AlfaRules from '@siteimprove/alfa-rules';
 import { Rules as AlfaRuleFilter } from '@siteimprove/alfa-test-utils';
-import { renderSinglePageReporting, getRuleMeta } from '@siteimprove/accessibility-cms-components';
+import {
+	renderSinglePageReporting,
+	getRuleMeta,
+} from '@siteimprove/accessibility-cms-components';
 
-/* global siteimproveAccessibilitySaveScanData, jQuery, requestAnimationFrame */
+/* global siteimproveAccessibilityScan, jQuery, requestAnimationFrame */
 
 (function ($) {
 	'use strict';
 
 	const { __ } = wp.i18n;
-	const urlParams = new URLSearchParams(window.location.search);
-	const isAutoCheckEnabled =
-		urlParams.has('siteimprove-auto-check') &&
-		urlParams.get('siteimprove-auto-check') === 'true';
 	let isPageScanned = false;
 
 	$(window).on('load', function () {
@@ -32,7 +31,7 @@ import { renderSinglePageReporting, getRuleMeta } from '@siteimprove/accessibili
 			}
 		);
 
-		if (isAutoCheckEnabled) {
+		if (siteimproveAccessibilityScan.auto_check) {
 			$('#siteimprove-scan-panel-button').trigger('click');
 		}
 	});
@@ -101,7 +100,7 @@ import { renderSinglePageReporting, getRuleMeta } from '@siteimprove/accessibili
 
 		return processAuditScan(
 			alfaResult,
-			siteimproveAccessibilitySaveScanData.post_id
+			siteimproveAccessibilityScan.post_id
 		);
 	}
 
