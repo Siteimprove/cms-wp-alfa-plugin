@@ -65,10 +65,10 @@ class Post_Save_Scan_Api implements Hook_Interface {
 		$post_id      = $request['post_id'] ? (int) $request['post_id'] : null;
 		$url          = $request['url'] ? sanitize_url( $request['url'] ) : null;
 		$title        = $request['title'] ? sanitize_text_field( $request['title'] ) : null;
-		$scan_results = rest_is_object( $request['scan_results'] ) ? rest_sanitize_object( $request['scan_results'] ) : null;
-		$scan_stats   = rest_is_object( $request['scan_stats'] ) ? rest_sanitize_object( $request['scan_stats'] ) : null;
+		$scan_results = rest_is_object( $request['scan_results'] ) ? rest_sanitize_object( $request['scan_results'] ) : array();
+		$scan_stats   = rest_is_object( $request['scan_stats'] ) ? rest_sanitize_object( $request['scan_stats'] ) : array();
 
-		if ( ! $url || ! $title || ! $scan_results || ! $scan_stats ) {
+		if ( ! $url || ! $title ) {
 			return new WP_REST_Response( 'Missing or invalid data!', 400 );
 		}
 
