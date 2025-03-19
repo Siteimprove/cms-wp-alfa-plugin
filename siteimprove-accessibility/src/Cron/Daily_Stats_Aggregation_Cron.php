@@ -42,10 +42,12 @@ class Daily_Stats_Aggregation_Cron {
 	 */
 	public function aggregate_daily_stats(): void {
 		$aggregated_stats = $this->daily_stats_processor->get_aggregated_issues();
+		$encoded_stats    = wp_json_encode( $aggregated_stats );
+		$timestamp        = strtotime( '-1 day', current_time( 'timestamp' ) ); // phpcs:ignore WordPress.DateTime.CurrentTimeTimestamp.Requested
+		$latest_stats     = $this->daily_stats_repository->find_daily_stats( $timestamp );
 
-		$this->daily_stats_repository->create_or_update_stats(
-			strtotime( '-1 day', current_time( 'timestamp' ) ), // phpcs:ignore WordPress.DateTime.CurrentTimeTimestamp.Requested
-			$aggregated_stats
-		);
+		if ( empty( $latest_stats ) || $latest_stats[0]->aggregated_stats !== $encoded_stats ) {
+			$this->daily_stats_repository->create_or_update_stats( $timestamp, $encoded_stats );
+		}
 	}
 }

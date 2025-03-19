@@ -6,18 +6,18 @@ class Daily_Stats_Repository {
 
 	/**
 	 * @param int $timestamp
-	 * @param array $stats
+	 * @param string $encoded_stats
 	 *
 	 * @return bool
 	 */
-	public function create_or_update_stats( int $timestamp, array $stats ): bool {
+	public function create_or_update_stats( int $timestamp, string $encoded_stats ): bool {
 		global $wpdb;
 
 		$table_name = $wpdb->prefix . 'siteimprove_accessibility_daily_stats';
 		$date       = wp_date( 'Y-m-d', $timestamp );
 		$data       = array(
 			'date'             => $date,
-			'aggregated_stats' => wp_json_encode( $stats ),
+			'aggregated_stats' => $encoded_stats,
 		);
 
 		$exists = (bool) $wpdb->get_var( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
