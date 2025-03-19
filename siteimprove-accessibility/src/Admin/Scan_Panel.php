@@ -4,6 +4,7 @@ namespace Siteimprove\Accessibility\Admin;
 
 use Siteimprove\Accessibility\Core\Hook_Interface;
 use Siteimprove\Accessibility\Core\View_Trait;
+use Siteimprove\Accessibility\Siteimprove_Accessibility;
 
 class Scan_Panel implements Hook_Interface {
 
@@ -43,9 +44,10 @@ class Scan_Panel implements Hook_Interface {
 		$post_id = is_singular() ? get_the_ID() : null;
 		wp_localize_script(
 			SITEIMPROVE_ACCESSIBILITY_PLUGIN_NAME,
-			'siteimproveAccessibilitySaveScanData',
+			'siteimproveAccessibilityScan',
 			array(
-				'post_id' => $post_id,
+				'post_id'    => $post_id,
+				'auto_check' => $this->isAutoCheckEnabled(),
 			)
 		);
 	}
@@ -55,5 +57,14 @@ class Scan_Panel implements Hook_Interface {
 	 */
 	public function add_scan_panel(): void {
 		$this->render( 'views/scan_panel.php' );
+	}
+
+	/**
+	 * @return bool
+	 */
+	public function isAutoCheckEnabled(): bool {
+		$force_auto_check = filter_var( wp_unslash( $_GET['siteimprove-auto-check'] ?? false ), FILTER_VALIDATE_BOOLEAN ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+
+		return ( $force_auto_check || ( is_preview() && get_option( Siteimprove_Accessibility::OPTION_PREVIEW_AUTO_CHECK, 0 ) ) );
 	}
 }
