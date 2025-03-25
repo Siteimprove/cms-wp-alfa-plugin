@@ -14,6 +14,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<div class="siteimprove-dashboard-heading">
 		<h1><?php echo esc_html( get_admin_page_title() ); ?></h1>
 
+		<?php settings_errors(); ?>
+
 		<div class="siteimprove-extension-notification">
 			<h2><?php esc_html_e( 'Instant Accessibility Checks, In Your Browser.', 'siteimprove-accessibility' ); ?></h2>
 			<p><?php esc_html_e( 'Securely test webpages, multi-step forms and dynamic content for accessibility with our free extension. Highlight issues and understand their impact on users, all within your browser.', 'siteimprove-accessibility' ); ?></p>
