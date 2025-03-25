@@ -91,7 +91,7 @@ class Issue_Repository {
 
 		return $wpdb->get_results( // phpcs:ignore WordPress.DB.DirectDatabaseQuery
 			$wpdb->prepare(
-				'SELECT r.rule, r.conformance, SUM(o.occurrence) occurrence
+				'SELECT r.rule, r.conformance, SUM(o.occurrence) occurrences
 			    FROM %i r
 			    JOIN %i o ON o.rule_id = r.id
 				GROUP BY r.id',

@@ -36,8 +36,7 @@ class Daily_Stats_Processor {
 		);
 
 		foreach ( $issues as $issue ) {
-			// TODO: consider simplifying structure (impacts the prepare_stat_record() method, and the data that has been already stored in database)
-			$aggregated_stats['rules'][ $issue->rule ][ $issue->conformance ] = ( $aggregated_stats['rules'][ $issue->rule ][ $issue->conformance ] ?? 0 ) + $issue->occurrence;
+			$aggregated_stats['rules'][ $issue->rule ][ $issue->conformance ] = ( $aggregated_stats['rules'][ $issue->rule ][ $issue->conformance ] ?? 0 ) + $issue->occurrences;
 		}
 
 		return $aggregated_stats;

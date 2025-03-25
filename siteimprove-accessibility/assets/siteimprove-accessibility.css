@@ -154,6 +154,34 @@
     text-align: center;
 }
 
+.siteimprove-empty-issues-container {
+    padding: 100px 0;
+    text-align: center;
+}
+
+.siteimprove-extension-notification {
+    position: relative;
+    background-color: #FFF;
+    background-image: url('./img/extension-notification.svg');
+    background-size: 70px 68px;
+    background-repeat: no-repeat;
+    background-position: 20px center;
+    padding: 10px 10px 10px 105px;
+    margin: 10px 0 20px 0;
+}
+
+.siteimprove-extension-notification .button {
+    position: absolute;
+    top: 50%;
+    right: 20px;
+    transform: translateY(-50%);
+    font-size: 1.3em;
+    background-color: #0D4CD3 !important;
+    border-color: #0D4CD3 !important;
+    padding: 5px 30px;
+    border-radius: 30px;
+}
+
 /**
  * Settings form
  */

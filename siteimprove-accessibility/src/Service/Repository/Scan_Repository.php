@@ -261,6 +261,7 @@ class Scan_Repository {
 		$page->id          = (int) $page->id;
 		$page->occurrences = (int) $page->occurrences;
 		$page->issuesCount = (int) $page->issuesCount; // phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
+		$page->lastChecked = wp_date( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), strtotime( $page->lastChecked ) );  // phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
 
 		return $page;
 	}

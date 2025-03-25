@@ -85,6 +85,8 @@ class Post_Save_Scan_Api implements Hook_Interface {
 			$this->issue_repository->create_occurrence( $scan_id, $rule_id, $details['occurrence'] );
 		}
 
+		update_option( Siteimprove_Accessibility::OPTION_IS_PAGE_CHECK_USED, true );
+
 		return new WP_REST_Response( $this->create_response_summary( $scan_stats ) );
 	}
 
