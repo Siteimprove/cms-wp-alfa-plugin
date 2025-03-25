@@ -62,7 +62,6 @@ class Get_Daily_Stats_Api implements Hook_Interface {
 		// prepare today's stat from scans
 		$aggregated_stats = $this->daily_stats_processor->get_aggregated_issues();
 		list($daily_stats->issues[], $daily_stats->occurrences[]) = $this->daily_stats_processor->prepare_stat_record( $aggregated_stats, wp_date( 'Y-m-d' ) );
-		// TODO: seems like that even though the data is available for the current day, the chart doesn't render it for some reason. Probably the issue is timezone mismatch related.
 
 		return new WP_REST_Response( $daily_stats );
 	}

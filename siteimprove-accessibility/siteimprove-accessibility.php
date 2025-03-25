@@ -56,6 +56,7 @@ define( 'SITEIMPROVE_ACCESSIBILITY_PLUGIN_ROOT_URL', trailingslashit( plugin_dir
  */
 class Siteimprove_Accessibility {
 
+	const OPTION_IS_PAGE_CHECK_USED = 'siteimprove_accessibility_is_page_check_used';
 	const OPTION_IS_WIDGET_ENABLED  = 'siteimprove_accessibility_is_widget_enabled';
 	const OPTION_WIDGET_POSITION    = 'siteimprove_accessibility_widget_position';
 	const OPTION_ALLOWED_USER_ROLE  = 'siteimprove_accessibility_allowed_user_role';
