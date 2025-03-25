@@ -28,6 +28,9 @@ class Settings implements Hook_Interface {
 		if ( ! get_option( Siteimprove_Accessibility::OPTION_PREVIEW_AUTO_CHECK, null ) ) {
 			add_option( Siteimprove_Accessibility::OPTION_PREVIEW_AUTO_CHECK, 1 );
 		}
+		if ( ! get_option( Siteimprove_Accessibility::OPTION_PREVIEW_IS_USAGE_TRACKING_ENABLED, null ) ) {
+			add_option( Siteimprove_Accessibility::OPTION_PREVIEW_IS_USAGE_TRACKING_ENABLED, 0 );
+		}
 	}
 
 	/**
@@ -108,6 +111,14 @@ class Settings implements Hook_Interface {
 		);
 
 		add_settings_field(
+			Siteimprove_Accessibility::OPTION_PREVIEW_IS_USAGE_TRACKING_ENABLED,
+			__( 'Usage tracking', 'siteimprove-accessibility' ),
+			array( $this, 'render_field_is_usage_tracking_enabled' ),
+			'siteimprove_accessibility_settings',
+			'siteimprove_accessibility_manage_features_section'
+		);
+
+		add_settings_field(
 			'siteimprove_accessibility_customer_support',
 			'Customer Support',
 			array( $this, 'render_field_customer_support' ),
@@ -146,6 +157,14 @@ class Settings implements Hook_Interface {
 			Siteimprove_Accessibility::OPTION_PREVIEW_AUTO_CHECK,
 			array(
 				'sanitize_callback' => array( $this, 'sanitize_preview_auto_check' ),
+			)
+		);
+
+		register_setting(
+			'siteimprove_accessibility_settings',
+			Siteimprove_Accessibility::OPTION_PREVIEW_IS_USAGE_TRACKING_ENABLED,
+			array(
+				'sanitize_callback' => array( $this, 'sanitize_is_usage_tracking_enabled' ),
 			)
 		);
 	}
@@ -188,6 +207,13 @@ class Settings implements Hook_Interface {
 	 */
 	public function render_field_preview_auto_check(): void {
 		$this->render( 'views/partials/field_preview_auto_check.php' );
+	}
+
+	/**
+	 * @return void
+	 */
+	public function render_field_is_usage_tracking_enabled(): void {
+		$this->render( 'views/partials/field_is_usage_tracking_enabled.php' );
 	}
 
 	/**
@@ -236,6 +262,15 @@ class Settings implements Hook_Interface {
 	 * @return int
 	 */
 	public function sanitize_preview_auto_check( $value ): int {
+		return (int) rest_sanitize_boolean( $value );
+	}
+
+	/**
+	 * @param $value
+	 *
+	 * @return int
+	 */
+	public function sanitize_is_usage_tracking_enabled( $value ): int {
 		return (int) rest_sanitize_boolean( $value );
 	}
 

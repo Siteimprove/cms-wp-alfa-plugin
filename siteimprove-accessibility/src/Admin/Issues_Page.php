@@ -39,6 +39,16 @@ class Issues_Page implements Hook_Interface {
 				SITEIMPROVE_ACCESSIBILITY_VERSION,
 				true
 			);
+
+			if ( get_option( Siteimprove_Accessibility::OPTION_PREVIEW_IS_USAGE_TRACKING_ENABLED, 0 ) ) {
+				wp_enqueue_script(
+					'siteimprove-accessibility-pendo',
+					SITEIMPROVE_ACCESSIBILITY_PLUGIN_ROOT_URL . 'assets/pendo.js',
+					array(),
+					SITEIMPROVE_ACCESSIBILITY_VERSION,
+					false
+				);
+			}
 		}
 	}
 
