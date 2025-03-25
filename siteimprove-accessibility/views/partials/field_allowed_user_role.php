@@ -19,5 +19,5 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<option value="<?php echo esc_attr( $key ); ?>" <?php echo selected( $selected === $key ); ?>><?php echo esc_attr( $value ); ?></option>
 		<?php endforeach; ?>
 	</select>
-	<p><?php esc_html_e( 'Select the least privileged role that should have access to Siteimprove Accessibility features. The other roles with higher privileges will also gain access.', 'siteimprove_accessibility' ); ?></p>
+	<p><?php esc_html_e( 'Choose the lowest-level user role that needs access to Siteimprove Accessibility. Roles with higher permissions will also have access.', 'siteimprove_accessibility' ); ?></p>
 </fieldset>
