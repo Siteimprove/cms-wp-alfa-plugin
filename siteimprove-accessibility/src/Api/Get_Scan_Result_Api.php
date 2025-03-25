@@ -72,7 +72,7 @@ class Get_Scan_Result_Api implements Hook_Interface {
 			);
 		}
 
-		return new WP_REST_Response( array() );
+		return new WP_REST_Response( null, 204 );
 	}
 
 	/**
