@@ -67,7 +67,7 @@ class Get_Scan_Result_Api implements Hook_Interface {
 			return new WP_REST_Response(
 				array(
 					'failedItems' => json_decode( $result->scan_results, true ),
-					'date'        => $result->created_at,
+					'date'        => wp_date( get_option( 'date_format' ) . ' ' . get_option( 'time_format' ), strtotime( $result->created_at ) ),
 				)
 			);
 		}
