@@ -151,7 +151,8 @@ class Siteimprove_Accessibility {
 	public function schedule_cron(): void {
 		$daily_stats_aggregation_cron = new Daily_Stats_Aggregation_Cron(
 			$this->container->get( 'daily_stats_repository' ),
-			$this->container->get( 'daily_stats_processor' )
+			$this->container->get( 'daily_stats_processor' ),
+			$this->container->get( 'scan_repository' ),
 		);
 
 		$daily_stats_aggregation_cron->schedule();

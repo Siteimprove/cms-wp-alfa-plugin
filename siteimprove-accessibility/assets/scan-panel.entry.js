@@ -49,20 +49,11 @@ import {
 						path: '/siteimprove-accessibility/save-scan',
 						method: 'POST',
 						data: auditScan,
-					}).then((response) => {
-						if (response.count_issues > 0) {
-							renderSinglePageReporting(
-								{ failedItems: auditScan.scan_results },
-								'siteimprove-scan-results'
-							);
-						} else {
-							$('#siteimprove-scan-results').html(
-								__(
-									'No issues found!',
-									'siteimprove-accessibility'
-								)
-							);
-						}
+					}).then(() => {
+						renderSinglePageReporting(
+							{ failedItems: auditScan.scan_results },
+							'siteimprove-scan-results'
+						);
 
 						$label.html(
 							__('Check page', 'siteimprove-accessibility')
