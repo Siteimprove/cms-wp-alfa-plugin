@@ -4,22 +4,27 @@ namespace Siteimprove\Accessibility\Cron;
 
 use Siteimprove\Accessibility\Service\Daily_Stats_Processor;
 use Siteimprove\Accessibility\Service\Repository\Daily_Stats_Repository;
+use Siteimprove\Accessibility\Service\Repository\Scan_Repository;
 
 class Daily_Stats_Aggregation_Cron {
 
 	private Daily_Stats_Repository $daily_stats_repository;
 	private Daily_Stats_Processor $daily_stats_processor;
+	private Scan_Repository $scan_repository;
 
 	/**
 	 * @param Daily_Stats_Repository $daily_stats_repository
 	 * @param Daily_Stats_Processor $daily_stats_processor
+	 * @param Scan_Repository $scan_repository
 	 */
 	public function __construct(
 		Daily_Stats_Repository $daily_stats_repository,
-		Daily_Stats_Processor $daily_stats_processor
+		Daily_Stats_Processor $daily_stats_processor,
+		Scan_Repository $scan_repository
 	) {
 		$this->daily_stats_repository = $daily_stats_repository;
 		$this->daily_stats_processor  = $daily_stats_processor;
+		$this->scan_repository        = $scan_repository;
 
 		add_action( 'siteimprove_accessibility_daily_stats_aggregation', array( $this, 'aggregate_daily_stats' ) );
 	}
@@ -41,6 +46,8 @@ class Daily_Stats_Aggregation_Cron {
 	 * @return void
 	 */
 	public function aggregate_daily_stats(): void {
+		$this->scan_repository->delete_scans_above_threshold();
+
 		$aggregated_stats = $this->daily_stats_processor->get_aggregated_issues();
 		$encoded_stats    = wp_json_encode( $aggregated_stats );
 		$timestamp        = strtotime( '-1 day', current_time( 'timestamp' ) ); // phpcs:ignore WordPress.DateTime.CurrentTimeTimestamp.Requested

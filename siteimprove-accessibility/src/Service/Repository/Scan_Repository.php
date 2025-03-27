@@ -137,6 +137,53 @@ class Scan_Repository {
 	}
 
 	/**
+	 * @return void
+	 */
+	public function delete_scans_above_threshold(): void {
+		global $wpdb;
+
+		$scan_threshold    = 25;
+		$scans_table       = $wpdb->prefix . 'siteimprove_accessibility_scans';
+		$occurrences_table = $wpdb->prefix . 'siteimprove_accessibility_occurrences';
+
+		// Delete occurrences table entries that are not part of the latest scans
+		$wpdb->query( // phpcs:ignore WordPress.DB
+			$wpdb->prepare(
+				'DELETE occurrences
+				FROM %i occurrences
+	            LEFT JOIN (
+	            	SELECT id
+	            	FROM %i
+	            	ORDER BY id
+	            	DESC LIMIT %d
+                ) latest_scans ON occurrences.scan_id = latest_scans.id
+	            WHERE latest_scans.id IS NULL',
+				$occurrences_table,
+				$scans_table,
+				$scan_threshold
+			)
+		);
+
+		// Delete scans table entries not within the scan threshold
+		$wpdb->query( // phpcs:ignore WordPress.DB
+			$wpdb->prepare(
+				'DELETE scans
+				FROM %i scans 
+                LEFT JOIN (
+                	SELECT id
+                	FROM %i
+                	ORDER BY id
+                	DESC LIMIT %d
+                ) latest_scans ON scans.id = latest_scans.id
+       			WHERE latest_scans.id IS NULL',
+				$scans_table,
+				$scans_table,
+				$scan_threshold
+			)
+		);
+	}
+
+	/**
 	 * @param array $params
 	 * @param bool $use_limit
 	 *
@@ -222,7 +269,7 @@ class Scan_Repository {
 	 *
 	 * @return array
 	 */
-	public function expand_scans_with_issues( array $scans ): array {
+	private function expand_scans_with_issues( array $scans ): array {
 		global $wpdb;
 
 		$occurrences_table = $wpdb->prefix . 'siteimprove_accessibility_occurrences';
