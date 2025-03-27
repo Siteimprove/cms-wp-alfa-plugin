@@ -29,7 +29,7 @@ class Settings implements Hook_Interface {
 			add_option( Siteimprove_Accessibility::OPTION_PREVIEW_AUTO_CHECK, 1 );
 		}
 		if ( ! get_option( Siteimprove_Accessibility::OPTION_PREVIEW_IS_USAGE_TRACKING_ENABLED, null ) ) {
-			add_option( Siteimprove_Accessibility::OPTION_PREVIEW_IS_USAGE_TRACKING_ENABLED, 0 );
+			add_option( Siteimprove_Accessibility::OPTION_PREVIEW_IS_USAGE_TRACKING_ENABLED, 1 );
 		}
 	}
 
