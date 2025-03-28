@@ -2,13 +2,14 @@
 
 namespace Siteimprove\Accessibility\Admin;
 
-use Siteimprove\Accessibility\Core\View_Trait;
+use Siteimprove\Accessibility\Core\Usage_Tracking_Trait;
 use Siteimprove\Accessibility\Core\Hook_Interface;
-use Siteimprove\Accessibility\Siteimprove_Accessibility;
+use Siteimprove\Accessibility\Core\View_Trait;
 
 class Reports_Page implements Hook_Interface {
 
 	use View_Trait;
+	use Usage_Tracking_Trait;
 
 	const MENU_SLUG = 'siteimprove_accessibility_reports';
 
@@ -34,15 +35,7 @@ class Reports_Page implements Hook_Interface {
 				true
 			);
 
-			if ( get_option( Siteimprove_Accessibility::OPTION_PREVIEW_IS_USAGE_TRACKING_ENABLED, 1 ) ) {
-				wp_enqueue_script(
-					'siteimprove-accessibility-pendo',
-					SITEIMPROVE_ACCESSIBILITY_PLUGIN_ROOT_URL . 'assets/pendo.js',
-					array(),
-					SITEIMPROVE_ACCESSIBILITY_VERSION,
-					false
-				);
-			}
+			$this->enqueue_usage_tracking_scripts();
 		}
 	}
 
