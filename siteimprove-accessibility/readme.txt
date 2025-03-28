@@ -7,11 +7,11 @@ Stable tag: 1.0.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-Make web content accessible to everyone. Effortlessly scan your pages for accessibility issues, get clear recommendations, and ensure your brand reaches a wider audience.
+Catch, monitor, and resolve web accessibility issues in minutes—right from your WordPress CMS.
 
 == Description ==
 
-TODO: Add description
+The Siteimprove Accessibility plugin allows you to catch, monitor, and resolve accessibility issues in minutes—right from your WordPress CMS. Go beyond an overlay solution – ensure your site meets ADA and WCAG 2.2 standards through automated scanning, AI-powered suggestions, and developer tools before content goes live.
 
 == Installation ==
 
