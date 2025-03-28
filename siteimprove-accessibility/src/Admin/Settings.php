@@ -5,6 +5,7 @@ namespace Siteimprove\Accessibility\Admin;
 use Siteimprove\Accessibility\Core\Hook_Interface;
 use Siteimprove\Accessibility\Core\View_Trait;
 use Siteimprove\Accessibility\Siteimprove_Accessibility;
+use Siteimprove\Alfa\Stim_Alfa;
 
 class Settings implements Hook_Interface {
 
