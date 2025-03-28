@@ -3,7 +3,8 @@
   "ignorePatterns": [
     "node_modules/",
     "**/*.bundle.js",
-    "vendor/"
+    "vendor/",
+    "usage-tracking.js"
   ],
   "parserOptions": {
     "requireConfigFile": false

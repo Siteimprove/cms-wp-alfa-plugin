@@ -2,6 +2,7 @@
 
 namespace Siteimprove\Accessibility\Admin;
 
+use Siteimprove\Accessibility\Core\Usage_Tracking_Trait;
 use Siteimprove\Accessibility\Core\View_Trait;
 use Siteimprove\Accessibility\Core\Hook_Interface;
 use Siteimprove\Accessibility\Siteimprove_Accessibility;
@@ -9,6 +10,7 @@ use Siteimprove\Accessibility\Siteimprove_Accessibility;
 class Issues_Page implements Hook_Interface {
 
 	use View_Trait;
+	use Usage_Tracking_Trait;
 
 	const MENU_SLUG = 'siteimprove_accessibility_issues';
 
@@ -39,6 +41,8 @@ class Issues_Page implements Hook_Interface {
 				SITEIMPROVE_ACCESSIBILITY_VERSION,
 				true
 			);
+
+			$this->enqueue_usage_tracking_scripts();
 		}
 	}
 
