@@ -105,7 +105,7 @@ class Settings implements Hook_Interface {
 
 		add_settings_field(
 			Siteimprove_Accessibility::OPTION_PREVIEW_AUTO_CHECK,
-			__( 'Preview auto-check', 'siteimprove-accessibility' ),
+			__( 'Accessibility auto-check', 'siteimprove-accessibility' ),
 			array( $this, 'render_field_preview_auto_check' ),
 			'siteimprove_accessibility_settings',
 			'siteimprove_accessibility_manage_features_section'

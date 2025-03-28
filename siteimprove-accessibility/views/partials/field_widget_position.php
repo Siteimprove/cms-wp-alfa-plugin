@@ -19,5 +19,5 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<option value="<?php echo esc_attr( $key ); ?>" <?php echo selected( $selected === $key ); ?>><?php echo esc_attr( $value ); ?></option>
 		<?php endforeach; ?>
 	</select>
-	<p><?php esc_html_e( 'Choose where the accessibility widget will appear when viewing content.', 'siteimprove-accessibility' ); ?></p>
+	<p><?php esc_html_e( "Select the widget's location on page previews.", 'siteimprove-accessibility' ); ?></p>
 </fieldset>
