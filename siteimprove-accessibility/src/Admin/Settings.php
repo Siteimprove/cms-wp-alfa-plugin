@@ -29,8 +29,8 @@ class Settings implements Hook_Interface {
 		if ( ! get_option( Siteimprove_Accessibility::OPTION_PREVIEW_AUTO_CHECK, null ) ) {
 			add_option( Siteimprove_Accessibility::OPTION_PREVIEW_AUTO_CHECK, 1 );
 		}
-		if ( ! get_option( Siteimprove_Accessibility::OPTION_PREVIEW_IS_USAGE_TRACKING_ENABLED, null ) ) {
-			add_option( Siteimprove_Accessibility::OPTION_PREVIEW_IS_USAGE_TRACKING_ENABLED, 1 );
+		if ( ! get_option( Siteimprove_Accessibility::OPTION_IS_USAGE_TRACKING_ENABLED, null ) ) {
+			add_option( Siteimprove_Accessibility::OPTION_IS_USAGE_TRACKING_ENABLED, 1 );
 		}
 	}
 
@@ -112,7 +112,7 @@ class Settings implements Hook_Interface {
 		);
 
 		add_settings_field(
-			Siteimprove_Accessibility::OPTION_PREVIEW_IS_USAGE_TRACKING_ENABLED,
+			Siteimprove_Accessibility::OPTION_IS_USAGE_TRACKING_ENABLED,
 			__( 'Usage tracking', 'siteimprove-accessibility' ),
 			array( $this, 'render_field_is_usage_tracking_enabled' ),
 			'siteimprove_accessibility_settings',
@@ -163,7 +163,7 @@ class Settings implements Hook_Interface {
 
 		register_setting(
 			'siteimprove_accessibility_settings',
-			Siteimprove_Accessibility::OPTION_PREVIEW_IS_USAGE_TRACKING_ENABLED,
+			Siteimprove_Accessibility::OPTION_IS_USAGE_TRACKING_ENABLED,
 			array(
 				'sanitize_callback' => array( $this, 'sanitize_is_usage_tracking_enabled' ),
 			)
