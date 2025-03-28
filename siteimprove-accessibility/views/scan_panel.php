@@ -1,6 +1,6 @@
 <?php
 
-use Siteimprove\Accessibility\Admin\Issues_Trait;
+use Siteimprove\Accessibility\Admin\Issues_Page;
 use Siteimprove\Accessibility\Siteimprove_Accessibility;
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -15,7 +15,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 "></button>
 <div id="siteimprove-scan-panel" class="siteimprove-component <?php echo esc_attr( get_option( Siteimprove_Accessibility::OPTION_WIDGET_POSITION ) ); ?>" style="display: none">
 	<div class="scan-panel-header">
-		<a href="<?php echo esc_url( admin_url( sprintf( 'admin.php?page=%s', Issues_Trait::MENU_SLUG ) ) ); ?>">
+		<a href="<?php echo esc_url( admin_url( sprintf( 'admin.php?page=%s', Issues_Page::MENU_SLUG ) ) ); ?>">
 			<?php esc_html_e( 'Siteimprove Accessibility', 'siteimprove-accessibility' ); ?>
 		</a>
 		<button id="siteimprove-scan-hide" aria-label="hide"></button>
