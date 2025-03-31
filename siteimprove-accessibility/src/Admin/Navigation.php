@@ -55,7 +55,7 @@ class Navigation implements Hook_Interface {
 		$reports_page = new Reports_Page();
 		add_submenu_page(
 			$issues_page::MENU_SLUG,
-			__( 'Progress over time', 'siteimprove-accessibility' ),
+			__( 'Compliance history', 'siteimprove-accessibility' ),
 			__( 'Reports', 'siteimprove-accessibility' ),
 			$capability,
 			$reports_page::MENU_SLUG,
