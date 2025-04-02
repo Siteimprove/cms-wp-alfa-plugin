@@ -22,7 +22,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	</div>
 	<div class="scan-panel-body">
 		<div class="scan-panel-control">
-			<button class="siteimprove-scan-button"><span><?php esc_html_e( 'Check page', 'siteimprove-accessibility' ); ?></span></button>
+			<button class="siteimprove-scan-button" data-observe-key="a11y-WordPress-ScanButton"><span><?php esc_html_e( 'Check page', 'siteimprove-accessibility' ); ?></span></button>
 		</div>
 		<div id="siteimprove-scan-results"></div>
 	</div>

@@ -3,13 +3,14 @@
 namespace Siteimprove\Accessibility\Admin;
 
 use Siteimprove\Accessibility\Core\Hook_Interface;
+use Siteimprove\Accessibility\Core\Usage_Tracking_Trait;
 use Siteimprove\Accessibility\Core\View_Trait;
 use Siteimprove\Accessibility\Siteimprove_Accessibility;
-use Siteimprove\Alfa\Stim_Alfa;
 
 class Settings implements Hook_Interface {
 
 	use View_Trait;
+	use Usage_Tracking_Trait;
 
 	const MENU_SLUG = 'siteimprove_accessibility_settings';
 
@@ -40,6 +41,7 @@ class Settings implements Hook_Interface {
 	public function register_hooks(): void {
 		add_filter( 'plugin_action_links_siteimprove-accessibility/siteimprove-accessibility.php', array( $this, 'action_links' ) );
 		add_action( 'admin_init', array( $this, 'register_settings' ) );
+		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
 	}
 
 	/**
@@ -57,6 +59,13 @@ class Settings implements Hook_Interface {
 		array_unshift( $links, $settings_link );
 
 		return $links;
+	}
+
+	/**
+	 * @return void
+	 */
+	public function enqueue_scripts(): void {
+		$this->enqueue_usage_tracking_scripts();
 	}
 
 	/**
