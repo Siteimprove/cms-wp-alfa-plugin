@@ -89,6 +89,7 @@ import { SinglePageReporting } from '@siteimprove/accessibility-cms-components';
 					<Button
 						className="siteimprove-scan-button"
 						onClick={() => setModalOpen(true)}
+						data-observe-key="a11y-WordPress-EditorModalOpenButton"
 					>
 						<span>
 							{__('Check page', 'siteimprove-accessibility')}
@@ -122,6 +123,7 @@ import { SinglePageReporting } from '@siteimprove/accessibility-cms-components';
 								isSecondary
 								onClick={handleActionCancel}
 								style={{ margin: '5px' }}
+								data-observe-key="a11y-WordPress-EditorModalCancelButton"
 							>
 								{__('Cancel', 'siteimprove-accessibility')}
 							</Button>
@@ -129,6 +131,7 @@ import { SinglePageReporting } from '@siteimprove/accessibility-cms-components';
 								isPrimary
 								onClick={handleActionConfirm}
 								style={{ margin: '5px' }}
+								data-observe-key="a11y-WordPress-EditorModalConfirmButton"
 							>
 								{__('Confirm', 'siteimprove-accessibility')}
 							</Button>

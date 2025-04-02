@@ -3,9 +3,12 @@
 namespace Siteimprove\Accessibility\Admin;
 
 use Siteimprove\Accessibility\Core\Hook_Interface;
+use Siteimprove\Accessibility\Core\Usage_Tracking_Trait;
 use Siteimprove\Accessibility\Siteimprove_Accessibility;
 
 class Gutenberg_Sidebar implements Hook_Interface {
+
+	use Usage_Tracking_Trait;
 
 	/**
 	 * @return void
@@ -31,6 +34,8 @@ class Gutenberg_Sidebar implements Hook_Interface {
 			SITEIMPROVE_ACCESSIBILITY_VERSION,
 			false
 		);
+
+		$this->enqueue_usage_tracking_scripts();
 	}
 
 	/**

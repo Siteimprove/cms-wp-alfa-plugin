@@ -3,12 +3,14 @@
 namespace Siteimprove\Accessibility\Admin;
 
 use Siteimprove\Accessibility\Core\Hook_Interface;
+use Siteimprove\Accessibility\Core\Usage_Tracking_Trait;
 use Siteimprove\Accessibility\Core\View_Trait;
 use Siteimprove\Accessibility\Siteimprove_Accessibility;
 
 class Scan_Panel implements Hook_Interface {
 
 	use View_Trait;
+	use Usage_Tracking_Trait;
 
 	/**
 	 * @return void
@@ -50,6 +52,8 @@ class Scan_Panel implements Hook_Interface {
 				'auto_check' => $this->isAutoCheckEnabled(),
 			)
 		);
+
+		$this->enqueue_usage_tracking_scripts();
 	}
 
 	/**
