@@ -29,7 +29,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<?php
 		settings_fields( 'siteimprove_accessibility_settings' );
 		do_settings_sections( 'siteimprove_accessibility_settings' );
-		submit_button( __( 'Update settings', 'siteimprove-accessibility' ) );
 		?>
+        <p class="submit">
+	        <?php submit_button( __( 'Update settings', 'siteimprove-accessibility' ), 'primary', 'submit', false ); ?>
+            <span style="display: block; margin-top: 10px;"><a href="https://frontier.siteimprove.com/page/terms-and-conditions" target="_blank"><?php esc_html_e( 'Terms and Conditions', 'siteimprove-accessibility' ); ?></a></span>
+        </p>
 	</form>
 </div>
