@@ -120,7 +120,6 @@ class Settings implements Hook_Interface {
 			'siteimprove_accessibility_manage_features_section'
 		);
 
-		// TODO: track when someone unchecks usage tracking and saves the settings like that
 		add_settings_field(
 			Siteimprove_Accessibility::OPTION_IS_USAGE_TRACKING_ENABLED,
 			__( 'Usage tracking', 'siteimprove-accessibility' ),
