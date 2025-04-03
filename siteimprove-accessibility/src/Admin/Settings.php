@@ -65,7 +65,11 @@ class Settings implements Hook_Interface {
 	 * @return void
 	 */
 	public function enqueue_scripts(): void {
-		$this->enqueue_usage_tracking_scripts();
+		global $pagenow;
+
+		if ( 'admin.php' === $pagenow && isset( $_GET['page'] ) && static::MENU_SLUG === $_GET['page'] ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+			$this->enqueue_usage_tracking_scripts();
+		}
 	}
 
 	/**

@@ -4,7 +4,6 @@
 	/* global pendo */
 	window.addEventListener('load', function () {
 		if (typeof pendo === 'undefined') return;
-		const defaultParams = {apiKey, visitor: {id: 'WORDPRESS-ANONYMOUS-ID'}, account: {id: '017065616813'}, disableGuides: true};
-		pendo.initialize($.extend(true, defaultParams, siteimproveUsageTrackingInitParams));
+		pendo.initialize($.extend(true, {apiKey}, siteimproveUsageTrackingInitParams));
 	});
 })('730de0a8-013b-42b8-58b9-5c52d8158b20', jQuery);
