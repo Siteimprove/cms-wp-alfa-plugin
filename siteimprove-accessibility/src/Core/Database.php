@@ -65,9 +65,9 @@ class Database {
 	public function uninstall(): void {
 		global $wpdb;
 
-		$wpdb->query( sprintf( 'DROP TABLE IF EXISTS %s%s;', $wpdb->prefix, 'siteimprove_accessibility_occurrences' ) ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery
-		$wpdb->query( sprintf( 'DROP TABLE IF EXISTS %s%s;', $wpdb->prefix, 'siteimprove_accessibility_rules' ) ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery
-		$wpdb->query( sprintf( 'DROP TABLE IF EXISTS %s%s;', $wpdb->prefix, 'siteimprove_accessibility_scans' ) ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery
-		$wpdb->query( sprintf( 'DROP TABLE IF EXISTS %s%s;', $wpdb->prefix, 'siteimprove_accessibility_daily_stats' ) ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery
+		$wpdb->query( $wpdb->prepare( 'DROP TABLE IF EXISTS %i;', $wpdb->prefix . 'siteimprove_accessibility_occurrences' ) ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery
+		$wpdb->query( $wpdb->prepare( 'DROP TABLE IF EXISTS %i;', $wpdb->prefix . 'siteimprove_accessibility_rules' ) ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery
+		$wpdb->query( $wpdb->prepare( 'DROP TABLE IF EXISTS %i;', $wpdb->prefix . 'siteimprove_accessibility_scans' ) ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery
+		$wpdb->query( $wpdb->prepare( 'DROP TABLE IF EXISTS %i;', $wpdb->prefix . 'siteimprove_accessibility_daily_stats' ) ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery
 	}
 }
