@@ -55,7 +55,13 @@ The plugin may be used by anyone with a WordPress site without mandatory Siteimp
 
 = Where is my data stored? =
 
-Accessibility checks are local and are stored locally in your own WordPress database.
+Accessibility checks are local and data is stored locally in your own WordPress database.
+
+= What third-party/external services this plugin use? =
+
+This plugin uses Pendo, to collect anonymous usage data such as which features of the plugin you are interacting with, but only with your explicit consent (e.g. when usage tracking is enabled in the plugin settings page).
+This data helps us improve the plugin by understanding how users interact with its features. No personal or sensitive information is ever collected or stored.
+More about Pendo: [privacy policy](https://www.pendo.io/legal/privacy-policy/).
 
 
 == Changelog ==
