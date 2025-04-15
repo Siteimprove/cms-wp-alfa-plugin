@@ -119,6 +119,10 @@ class Siteimprove_Accessibility {
 	 * @return void
 	 */
 	public function register_hooks(): void {
+		if ( ! current_user_can( get_option( self::OPTION_ALLOWED_USER_ROLE ) ) ) {
+			return;
+		}
+
 		$hook_registry = new Hook_Registry();
 		$hook_registry
 			->add( new Settings() )
