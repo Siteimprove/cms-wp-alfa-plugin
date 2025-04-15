@@ -40,7 +40,7 @@ class Navigation implements Hook_Interface {
 			$capability,
 			$issues_page::MENU_SLUG,
 			array( $issues_page, 'render_page' ),
-			plugins_url( 'siteimprove-accessibility/assets/img/si-icon.svg' ),
+			SITEIMPROVE_ACCESSIBILITY_PLUGIN_ROOT_URL . 'assets/img/si-icon.svg',
 		);
 
 		add_submenu_page(
