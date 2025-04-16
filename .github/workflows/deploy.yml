@@ -1,0 +1,77 @@
+name: Deploy to Pantheon
+
+on:
+  push:
+    branches:
+      - development
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    container:
+      image: php:8.0
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Setup Tools
+        run: |
+          apt-get update && apt-get install -y zip unzip openssh-client git
+          curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+
+      - name: Install Composer dependencies
+        working-directory: ./siteimprove-accessibility
+        run: composer install --no-dev --prefer-dist --no-progress --no-suggest
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '23'
+
+      - name: Install Node.js dependencies
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.CI_DEPLOY_KEY }}" > ~/.ssh/id_rsa_siteimprove
+          chmod 600 ~/.ssh/id_rsa_siteimprove
+          eval "$(ssh-agent -s)"
+          ssh-add ~/.ssh/id_rsa_siteimprove
+          npm install
+
+      - name: Build assets
+        run: npm run build
+
+      - name: Archive Release
+        uses: Siteimprove/zip-release@main
+        with:
+          type: 'zip'
+          path: './siteimprove-accessibility/'
+          filename: 'siteimprove-accessibility.zip'
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4
+        id: artifact-upload-step
+        with:
+          name: 'siteimprove-accessibility'
+          path: 'siteimprove-accessibility.zip'
+          overwrite: 'true'
+          retention-days: 1
+
+      - name: Install Terminus
+        run: |
+          curl -O https://raw.githubusercontent.com/pantheon-systems/terminus-installer/master/builds/installer.phar && php installer.phar install
+
+      - name: Deploy to Pantheon
+        # Prepare ssh key that is required to use wp cli on Pantheon
+        # Log into terminus
+        # Delete old plugin (executes plugin uninstall)
+        # Install new plugin
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.TERMINUS_SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa_pantheon
+          chmod 600 ~/.ssh/id_rsa_pantheon
+          eval "$(ssh-agent -s)"
+          ssh-add ~/.ssh/id_rsa_pantheon
+          terminus auth:login --machine-token=${{ secrets.TERMINUS_TOKEN }}
+          terminus wp ${{ vars.PANTHEON_SITE_ID }}.dev -- plugin delete siteimprove-accessibility --quiet
+          terminus wp ${{ vars.PANTHEON_SITE_ID }}.dev -- plugin install ${{ steps.artifact-upload-step.outputs.artifact-url }} --activate
