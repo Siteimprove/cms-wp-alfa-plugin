@@ -3,7 +3,7 @@ Contributors: siteimprove
 Tags: accessibility, analytics, insights, spelling, seo
 Requires at least: 6.7
 Requires PHP: 8.0
-Tested up to: 6.7.2
+Tested up to: 6.8
 Stable tag: 1.0.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -55,8 +55,20 @@ The plugin may be used by anyone with a WordPress site without mandatory Siteimp
 
 = Where is my data stored? =
 
-Accessibility checks are local and are stored locally in your own WordPress database.
+Accessibility checks are local and data is stored locally in your own WordPress database.
 
+= What third-party/external services this plugin use? =
+
+The plugin uses SiteimproveAccessibilityCmsComponents library, loaded via CDN. It provides reusable React-based UI components for displaying issue details, issue lists, reports and more.
+These components are designed to be integrated across different CMS platforms, including WordPress, to ensure consistency and reduce the need for custom UI development.
+
+This plugin uses Pendo, to collect anonymous usage data such as which features of the plugin you are interacting with, but only with your explicit consent (e.g. when usage tracking is enabled in the plugin settings page).
+This data helps us improve the plugin by understanding how users interact with its features. No personal or sensitive information is ever collected or stored.
+More about Pendo: [privacy policy](https://www.pendo.io/legal/privacy-policy/).
+
+= Where can I find the development repository for this plugin? =
+
+The development happens on GitHub, and the repository is available at: [https://github.com/Siteimprove/cms-wp-alfa-plugin](https://github.com/Siteimprove/cms-wp-alfa-plugin).
 
 == Changelog ==
 

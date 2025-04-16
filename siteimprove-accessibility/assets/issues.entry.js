@@ -1,6 +1,4 @@
-import { renderScanIssueReporting } from '@siteimprove/accessibility-cms-components';
-
-/* global jQuery */
+/* global jQuery, SiteimproveAccessibilityCmsComponents */
 
 (async function ($) {
 	const pagesWithIssuesCallback = async function (params) {
@@ -16,7 +14,7 @@ import { renderScanIssueReporting } from '@siteimprove/accessibility-cms-compone
 	});
 
 	if (issues.length) {
-		renderScanIssueReporting(
+		SiteimproveAccessibilityCmsComponents.renderScanIssueReporting(
 			issues,
 			pagesWithIssuesCallback,
 			'siteimprove-scan-report'

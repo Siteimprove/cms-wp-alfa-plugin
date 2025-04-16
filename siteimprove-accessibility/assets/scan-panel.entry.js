@@ -3,12 +3,8 @@ import { JQuery as AlfaJQuery } from '@siteimprove/alfa-jquery';
 import * as AlfaJson from '@siteimprove/alfa-json';
 import AlfaRules from '@siteimprove/alfa-rules';
 import { Rules as AlfaRuleFilter } from '@siteimprove/alfa-test-utils';
-import {
-	renderSinglePageReporting,
-	getRuleMeta,
-} from '@siteimprove/accessibility-cms-components';
 
-/* global siteimproveAccessibilityScan, jQuery, requestAnimationFrame */
+/* global siteimproveAccessibilityScan, jQuery, SiteimproveAccessibilityCmsComponents, requestAnimationFrame */
 
 (function ($) {
 	'use strict';
@@ -50,7 +46,7 @@ import {
 						method: 'POST',
 						data: auditScan,
 					}).then(() => {
-						renderSinglePageReporting(
+						SiteimproveAccessibilityCmsComponents.renderSinglePageReporting(
 							{ failedItems: auditScan.scan_results },
 							'siteimprove-scan-results'
 						);
@@ -123,7 +119,10 @@ import {
 			if (outcome._outcome === 'failed') {
 				// process outcome stat
 				const rule = outcome.rule.uri.split('/').pop();
-				const conformance = getRuleMeta(rule).conformance;
+				const conformance =
+					SiteimproveAccessibilityCmsComponents.getRuleMeta(
+						rule
+					).conformance;
 				auditScan.scan_stats[rule] = auditScan.scan_stats[rule] || {
 					conformance,
 					occurrence: 0,

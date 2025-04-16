@@ -1,4 +1,5 @@
-import { SinglePageReporting } from '@siteimprove/accessibility-cms-components';
+const SiteimproveAccessibilityCmsComponents =
+	window.SiteimproveAccessibilityCmsComponents;
 
 (function (wp) {
 	const {
@@ -47,7 +48,9 @@ import { SinglePageReporting } from '@siteimprove/accessibility-cms-components';
 				>
 					<AccessibilityCheckModal post={post} data={data} />
 
-					<SinglePageReporting data={data} />
+					<SiteimproveAccessibilityCmsComponents.SinglePageReporting
+						data={data}
+					/>
 				</PluginDocumentSettingPanel>
 
 				<PluginPrePublishPanel>

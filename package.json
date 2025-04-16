@@ -5,7 +5,6 @@
     "watch": "webpack --watch --mode development"
   },
   "dependencies": {
-    "@siteimprove/accessibility-cms-components": "^0.2.2",
     "@siteimprove/alfa-act": "^0.101.0",
     "@siteimprove/alfa-jquery": "^0.78",
     "@siteimprove/alfa-json": "^0.101.0",

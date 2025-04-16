@@ -273,16 +273,20 @@ class Scan_Repository {
 		global $wpdb;
 
 		$occurrences_table = $wpdb->prefix . 'siteimprove_accessibility_occurrences';
-		$scan_ids          = array_map(
+
+		$scan_ids = array_map(
 			function ( \stdClass $record ) {
 				return (int) $record->id;
 			},
 			$scans
 		);
 
-		$query = sprintf( "SELECT * FROM $occurrences_table o WHERE o.scan_id IN (%s)", implode( ', ', $scan_ids ) );
+		$placeholders = implode( ', ', array_fill( 0, count( $scan_ids ), '%d' ) );
 
-		$occurrences = $wpdb->get_results( $wpdb->prepare( $query ) );  // phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL.NotPrepared
+		$sql = "SELECT * FROM $occurrences_table o WHERE o.scan_id IN ($placeholders)";
+
+		$occurrences = $wpdb->get_results( $wpdb->prepare( $sql, $scan_ids ) ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery, WordPress.DB.PreparedSQL.NotPrepared
+
 		foreach ( $occurrences as $occurrence ) {
 			foreach ( $scans as $scan ) {
 				if ( $scan->id === $occurrence->scan_id ) {

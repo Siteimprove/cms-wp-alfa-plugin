@@ -17,7 +17,7 @@ module.exports = {
     rules: [
       {
         test: /\.(js|jsx)$/,
-        exclude: /node_modules\/(?!@siteimprove\/accessibility-cms-components)/,
+        exclude: /node_modules/,
         use: {
           loader: "babel-loader",
           options: {
@@ -29,13 +29,6 @@ module.exports = {
         test: /\.css$/,
         use: ["style-loader", "css-loader"]
       },
-      {
-        test: /\.(woff|woff2|ttf|eot)$/,
-        type: "asset/resource",
-        generator: {
-          emit: false,
-        },
-      },
     ],
   },
   optimization: {
@@ -45,6 +38,7 @@ module.exports = {
     jquery: "jQuery",
     react: "React",
     "react-dom": "ReactDOM",
+    "@siteimprove/accessibility-cms-components": "SiteimproveAccessibilityCmsComponents",
   },
   resolve: {
     extensions: [".js", ".jsx"],
