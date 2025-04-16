@@ -1,7 +1,10 @@
-import { renderComplianceDashboard } from '@siteimprove/accessibility-cms-components';
+/* global SiteimproveAccessibilityCmsComponents */
 
 wp.apiFetch({ path: '/siteimprove-accessibility/daily-stats' }).then(
 	(stats) => {
-		renderComplianceDashboard(stats, 'siteimprove-daily-stats');
+		SiteimproveAccessibilityCmsComponents.renderComplianceDashboard(
+			stats,
+			'siteimprove-daily-stats'
+		);
 	}
 );
