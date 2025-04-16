@@ -3,7 +3,7 @@ Contributors: siteimprove
 Tags: accessibility, analytics, insights, spelling, seo
 Requires at least: 6.7
 Requires PHP: 8.0
-Tested up to: 6.7
+Tested up to: 6.8
 Stable tag: 1.0.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
