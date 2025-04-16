@@ -49,6 +49,7 @@ define( 'SITEIMPROVE_ACCESSIBILITY_VERSION', '1.0.0' );
 define( 'SITEIMPROVE_ACCESSIBILITY_PLUGIN_NAME', 'siteimprove-accessibility' );
 define( 'SITEIMPROVE_ACCESSIBILITY_PLUGIN_ROOT_PATH', trailingslashit( __DIR__ ) );
 define( 'SITEIMPROVE_ACCESSIBILITY_PLUGIN_ROOT_URL', trailingslashit( plugin_dir_url( __FILE__ ) ) );
+define( 'SITEIMPROVE_CDN_URL', 'https://cdn.siteimprove.net/cms/' );
 
 /**
  * Main plugin class.

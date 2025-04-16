@@ -27,9 +27,16 @@ class Gutenberg_Sidebar implements Hook_Interface {
 		}
 
 		wp_enqueue_script(
+			'SiteimproveAccessibilityCmsComponents',
+			SITEIMPROVE_CDN_URL . 'siteimprove-accessibility-cms-components-latest.js',
+			array( 'react', 'react-dom' ),
+			SITEIMPROVE_ACCESSIBILITY_VERSION,
+			false
+		);
+		wp_enqueue_script(
 			'siteimprove-accessibility-gutenberg-sidebar',
 			SITEIMPROVE_ACCESSIBILITY_PLUGIN_ROOT_URL . 'assets/gutenberg.bundle.js',
-			array( 'wp-i18n', 'wp-plugins', 'wp-edit-post', 'wp-element', 'wp-components', 'wp-data', 'wp-api-fetch' ),
+			array( 'wp-i18n', 'wp-plugins', 'wp-edit-post', 'wp-element', 'wp-components', 'wp-data', 'wp-api-fetch', 'SiteimproveAccessibilityCmsComponents' ),
 			SITEIMPROVE_ACCESSIBILITY_VERSION,
 			false
 		);

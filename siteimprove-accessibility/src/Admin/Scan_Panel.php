@@ -29,6 +29,13 @@ class Scan_Panel implements Hook_Interface {
 		}
 
 		wp_enqueue_script(
+			'SiteimproveAccessibilityCmsComponents',
+			SITEIMPROVE_CDN_URL . 'siteimprove-accessibility-cms-components-latest.js',
+			array( 'react', 'react-dom' ),
+			SITEIMPROVE_ACCESSIBILITY_VERSION,
+			false
+		);
+		wp_enqueue_script(
 			SITEIMPROVE_ACCESSIBILITY_PLUGIN_NAME,
 			SITEIMPROVE_ACCESSIBILITY_PLUGIN_ROOT_URL . 'assets/scan-panel.bundle.js',
 			array( 'wp-i18n', 'wp-api-fetch', 'jquery', 'react', 'react-dom' ),

@@ -28,9 +28,16 @@ class Reports_Page implements Hook_Interface {
 
 		if ( 'admin.php' === $pagenow && isset( $_GET['page'] ) && static::MENU_SLUG === $_GET['page'] ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 			wp_enqueue_script(
+				'SiteimproveAccessibilityCmsComponents',
+				SITEIMPROVE_CDN_URL . 'siteimprove-accessibility-cms-components-latest.js',
+				array( 'react', 'react-dom' ),
+				SITEIMPROVE_ACCESSIBILITY_VERSION,
+				true
+			);
+			wp_enqueue_script(
 				SITEIMPROVE_ACCESSIBILITY_PLUGIN_NAME,
 				SITEIMPROVE_ACCESSIBILITY_PLUGIN_ROOT_URL . 'assets/reports.bundle.js',
-				array( 'wp-api-fetch', 'react', 'react-dom' ),
+				array( 'wp-api-fetch', 'react', 'react-dom', 'SiteimproveAccessibilityCmsComponents' ),
 				SITEIMPROVE_ACCESSIBILITY_VERSION,
 				true
 			);

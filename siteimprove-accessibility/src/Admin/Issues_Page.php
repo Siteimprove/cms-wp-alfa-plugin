@@ -35,9 +35,16 @@ class Issues_Page implements Hook_Interface {
 
 		if ( $this->is_page_check_used && 'admin.php' === $pagenow && isset( $_GET['page'] ) && static::MENU_SLUG === $_GET['page'] ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 			wp_enqueue_script(
+				'SiteimproveAccessibilityCmsComponents',
+				SITEIMPROVE_CDN_URL . 'siteimprove-accessibility-cms-components-latest.js',
+				array( 'react', 'react-dom' ),
+				SITEIMPROVE_ACCESSIBILITY_VERSION,
+				true
+			);
+			wp_enqueue_script(
 				SITEIMPROVE_ACCESSIBILITY_PLUGIN_NAME,
 				SITEIMPROVE_ACCESSIBILITY_PLUGIN_ROOT_URL . 'assets/issues.bundle.js',
-				array( 'wp-api-fetch', 'react', 'react-dom', 'jquery' ),
+				array( 'wp-api-fetch', 'react', 'react-dom', 'jquery', 'SiteimproveAccessibilityCmsComponents' ),
 				SITEIMPROVE_ACCESSIBILITY_VERSION,
 				true
 			);
