@@ -27,7 +27,6 @@ wp plugin activate siteimprove-accessibility
 # Install land activate additional plugins for development environment
 wp plugin install debug-bar
 wp plugin install query-monitor
-wp plugin install siteimprove
 
 cd /var/www/html
 echo "Setup completed."

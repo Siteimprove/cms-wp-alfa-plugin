@@ -1,7 +1,11 @@
 {
+    "name": "siteimprove/siteimprove-accessibility",
+    "description": "WordPress plugin for accessibility improvements.",
+    "license": "GPL-2.0-or-later",
+    "type": "wordpress-plugin",
     "autoload": {
         "psr-4": {
-            "Siteimprove\\Accessibility\\": "siteimprove-accessibility/src/"
+            "Siteimprove\\Accessibility\\": "src/"
         }
     },
     "require": {
@@ -13,13 +17,12 @@
         "phpcsstandards/phpcsutils": "^1.0"
     },
     "config": {
-        "vendor-dir": "./siteimprove-accessibility/vendor",
         "allow-plugins": {
             "dealerdirect/phpcodesniffer-composer-installer": true
         }
     },
     "scripts": {
-        "lint": "./siteimprove-accessibility/vendor/bin/phpcs siteimprove-accessibility --standard=phpcs.xml.dist",
-        "lint-fix": "./siteimprove-accessibility/vendor/bin/phpcbf siteimprove-accessibility --standard=phpcs.xml.dist"
+        "lint": "./vendor/bin/phpcs . --standard=../phpcs.xml.dist",
+        "lint-fix": "./vendor/bin/phpcbf . --standard=../phpcs.xml.dist"
     }
 }
