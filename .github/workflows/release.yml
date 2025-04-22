@@ -21,7 +21,7 @@ jobs:
           curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
       - name: Install Composer dependencies
-        run: composer install --no-dev --prefer-dist --no-progress --no-suggest
+        run: composer install --working-dir=./siteimprove-accessibility --no-dev --prefer-dist --no-progress --no-suggest
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
