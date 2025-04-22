@@ -59,12 +59,19 @@ Accessibility checks are local and data is stored locally in your own WordPress 
 
 = What third-party/external services this plugin use? =
 
-The plugin uses SiteimproveAccessibilityCmsComponents library, loaded via CDN. It provides reusable React-based UI components for displaying issue details, issue lists, reports and more.
-These components are designed to be integrated across different CMS platforms, including WordPress, to ensure consistency and reduce the need for custom UI development.
+This plugin uses the following third-party/external services:
 
-This plugin uses Pendo, to collect anonymous usage data such as which features of the plugin you are interacting with, but only with your explicit consent (e.g. when usage tracking is enabled in the plugin settings page).
-This data helps us improve the plugin by understanding how users interact with its features. No personal or sensitive information is ever collected or stored.
-More about Pendo: [privacy policy](https://www.pendo.io/legal/privacy-policy/).
+1. **Siteimprove**
+    The plugin uses the [SiteimproveAccessibilityCmsComponents](https://cdn.siteimprove.net/cms/siteimprove-accessibility-cms-components-latest.js) javascript library, loaded via CDN.
+    It provides reusable React-based UI components for displaying issue details, issue lists, reports and more.
+    These components are designed to be integrated across different CMS platforms, including WordPress, to ensure consistency and reduce the need for custom UI development.
+
+    The plugin also uses Siteimprove's open source accessibility conformance testing engine called [Alfa](https://alfa.siteimprove.com/). Some of its features that requires to connect to [Siteimprove API](https://api.siteimprove.com/) are currently not used in this plugin.
+
+3. **Pendo**
+    Pendo is used to collect anonymous usage data, such as which features of the plugin users are interacting with. Usage data collection is active only with the explicit consent of the administrator (e.g. when usage tracking is enabled in the plugin settings page).
+    This data helps us improve the plugin by understanding how users interact with its features. No personal or sensitive information is ever collected or stored.
+    More about Pendo: [privacy policy](https://www.pendo.io/legal/privacy-policy/).
 
 = Where can I find the development repository for this plugin? =
 
