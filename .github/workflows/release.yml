@@ -13,23 +13,31 @@ jobs:
       image: php:8.0
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
       - name: Setup Tools
         run: |
-          apt-get update && apt-get install -y zip unzip
+          apt-get update && apt-get install -y zip unzip openssh-client git
           curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
       - name: Install Composer dependencies
-        run: composer install --no-dev --prefer-dist --no-progress --no-suggest
+        run: composer install --working-dir=./siteimprove-accessibility --no-dev --prefer-dist --no-progress --no-suggest
 
       - name: Set up Node.js
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v4
         with:
           node-version: '23'
 
-      - name: Install Node.js dependencies
-        run: npm install
+      - name: Install Dependencies
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.CI_DEPLOY_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          eval "$(ssh-agent -s)"
+          ssh-add ~/.ssh/id_rsa
+          echo "@siteimprove:registry=https://npm.pkg.github.com/" >> ~/.npmrc
+          echo "//npm.pkg.github.com/:_authToken=${{ secrets.CI_TOKEN }}" >> ~/.npmrc
+          npm install
 
       - name: Build assets
         run: npm run build
@@ -38,11 +46,13 @@ jobs:
         uses: Siteimprove/zip-release@main
         with:
           type: 'zip'
-          path: './siteimprove-alfa/'
-          filename: 'siteimprove-alfa.zip'
+          path: './siteimprove-accessibility/'
+          filename: 'siteimprove-accessibility.zip'
 
       - name: Create Release
         uses: Siteimprove/release-action@v1
         with:
-          artifacts: "siteimprove-alfa.zip"
+          allowUpdates: true
+          generateReleaseNotes: true
+          artifacts: "siteimprove-accessibility.zip"
           token: ${{ secrets.GITHUB_TOKEN }}

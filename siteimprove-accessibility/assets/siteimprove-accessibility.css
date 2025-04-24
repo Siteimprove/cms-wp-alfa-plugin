@@ -1,0 +1,248 @@
+/**
+ * Scan panel
+ */
+
+#siteimprove-scan-panel-button {
+    position: fixed;
+    border: none;
+    width: 70px;
+    height: 70px;
+    background-image: url("./img/FAB.svg");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-color: transparent;
+    cursor: pointer;
+    z-index: 4325235230;
+    display: none;
+}
+
+#siteimprove-scan-panel {
+    position: fixed;
+    max-height: calc(100vh - 120px);
+    overflow-y: auto;
+    background: white;
+    border: 1px solid #ddd;
+    z-index: 4325235231;
+    width: 265px;
+    font-size: 14px;
+    font-family: "Manrope", "Arial", "sans-serif";
+    display: flex;
+    flex-direction: column;
+}
+
+#siteimprove-scan-panel-button.top-right, #siteimprove-scan-panel.top-right {
+    top: 100px;
+    right: 10px;
+}
+
+#siteimprove-scan-panel-button.top-left, #siteimprove-scan-panel.top-left {
+    top: 100px;
+    left: 10px;
+}
+
+#siteimprove-scan-panel-button.bottom-right, #siteimprove-scan-panel.bottom-right {
+    bottom: 100px;
+    right: 10px;
+}
+
+#siteimprove-scan-panel-button.bottom-left, #siteimprove-scan-panel.bottom-left {
+    bottom: 100px;
+    left: 10px;
+}
+
+#siteimprove-scan-panel .scan-panel-header {
+    background: #0D4CD3;
+    color: white;
+    font-size: 14px;
+    padding: 9px 0 9px 16px;
+    line-height: 32px;
+    font-weight: bold;
+    flex-shrink: 0;
+}
+
+#siteimprove-scan-panel .scan-panel-header a {
+    text-decoration: none;
+}
+
+#siteimprove-scan-panel .scan-panel-body {
+    overflow-y: auto;
+    flex-grow: 1;
+    padding: 0 10px;
+}
+
+#siteimprove-scan-hide {
+    width: 40px;
+    height: 32px;
+    margin: 0;
+    background-image: url("./img/hide.svg");
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-color: transparent;
+    float: right;
+    border: none;
+    cursor: pointer;
+}
+
+/**
+ * "Scan page" button
+ */
+
+.siteimprove-scan-button-container {
+    margin-bottom: 20px;
+    font-size: 12px;
+}
+
+.siteimprove-scan-button {
+    width: 100%;
+    height: 32px;
+    line-height: 32px;
+    margin: 10px 0;
+    padding: 0;
+    background: none;
+    border: 1px solid #767676;
+    cursor: pointer;
+    text-align: center;
+    display: block;
+}
+
+.siteimprove-scan-button span:before {
+    content: "";
+    position: relative;
+    top: 4px;
+    margin: 0 5px;
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    background-image: url("./img/update.svg");
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+/**
+ * Dashboard
+ */
+
+#wpcontent:has(#siteimprove-dashboard-header) {
+    padding: 0;
+}
+
+#siteimprove-dashboard-header {
+    background: #0D4CD3;
+    color: white;
+    padding: 10px 22px;
+    font-size: 16px;
+    font-family: "Manrope", "Arial", "sans-serif";
+}
+
+.siteimprove-dashboard-container {
+    padding-left: 20px;
+    margin-bottom: 40px;
+}
+
+.siteimprove-dashboard-heading {
+    margin-bottom: 10px;
+}
+
+.siteimprove-component-container {
+    background-color: #FFF;
+    box-shadow: #E0E0E0 2px 2px 4px;
+}
+
+.siteimprove-component-placeholder {
+    line-height: 150px;
+    text-align: center;
+}
+
+.siteimprove-empty-issues-container {
+    padding: 50px 0;
+    text-align: center;
+}
+
+/**
+ * Extension notification banner
+ */
+
+.siteimprove-extension-notification {
+    position: relative; /* Ensure relative positioning for consistent layout */
+    background-color: #FFF;
+    background-image: url('./img/extension-notification.svg');
+    background-size: 70px 68px;
+    background-repeat: no-repeat;
+    background-position: 20px 20px; /* Original left alignment for the background image */
+    padding: 20px 20px 20px 110px; /* Keep the original padding */
+    margin: 10px 0 20px 0;
+
+    display: flex; /* Use flexbox to organize content */
+    flex-wrap: wrap; /* Allow wrapping for small screens */
+    align-items: center; /* Vertically align text and button */
+    justify-content: space-between; /* Ensure space between text and button */
+}
+
+.siteimprove-extension-notification .text-content {
+    flex: 1; /* Allow text to occupy available space */
+}
+
+.siteimprove-extension-notification .text-content h2 {
+    margin: 0 0 10px; /* Ensure appropriate spacing below title */
+}
+
+.siteimprove-extension-notification .text-content p {
+    margin: 0 0 10px 0;
+}
+
+.siteimprove-extension-notification .button {
+    font-size: 1.3em;
+    background-color: #0D4CD3 !important;
+    border-color: #0D4CD3 !important;
+    padding: 5px 30px;
+    border-radius: 30px;
+    position: relative; /* Avoid absolute positioning to improve flexibility */
+    margin-left: auto; /* Push the button to the right on larger screens */
+}
+
+/* Responsive Adjustments for Mobile View */
+@media (max-width: 768px) {
+    .siteimprove-extension-notification {
+        flex-direction: column; /* Stack text and button vertically */
+        padding: 10px 10px 10px 105px; /* Maintain the original container padding */
+        background-position: 20px 20px; /* Keep background image aligned on the left */
+    }
+
+    .siteimprove-extension-notification .text-content {
+        margin-bottom: 10px; /* Add spacing between text and button */
+    }
+
+    .siteimprove-extension-notification .button {
+        margin: 0; /* Remove any auto margins */
+        align-self: flex-start; /* Align button to the left */
+        text-align: left; /* Ensure the text content inside the button is left-aligned */
+    }
+}
+
+/**
+ * Settings form
+ */
+
+#siteimprove-settings-form {
+    background-color: #F6F6F6;
+    box-shadow: #E0E0E0 2px 2px 4px;
+}
+
+#siteimprove-settings-form h2 {
+    background-color: #FFF;
+    padding-left: 20px;
+    line-height: 48px;
+    margin-top: 0;
+}
+
+#siteimprove-settings-form tr {
+    display: block;
+    background-color: #FFF;
+    margin: 2px 20px;
+    padding-left: 20px;
+}
+
+#siteimprove-settings-form .submit {
+    margin-left: 20px;
+}
