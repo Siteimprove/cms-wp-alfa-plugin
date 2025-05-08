@@ -142,7 +142,7 @@ class Scan_Repository {
 	public function delete_scans_above_threshold(): void {
 		global $wpdb;
 
-		$scan_threshold    = 25;
+		$scan_threshold    = 100;
 		$scans_table       = $wpdb->prefix . 'siteimprove_accessibility_scans';
 		$occurrences_table = $wpdb->prefix . 'siteimprove_accessibility_occurrences';
 
