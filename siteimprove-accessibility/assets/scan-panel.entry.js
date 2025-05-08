@@ -45,17 +45,19 @@ import { Rules as AlfaRuleFilter } from '@siteimprove/alfa-test-utils';
 						path: '/siteimprove-accessibility/save-scan',
 						method: 'POST',
 						data: auditScan,
-					}).then(() => {
-						SiteimproveAccessibilityCmsComponents.renderSinglePageReporting(
-							{ failedItems: auditScan.scan_results },
-							'siteimprove-scan-results'
-						);
-
-						$label.html(
-							__('Check page', 'siteimprove-accessibility')
-						);
-						$this.removeAttr('disabled');
-					});
+					})
+						.then(() => {
+							SiteimproveAccessibilityCmsComponents.renderSinglePageReporting(
+								{ failedItems: auditScan.scan_results },
+								'siteimprove-scan-results'
+							);
+						})
+						.finally(() => {
+							$label.html(
+								__('Check page', 'siteimprove-accessibility')
+							);
+							$this.removeAttr('disabled');
+						});
 				})
 			);
 		});

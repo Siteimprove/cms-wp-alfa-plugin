@@ -4,7 +4,7 @@ Tags: accessibility, analytics, insights, spelling, seo
 Requires at least: 6.7
 Requires PHP: 8.0
 Tested up to: 6.8
-Stable tag: 1.0.0
+Stable tag: 1.0.1
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -66,7 +66,7 @@ This plugin uses the following third-party/external services:
     It provides reusable React-based UI components for displaying issue details, issue lists, reports and more.
     These components are designed to be integrated across different CMS platforms, including WordPress, to ensure consistency and reduce the need for custom UI development.
 
-    The plugin also uses Siteimprove's open source accessibility conformance testing engine called [Alfa](https://alfa.siteimprove.com/). Some of its features that requires to connect to [Siteimprove API](https://api.siteimprove.com/) are currently not used in this plugin.
+    The plugin also uses Siteimprove's open source accessibility conformance testing engine called [Alfa](https://alfa.siteimprove.com/). Some of its features that requires to connect to [Siteimprove API](https://api.siteimprove.com/v2/documentation) are currently not used in this plugin.
 
 3. **Pendo**
     Pendo is used to collect anonymous usage data, such as which features of the plugin users are interacting with. Usage data collection is active only with the explicit consent of the administrator (e.g. when usage tracking is enabled in the plugin settings page).
@@ -78,6 +78,11 @@ This plugin uses the following third-party/external services:
 The development happens on GitHub, and the repository is available at: [https://github.com/Siteimprove/cms-wp-alfa-plugin](https://github.com/Siteimprove/cms-wp-alfa-plugin).
 
 == Changelog ==
+
+= 1.0.1 =
+* Fixed database compatibility issue that caused the plugin to incorrectly being installed on some environments.
+* Fixed terms and conditions link in the settings page.
+* Fixed broken Siteimprove API link in the plugin documentation.
 
 = 1.0.0 =
 * First public version

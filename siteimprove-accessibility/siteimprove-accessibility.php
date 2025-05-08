@@ -5,7 +5,7 @@
  * @wordpress-plugin
  * Plugin Name:       Siteimprove Accessibility
  * Description:       The Siteimprove Accessibility plugin bridges the gap between WordPress and the Siteimprove Intelligence Platform via open source Alfa Engine.
- * Version:           1.0.0
+ * Version:           1.0.1
  * Requires at least: 6.7
  * Requires PHP:      8.0
  * Author:            Siteimprove
@@ -45,7 +45,7 @@ if ( file_exists( __DIR__ . '/vendor/autoload.php' ) ) {
 	require_once __DIR__ . '/vendor/autoload.php';
 }
 
-define( 'SITEIMPROVE_ACCESSIBILITY_VERSION', '1.0.0' );
+define( 'SITEIMPROVE_ACCESSIBILITY_VERSION', '1.0.1' );
 define( 'SITEIMPROVE_ACCESSIBILITY_PLUGIN_NAME', 'siteimprove-accessibility' );
 define( 'SITEIMPROVE_ACCESSIBILITY_PLUGIN_ROOT_PATH', trailingslashit( __DIR__ ) );
 define( 'SITEIMPROVE_ACCESSIBILITY_PLUGIN_ROOT_URL', trailingslashit( plugin_dir_url( __FILE__ ) ) );
