@@ -32,7 +32,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		?>
 		<p class="submit">
 			<?php submit_button( __( 'Update settings', 'siteimprove-accessibility' ), 'primary', 'submit', false ); ?>
-			<span style="display: block; margin-top: 10px;"><a href="https://frontier.siteimprove.com/page/terms-and-conditions" target="_blank"><?php esc_html_e( 'Terms and Conditions', 'siteimprove-accessibility' ); ?></a></span>
+			<span style="display: block; margin-top: 10px;"><a href="https://www.siteimprove.com/legal/accessibility-plugin-terms-of-use/" target="_blank"><?php esc_html_e( 'Terms and Conditions', 'siteimprove-accessibility' ); ?></a></span>
 		</p>
 	</form>
 </div>
