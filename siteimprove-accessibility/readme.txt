@@ -4,7 +4,7 @@ Tags: accessibility, analytics, insights, spelling, seo
 Requires at least: 6.7
 Requires PHP: 8.0
 Tested up to: 6.8
-Stable tag: 1.0.1
+Stable tag: 1.0.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -78,6 +78,9 @@ This plugin uses the following third-party/external services:
 The development happens on GitHub, and the repository is available at: [https://github.com/Siteimprove/cms-wp-alfa-plugin](https://github.com/Siteimprove/cms-wp-alfa-plugin).
 
 == Changelog ==
+
+= 1.0.2 =
+* Updated logo
 
 = 1.0.1 =
 * Fixed database compatibility issue that caused the plugin to incorrectly being installed on some environments.
